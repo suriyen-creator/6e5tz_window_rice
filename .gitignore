@@ -1,0 +1,65 @@
+# OS and editor noise
+Thumbs.db
+desktop.ini
+.DS_Store
+.idea/
+.vscode/
+
+# PowerShell and application logs
+*.log
+logs/
+Log/
+CrashDumps/
+
+# Caches, indexes, histories, and runtime state
+cache/
+Cache/
+*.cache
+history/
+History.json
+*.history
+state.json
+elevated-state.json
+quick_launch_recent.json
+systray_state_*.json
+last_update_check
+*.tmp
+*.temp
+*.bak
+*.old
+
+# Local-only configuration and credentials
+.env
+.env.*
+!.env.example
+.secrets/
+secrets/
+*.secret
+*.secret.*
+*.local
+*.local.*
+*.credentials
+*.credentials.*
+*.token
+*.token.*
+
+# Generated install backups
+*.backup-????????-??????
+**/*.backup-????????-??????
+
+# Flow Launcher runtime and private data
+configs/flow-launcher/Cache/
+configs/flow-launcher/Logs/
+configs/flow-launcher/History.json
+configs/flow-launcher/**/History.json
+configs/flow-launcher/**/*.bak
+
+# Wallpaper Engine Workshop downloads and Steam runtime data
+wallpapers/workshop/
+wallpapers/steam-workshop/
+assets/wallpaper-engine-workshop/
+**/steamapps/workshop/content/431960/
+
+# Temporary backup reports
+backup-report*.json
+security-scan*.txt

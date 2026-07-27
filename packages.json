@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": "Windows desktop setup detected on the source machine",
+  "winget": [
+    {
+      "id": "Microsoft.WindowsTerminal",
+      "name": "Windows Terminal",
+      "reason": "Terminal host used by this setup"
+    },
+    {
+      "id": "Microsoft.PowerShell",
+      "name": "PowerShell",
+      "reason": "pwsh.exe is the active terminal shell"
+    },
+    {
+      "id": "Flow-Launcher.Flow-Launcher",
+      "name": "Flow Launcher",
+      "reason": "Installed launcher and settings were detected"
+    },
+    {
+      "id": "JanDeDobbeleer.OhMyPosh",
+      "name": "Oh My Posh",
+      "reason": "oh-my-posh.exe is available on PATH"
+    },
+    {
+      "id": "Fastfetch-cli.Fastfetch",
+      "name": "Fastfetch",
+      "reason": "fastfetch.exe is available on PATH"
+    },
+    {
+      "id": "glzr-io.glazewm",
+      "name": "GlazeWM",
+      "reason": "GlazeWM config and executable were detected"
+    },
+    {
+      "id": "AmN.yasb",
+      "name": "YASB Reborn",
+      "reason": "YASB executable and local runtime data were detected"
+    },
+    {
+      "id": "karlstav.cava",
+      "name": "CAVA",
+      "reason": "cava.exe and version 0.10.7 were detected"
+    },
+    {
+      "id": "Valve.Steam",
+      "name": "Steam",
+      "reason": "Steam is the installed host for Wallpaper Engine"
+    }
+  ],
+  "manual": [
+    {
+      "name": "GlazeTiler",
+      "reason": "No verified WinGet package was included; install from its official release/source"
+    },
+    {
+      "name": "HideTaskbar",
+      "reason": "No installed executable/config or verified WinGet package was found"
+    },
+    {
+      "name": "Wallpaper Engine",
+      "reason": "Use Steam and install Wallpaper Engine from its store page; Workshop content is intentionally not backed up"
+    }
+  ]
+}
