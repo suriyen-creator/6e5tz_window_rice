@@ -459,6 +459,11 @@ Copy-OptionalCandidates -Name 'Nilesoft Shell' -Sources @(
     (Join-Path $env:USERPROFILE 'scoop\apps\nilesoft-shell\current\shell.nss')
 ) -Destination (Join-Path $ConfigsRoot 'nilesoft-shell') -AllowSensitiveExample
 
+# 17. Terminal Tools (Clock / Unimatrix / Wallpapers)
+Copy-OptionalCandidates -Name 'Terminal Tools' -Sources @(
+    (Join-Path $env:USERPROFILE '.config\tools')
+) -Destination (Join-Path $ConfigsRoot 'tools') -AllowSensitiveExample
+
 Write-Host ''
 Write-Host 'Backup summary' -ForegroundColor White
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object {

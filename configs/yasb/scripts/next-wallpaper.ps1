@@ -22,7 +22,6 @@ if ($target -eq 'Auto') {
         }
     }
     
-    # Check if WE binary actually exists
     $weCandidates = @(
         (Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\common\wallpaper_engine\wallpaper64.exe'),
         (Join-Path $env:ProgramFiles 'Steam\steamapps\common\wallpaper_engine\wallpaper64.exe')
@@ -38,11 +37,13 @@ if ($target -eq 'Auto') {
 
 if ($target -eq 'WallpaperEngine' -and (Test-Path $weControlScript)) {
     & $weControlScript -Action next
-    exit 0
 }
 
 # -------------------------------------------------------------
 # Static Wallpaper Cycling (Windows Desktop)
+# We update static wallpaper as well so:
+# 1) If WE is closed, paused, or uninstalled, desktop is fresh.
+# 2) If in Static mode, changes desktop wallpaper immediately.
 # -------------------------------------------------------------
 $wallDir = Join-Path $env:USERPROFILE "Pictures\Wallpapers"
 if (-not (Test-Path $wallDir)) {
@@ -55,27 +56,22 @@ if (-not (Test-Path $wallDir)) {
 }
 
 $exts = @('.jpg', '.jpeg', '.png', '.webp')
-$wallpapers = @(Get-ChildItem -Path $wallDir -File | Where-Object { $exts -contains $_.Extension.ToLowerInvariant() } | Sort-Object Name)
+$wallpapers = @(Get-ChildItem -Path $wallDir -File -ErrorAction SilentlyContinue | Where-Object { $exts -contains $_.Extension.ToLowerInvariant() } | Sort-Object Name)
 
-if ($wallpapers.Count -eq 0) {
-    exit 0
-}
-
-# Find current wallpaper from registry
-$current = (Get-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -ErrorAction SilentlyContinue).Wallpaper
-$currentIndex = -1
-for ($i = 0; $i -lt $wallpapers.Count; $i++) {
-    if ($wallpapers[$i].FullName -ieq $current) {
-        $currentIndex = $i
-        break
+if ($wallpapers.Count -gt 0) {
+    $current = (Get-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -ErrorAction SilentlyContinue).Wallpaper
+    $currentIndex = -1
+    for ($i = 0; $i -lt $wallpapers.Count; $i++) {
+        if ($wallpapers[$i].FullName -ieq $current) {
+            $currentIndex = $i
+            break
+        }
     }
-}
 
-$nextIndex = ($currentIndex + 1) % $wallpapers.Count
-$nextWallpaper = $wallpapers[$nextIndex].FullName
+    $nextIndex = ($currentIndex + 1) % $wallpapers.Count
+    $nextWallpaper = $wallpapers[$nextIndex].FullName
 
-# Apply wallpaper via Win32 SystemParametersInfo
-$code = @"
+    $code = @"
 using System;
 using System.Runtime.InteropServices;
 public class WinWallpaperSwitcher {
@@ -83,11 +79,10 @@ public class WinWallpaperSwitcher {
     public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 }
 "@
-if (-not ([System.Management.Automation.PSTypeName]'WinWallpaperSwitcher').Type) {
-    Add-Type -TypeDefinition $code -ErrorAction SilentlyContinue
+    if (-not ([System.Management.Automation.PSTypeName]'WinWallpaperSwitcher').Type) {
+        Add-Type -TypeDefinition $code -ErrorAction SilentlyContinue
+    }
+
+    [WinWallpaperSwitcher]::SystemParametersInfo(0x0014, 0, $nextWallpaper, 0x01 -bor 0x02)
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value $nextWallpaper -Force -ErrorAction SilentlyContinue
 }
-
-[WinWallpaperSwitcher]::SystemParametersInfo(0x0014, 0, $nextWallpaper, 0x01 -bor 0x02)
-
-# Update registry explicitly so subsequent queries reflect the change immediately
-Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value $nextWallpaper -Force -ErrorAction SilentlyContinue

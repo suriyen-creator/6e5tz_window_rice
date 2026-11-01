@@ -414,7 +414,7 @@ function Deploy-AllConfigs {
     Ensure-Directory $targetWallpapersDir
     $repoWallpapersDir = Join-Path $scriptDir 'wallpapers'
     if (Test-Path $repoWallpapersDir) {
-        $sampleImgs = Get-ChildItem -Path $repoWallpapersDir -Filter '*.jpg' -ErrorAction SilentlyContinue
+        $sampleImgs = Get-ChildItem -Path $repoWallpapersDir -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -match '\.(jpg|jpeg|png|webp)$' }
         if ($sampleImgs) {
             foreach ($img in $sampleImgs) {
                 $destImg = Join-Path $targetWallpapersDir $img.Name

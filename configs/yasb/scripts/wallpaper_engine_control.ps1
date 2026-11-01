@@ -33,17 +33,80 @@ if (-not $weExe) {
     exit 1
 }
 
-# If Wallpaper Engine isn't running yet, launch it
-if (-not $runningProc) {
-    Start-Process -FilePath $weExe -WindowStyle Hidden
-    Start-Sleep -Milliseconds 1200
+function Get-WallpaperEngineProjects {
+    $projects = [System.Collections.Generic.List[string]]::new()
+    
+    # 1. Workshop items (Steam App ID 431960)
+    $wsDirs = @(
+        (Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\workshop\content\431960'),
+        (Join-Path $env:ProgramFiles 'Steam\steamapps\workshop\content\431960')
+    )
+    
+    # Check Steam libraryfolders.vdf for custom Steam library paths
+    $vdfPath = Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\libraryfolders.vdf'
+    if (Test-Path $vdfPath) {
+        $vdf = Get-Content -Path $vdfPath -Raw -ErrorAction SilentlyContinue
+        $matches = [regex]::Matches($vdf, '"path"\s+"([^"]+)"')
+        foreach ($m in $matches) {
+            $libPath = $m.Groups[1].Value.Replace('\\', '\')
+            $ws = Join-Path $libPath 'steamapps\workshop\content\431960'
+            if (($wsDirs -notcontains $ws) -and (Test-Path $ws)) {
+                $wsDirs += $ws
+            }
+        }
+    }
+
+    foreach ($wsDir in $wsDirs) {
+        if (Test-Path $wsDir) {
+            $found = Get-ChildItem -Path $wsDir -Filter 'project.json' -Recurse -Depth 2 -File -ErrorAction SilentlyContinue
+            foreach ($f in $found) {
+                $projects.Add($f.FullName)
+            }
+        }
+    }
+
+    # 2. Local default/myprojects
+    $localDirs = @(
+        (Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\common\wallpaper_engine\projects\defaultprojects'),
+        (Join-Path $env:ProgramFiles 'Steam\steamapps\common\wallpaper_engine\projects\defaultprojects'),
+        (Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\common\wallpaper_engine\projects\myprojects'),
+        (Join-Path $env:ProgramFiles 'Steam\steamapps\common\wallpaper_engine\projects\myprojects')
+    )
+    foreach ($ld in $localDirs) {
+        if (Test-Path $ld) {
+            $found = Get-ChildItem -Path $ld -Filter 'project.json' -Recurse -Depth 2 -File -ErrorAction SilentlyContinue
+            foreach ($f in $found) {
+                $projects.Add($f.FullName)
+            }
+        }
+    }
+
+    return $projects
 }
 
 $stateFile = Join-Path $env:TEMP 'yasb_we_state.txt'
 
 switch ($Action) {
     'next' {
-        # Trigger next wallpaper
+        # Intelligent cycling: If user has workshop or local wallpapers installed, cycle through them directly
+        $projList = Get-WallpaperEngineProjects
+        if ($projList.Count -gt 0) {
+            $idxFile = Join-Path $env:LOCALAPPDATA 'yasb_we_index.txt'
+            $currentIdx = 0
+            if (Test-Path $idxFile) {
+                try {
+                    $val = (Get-Content -Path $idxFile -Raw -ErrorAction SilentlyContinue).Trim()
+                    $currentIdx = [int]$val
+                } catch { $currentIdx = 0 }
+            }
+            $nextIdx = ($currentIdx + 1) % $projList.Count
+            Set-Content -Path $idxFile -Value "$nextIdx" -Force
+            
+            $chosen = $projList[$nextIdx]
+            Start-Process -FilePath $weExe -ArgumentList '-control', 'openWallpaper', '-file', "`"$chosen`"" -WindowStyle Hidden
+        }
+
+        # Also send nextWallpaper for playlist rotations
         Start-Process -FilePath $weExe -ArgumentList '-control', 'nextWallpaper' -WindowStyle Hidden
     }
     'pause' {

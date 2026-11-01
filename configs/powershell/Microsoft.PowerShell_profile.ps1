@@ -116,5 +116,10 @@ function unimatrix {
 }
 Set-Alias -Name matrix -Value unimatrix
 
-# 9. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal
+# 9. Next Wallpaper Shortcut Function
+function next-wallpaper {
+    & "$HOME\.config\yasb\scripts\next-wallpaper.ps1" @args
+}
+
+# 10. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal
 ff
