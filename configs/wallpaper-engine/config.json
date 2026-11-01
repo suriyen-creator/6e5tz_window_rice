@@ -207,6 +207,7 @@
 				"paireddevices" : [],
 				"pairingguid" : "2793644D-CE3E-4657-94E3-2CEB4AC2A09E",
 				"resultsperpage" : 100,
+				"seasonaldialogdisabled" : null,
 				"seasonaldialogtimestamp" : 20261102,
 				"showmonitorselectiononstart" : true,
 				"viewiconsize" : "medium"
@@ -402,7 +403,7 @@
 				{
 					"Monitor0" : 
 					{
-						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg"
+						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg"
 					},
 					"Monitor1" : 
 					{
@@ -412,26 +413,6 @@
 			},
 			"wallpaperconfigrecent" : 
 			[
-				{
-					"config" : 
-					{
-						"layout" : 0,
-						"profile" : null,
-						"selectedwallpapers" : 
-						{
-							"Monitor0" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							},
-							"Monitor1" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							}
-						}
-					},
-					"playlist" : false,
-					"title" : "js object - clock"
-				},
 				{
 					"config" : 
 					{
@@ -611,6 +592,26 @@
 					},
 					"playlist" : false,
 					"title" : "Persona 3 Reload [4K + Day/Night cycle]"
+				},
+				{
+					"config" : 
+					{
+						"layout" : 0,
+						"profile" : null,
+						"selectedwallpapers" : 
+						{
+							"Monitor0" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg"
+							},
+							"Monitor1" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+							}
+						}
+					},
+					"playlist" : false,
+					"title" : "Jinhsi 今汐 금희"
 				}
 			],
 			"wallpaperconfigscreensaver" : 
@@ -671,6 +672,13 @@
 				"Monitor0" : 
 				{
 					"volume" : 47
+				}
+			},
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg" : 
+			{
+				"Monitor0" : 
+				{
+					"volume" : 0
 				}
 			},
 			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4" : 

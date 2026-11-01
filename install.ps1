@@ -447,6 +447,17 @@ function Deploy-AllConfigs {
             Restore-Directory -Name 'Vencord/themes' -Source (Join-Path $vencordSource 'themes') -Target (Join-Path $vencordTarget 'themes')
         }
     }
+
+    # 16. Nilesoft Shell
+    $nsSource = Join-Path $ConfigRoot 'nilesoft-shell\shell.nss'
+    if (Test-Path $nsSource) {
+        if (Test-Path 'C:\Program Files\Nilesoft Shell') {
+            Restore-File -Name 'Nilesoft Shell' -Source $nsSource -Target 'C:\Program Files\Nilesoft Shell\shell.nss'
+        } else {
+            $nsUserTarget = Join-Path $env:USERPROFILE '.config\nilesoft-shell\shell.nss'
+            Restore-File -Name 'Nilesoft Shell (config)' -Source $nsSource -Target $nsUserTarget
+        }
+    }
 }
 
 # -------------------------------------------------------------------------
@@ -506,12 +517,14 @@ Write-Host "====================================================================
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object { Write-Host ("  {0}: {1}" -f $_.Name, $_.Count) }
 Write-Host ""
 Write-Host "Tips:" -ForegroundColor Yellow
-Write-Host "  - Alt + Space      : Open Flow Launcher"
+Write-Host "  - Ctrl + Space     : Open Flow Launcher (Search apps & files)"
+Write-Host "  - Alt + Space      : Cycle window focus (GlazeWM)"
 Write-Host "  - Alt + 1..9       : Switch GlazeWM workspaces"
 Write-Host "  - Alt + H/J/K/L    : Move focus between windows"
 Write-Host "  - Type 'ff' in pwsh: Launch Fastfetch with Frieren ASCII art"
 Write-Host "  - Type 'btop'      : Launch Btop monitor with Catppuccin Mocha theme"
-Write-Host "  - ExplorerBlurMica : Run ~/.config/ExplorerBlurMica/register.cmd as Admin to activate File Explorer blur"
+Write-Host "  - Type 'pipes'     : Launch animated pipes screensaver"
+Write-Host "  - ExplorerBlurMica : Press Ctrl + F1 in File Explorer to minimize Ribbon for full Acrylic Blur"
 Write-Host "  - Spicetify        : Run 'spicetify backup apply' once Spotify is installed"
 Write-Host ""
 

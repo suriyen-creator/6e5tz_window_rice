@@ -9,5 +9,15 @@ function ff {
     fastfetch -c "$HOME\fastfetch\fastfetch.json"
 }
 
-# 4. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal
+# 4. ฟังก์ชันเรียกท่อพักหน้าจอ (Pipes Animation)
+function pipes {
+    if (Get-Command pipes-rs -ErrorAction SilentlyContinue) {
+        pipes-rs
+    } else {
+        Write-Host "pipes-rs is not installed. Run: scoop install pipes-rs" -ForegroundColor Yellow
+    }
+}
+Set-Alias -Name pipe -Value pipes
+
+# 5. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal
 ff

@@ -439,6 +439,12 @@ Copy-OptionalCandidates -Name 'Vencord/themes' -Sources @(
     (Join-Path $env:APPDATA 'Vencord\themes')
 ) -Destination (Join-Path $ConfigsRoot 'vencord\themes') -AllowSensitiveExample
 
+# 16. Nilesoft Shell
+Copy-OptionalCandidates -Name 'Nilesoft Shell' -Sources @(
+    'C:\Program Files\Nilesoft Shell\shell.nss',
+    (Join-Path $env:USERPROFILE '.config\nilesoft-shell\shell.nss')
+) -Destination (Join-Path $ConfigsRoot 'nilesoft-shell') -AllowSensitiveExample
+
 Write-Host ''
 Write-Host 'Backup summary' -ForegroundColor White
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object {

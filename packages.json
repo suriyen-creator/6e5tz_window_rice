@@ -74,6 +74,10 @@
       "reason": "Modern TUI hardware monitor (can also be installed via Scoop)"
     },
     {
+      "name": "pipes-rs",
+      "reason": "Animated terminal screensaver pipes for Windows Terminal"
+    },
+    {
       "name": "spicetify-cli",
       "reason": "CLI tool to customize and theme the official Spotify client"
     },
