@@ -135,8 +135,8 @@ widgets:
   traffic:
     type: "yasb.traffic.TrafficWidget"
     options:
-      label: "â†“ {download_speed}   â†‘ {upload_speed}"
-      label_alt: "â‡…"
+      label: "↓ {download_speed}   ↑ {upload_speed}"
+      label_alt: "⇅"
       update_interval: 3000
       interface: "Auto"
       hide_if_offline: true
@@ -167,7 +167,7 @@ widgets:
     type: "yasb.language.LanguageWidget"
     options:
       label: "{lang[language_code]}"
-      label_alt: "{lang[native_lang_name]} â€¢ {lang[layout_name]}"
+      label_alt: "{lang[native_lang_name]} • {lang[layout_name]}"
       update_interval: 2
       callbacks:
         on_left: "toggle_menu"

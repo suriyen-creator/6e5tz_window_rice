@@ -8,7 +8,7 @@
   },
   "logo": {
     "type": "file",
-    "source": "~/fastfetch/frieren.txt",
+    "source": "__USERPROFILE__/fastfetch/frieren.txt",
     "color": {
       "1": "#ccccff",
       "2": "#c6d2ff",
@@ -26,98 +26,96 @@
     "break",
     {
       "type": "title",
-      "key": "ÃƒÂ³Ã‚Â°Ã¢â€šÂ¬Ã¢â‚¬Â° USER",
+      "key": "󰀉 USER",
       "keyColor": "#ccccff",
       "format": "{user-name}@{host-name}"
     },
     {
       "type": "separator",
-      "string": "ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+      "string": "─────────────────────────",
       "outputColor": "#89b4fa"
     },
     {
       "type": "os",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚ÂÃ‚Â² OS",
+      "key": "󰍲 OS",
       "keyColor": "#c9cfff"
     },
     {
       "type": "host",
-      "key": "ÃƒÂ³Ã‚Â°Ã…â€™Ã‚Â¢ HOST",
+      "key": "󰌢 HOST",
       "keyColor": "#c7d1ff"
     },
     {
       "type": "kernel",
-      "key": "ÃƒÂ³Ã‚Â°Ã…â€™Ã‚Â½ KER",
+      "key": "󰌽 KER",
       "keyColor": "#c4d4ff"
     },
     {
       "type": "uptime",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚Â¥Ã¢â‚¬Â UP",
+      "key": "󰥔 UP",
       "keyColor": "#c2d6ff"
     },
     {
       "type": "packages",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚ÂÃ¢â‚¬â€œ PKG",
+      "key": "󰏖 PKG",
       "keyColor": "#c1d7ff"
     },
     {
       "type": "shell",
-      "key": "ÃƒÂ³Ã‚Â°Ã…Â¾Ã‚Â· SH",
+      "key": "󰞷 SH",
       "keyColor": "#c0d9ff",
       "format": "{pretty-name} {version}"
     },
     {
       "type": "display",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚ÂÃ‚Â¹ DISP",
+      "key": "󰍹 DISP",
       "keyColor": "#bedbff",
       "format": "{width}x{height} @ {refresh-rate}Hz"
     },
     {
       "type": "wm",
-      "key": "ÃƒÂ³Ã‚Â±Ã¢â‚¬Å¡Ã‚Â¬ WM",
+      "key": "󱂬 WM",
       "keyColor": "#bddcff",
       "format": "{plugin-name}"
     },
     {
       "type": "terminal",
-      "key": "ÃƒÂ³Ã‚Â°Ã¢â‚¬Â Ã‚Â TERM",
+      "key": "󰆍 TERM",
       "keyColor": "#bddeff",
       "format": "{pretty-name} {version}"
     },
     {
       "type": "cpu",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚Â»Ã‚Â  CPU",
+      "key": "󰻠 CPU",
       "keyColor": "#bde0fe"
     },
     {
       "type": "gpu",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚Â¢Ã‚Â® GPU",
+      "key": "󰢮 GPU",
       "keyColor": "#bde0fe"
     },
     {
       "type": "memory",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚ÂÃ¢â‚¬Âº RAM",
+      "key": "󰍛 RAM",
       "keyColor": "#bde0fe",
       "format": "{used} / {total} ({percentage})"
     },
     {
       "type": "disk",
-      "key": "ÃƒÂ³Ã‚Â°Ã¢â‚¬Â¹Ã…Â  DISK",
+      "key": "󰋊 DISK",
       "keyColor": "#bde0fe",
       "folders": "C:\\",
       "format": "{size-used} / {size-total} ({size-percentage})"
     },
     {
       "type": "battery",
-      "key": "ÃƒÂ³Ã‚Â°Ã‚ÂÃ‚Â¹ BAT",
+      "key": "󰁹 BAT",
       "keyColor": "#bde0fe"
     },
     {
       "type": "custom",
-      "format": "\u001b[90mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[91mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[92mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[93mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[94mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[95mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[96mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ \u001b[97mÃƒÂ¯Ã¢â‚¬Å¾Ã¢â‚¬Ëœ"
+      "format": "\u001b[90m \u001b[91m \u001b[92m \u001b[93m \u001b[94m \u001b[95m \u001b[96m \u001b[97m"
     },
     "break"
   ]
 }
-
-

@@ -817,7 +817,7 @@ Example: "Windows Media" becomes "windows-media" */
 }
 
 /* =========================================================
-   POLISHED SYSTEM POPUPS â€” Catppuccin / Windows 11 inspired
+   POLISHED SYSTEM POPUPS — Catppuccin / Windows 11 inspired
    Added for Wi-Fi, Bluetooth, Battery and Control Center.
    This block is intentionally last so it overrides older rules.
    ========================================================= */
@@ -1591,7 +1591,7 @@ Example: "Windows Media" becomes "windows-media" */
     qproperty-alignment: AlignCenter;
 }
 
-/* Collapsed state (label_alt = â‡…). */
+/* Collapsed state (label_alt = ⇅). */
 .traffic-widget .label.alt {
     min-width: 22px;
     max-width: 22px;

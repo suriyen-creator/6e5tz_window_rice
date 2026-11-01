@@ -122,10 +122,16 @@ function Convert-ToTargetText {
         [switch]$PowerShellProfile
     )
     $userValue = if ($PowerShellProfile) { '$HOME' } else { $env:USERPROFILE }
+    $userSlash = ($env:USERPROFILE).Replace('\', '/')
+    $Content = $Content.Replace('__USERPROFILE__/', "$userSlash/")
     $Content = $Content.Replace('__USERPROFILE__', $userValue)
+    $Content = $Content.Replace('__APPDATA__/', (($env:APPDATA).Replace('\', '/')) + '/')
     $Content = $Content.Replace('__APPDATA__', $env:APPDATA)
+    $Content = $Content.Replace('__LOCALAPPDATA__/', (($env:LOCALAPPDATA).Replace('\', '/')) + '/')
     $Content = $Content.Replace('__LOCALAPPDATA__', $env:LOCALAPPDATA)
+    $Content = $Content.Replace('__PROGRAMFILES__/', (($env:ProgramFiles).Replace('\', '/')) + '/')
     $Content = $Content.Replace('__PROGRAMFILES__', $env:ProgramFiles)
+    $Content = $Content.Replace('__PROGRAMFILES_X86__/', ((${env:ProgramFiles(x86)}).Replace('\', '/')) + '/')
     $Content = $Content.Replace('__PROGRAMFILES_X86__', ${env:ProgramFiles(x86)})
     $Content = $Content.Replace('__REPO_ROOT__', $RepoRoot)
     return $Content
@@ -172,7 +178,7 @@ function Restore-File {
         $extension = [IO.Path]::GetExtension($Source).ToLowerInvariant()
         $textExtensions = @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.md', '')
         if ($textExtensions -contains $extension) {
-            $content = Get-Content -LiteralPath $Source -Raw
+            $content = [System.IO.File]::ReadAllText($Source, [System.Text.Encoding]::UTF8)
             $converted = Convert-ToTargetText -Content $content -PowerShellProfile:$PowerShellProfile
             [System.IO.File]::WriteAllText($Target, $converted, $utf8NoBom)
         } else {
@@ -208,7 +214,7 @@ function Restore-Directory {
             $textExtensions = @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.md', '')
             Ensure-Directory -Path (Split-Path -Parent $destination)
             if ($textExtensions -contains $extension) {
-                $content = Get-Content -LiteralPath $file.FullName -Raw
+                $content = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
                 $converted = Convert-ToTargetText -Content $content
                 [System.IO.File]::WriteAllText($destination, $converted, $utf8NoBom)
             } else {
@@ -237,7 +243,8 @@ function Install-Packages {
         return
     }
 
-    $packageData = Get-Content -LiteralPath $PackagesFile -Raw | ConvertFrom-Json
+    $packageRaw = [System.IO.File]::ReadAllText($PackagesFile, [System.Text.Encoding]::UTF8)
+    $packageData = $packageRaw | ConvertFrom-Json
     foreach ($package in @($packageData.winget)) {
         try {
             Write-Status "Installing/Verifying $($package.name)..." 'Info'

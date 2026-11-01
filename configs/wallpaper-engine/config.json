@@ -1,5 +1,5 @@
 {
-	"?installdirectory" : "C:/Program Files (x86)/Steam/steamapps/common/wallpaper_engine",
+	"?installdirectory" : "__PROGRAMFILES__ (x86)/Steam/steamapps/common/wallpaper_engine",
 	"suriy" : 
 	{
 		"general" : 
@@ -207,6 +207,7 @@
 				"paireddevices" : [],
 				"pairingguid" : "2793644D-CE3E-4657-94E3-2CEB4AC2A09E",
 				"resultsperpage" : 100,
+				"seasonaldialogtimestamp" : 20261102,
 				"showmonitorselectiononstart" : true,
 				"viewiconsize" : "medium"
 			},
@@ -401,11 +402,11 @@
 				{
 					"Monitor0" : 
 					{
-						"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4"
+						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg"
 					},
 					"Monitor1" : 
 					{
-						"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 					}
 				}
 			},
@@ -420,11 +421,11 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
@@ -440,16 +441,16 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3510729512/scene.pkg"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3510729512/scene.pkg"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
 					"playlist" : false,
-					"title" : "Blue Archive å°é¸Ÿæ¸¸æ˜Ÿé‡Ž çª—ç•”å¼¦æ­Œâ€”â€”å¤œèŽºNightã€æ€»æœ‰äº›æƒŠå¥‡çš„é™…é‡ï¼Œæ¯”æ–¹è¯´å½“æˆ‘é‡è§ä½ ã€‘"
+					"title" : "Blue Archive 小鸟游星野 窗畔弦歌——夜莺Night【总有些惊奇的际遇，比方说当我遇见你】"
 				},
 				{
 					"config" : 
@@ -460,11 +461,11 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RINGâ„¢ 2024-07-20 23-09-54.mp4"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RING™ 2024-07-20 23-09-54.mp4"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
@@ -480,11 +481,11 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2517518192/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2517518192/index.html"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
@@ -500,16 +501,16 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes â€“ Relaxing Aquarium.mp4"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes – Relaxing Aquarium.mp4"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
 					"playlist" : false,
-					"title" : "[Lightweight] Minecraft Soothing Scenes â€“ Relaxing Aquarium (Cozy Ocean)"
+					"title" : "[Lightweight] Minecraft Soothing Scenes – Relaxing Aquarium (Cozy Ocean)"
 				},
 				{
 					"config" : 
@@ -520,11 +521,11 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3417601930/scene.pkg"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3417601930/scene.pkg"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
@@ -540,11 +541,11 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
@@ -560,31 +561,11 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							}
-						}
-					},
-					"playlist" : false,
-					"title" : "Persona 3 Reload [4K + Day/Night cycle]"
-				},
-				{
-					"config" : 
-					{
-						"layout" : 0,
-						"profile" : null,
-						"selectedwallpapers" : 
-						{
-							"Monitor0" : 
-							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4"
-							},
-							"Monitor1" : 
-							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
@@ -600,16 +581,36 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4"
 							},
 							"Monitor1" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
 							}
 						}
 					},
 					"playlist" : false,
-					"title" : "Minecraft Liminal space Poolcore é˜ˆé™ç©ºé—´ æ± æ ¸"
+					"title" : "Minecraft Liminal space Poolcore 阈限空间 池核"
+				},
+				{
+					"config" : 
+					{
+						"layout" : 0,
+						"profile" : null,
+						"selectedwallpapers" : 
+						{
+							"Monitor0" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg"
+							},
+							"Monitor1" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
+							}
+						}
+					},
+					"playlist" : false,
+					"title" : "Persona 3 Reload [4K + Day/Night cycle]"
 				}
 			],
 			"wallpaperconfigscreensaver" : 
@@ -621,7 +622,7 @@
 		"version" : 5,
 		"wproperties" : 
 		{
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2517518192/index.html" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2517518192/index.html" : 
 			{
 				"Monitor0" : 
 				{
@@ -630,63 +631,63 @@
 					"fnafui" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes â€“ Relaxing Aquarium.mp4" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes – Relaxing Aquarium.mp4" : 
 			{
 				"Monitor0" : 
 				{
 					"volume" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html" : 
 			{
 				"Monitor0" : 
 				{
 					"ui_font_size" : 21
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg" : 
 			{
 				"Monitor0" : 
 				{
 					"volume" : 41
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RINGâ„¢ 2024-07-20 23-09-54.mp4" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RING™ 2024-07-20 23-09-54.mp4" : 
 			{
 				"Monitor0" : 
 				{
 					"volume" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3313986886/IQ2lQYIfKYc_1080p.mp4" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3313986886/IQ2lQYIfKYc_1080p.mp4" : 
 			{
 				"Monitor0" : 
 				{
 					"volume" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3444152820/é»Žæ­Œæ ¼å­ 2.mp4" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3444152820/黎歌格子 2.mp4" : 
 			{
 				"Monitor0" : 
 				{
 					"volume" : 47
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4" : 
 			{
 				"Monitor0" : 
 				{
 					"volume" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3500648585/scene.pkg" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3500648585/scene.pkg" : 
 			{
 				"Monitor0" : 
 				{
 					"alignmentposition" : 72
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3647696675/project.json" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3647696675/project.json" : 
 			{
 				"Monitor0" : 
 				{
@@ -696,7 +697,7 @@
 					"timedifference2" : "+2"
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4" : 
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4" : 
 			{
 				"Monitor0" : 
 				{
@@ -706,4 +707,3 @@
 		}
 	}
 }
-

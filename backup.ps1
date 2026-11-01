@@ -7,6 +7,7 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = [IO.Path]::GetFullPath($PSScriptRoot)
 $ConfigsRoot = Join-Path $RepoRoot 'configs'
 $Results = New-Object 'System.Collections.Generic.List[object]'
+$utf8NoBom = [System.Text.UTF8Encoding]::new($false)
 
 function Write-Status {
     param(
@@ -50,6 +51,7 @@ function Get-AssetExtension {
 
 function Test-ExcludedFile {
     param([Parameter(Mandatory = $true)][IO.FileInfo]$File)
+    if ($File.FullName -match '(?i)[\\/]\.git([\\/]|$)') { return $true }
     if ($File.Name -match '(?i)(^|\.)(log|bak|old|tmp|temp|cache)$|\.backup-') { return $true }
     if ($File.Name -match '(?i)(history|recent|state|last_update|crash|dump)') { return $true }
     if ($File.FullName -match '(?i)[\\/](\.backup-|backup-|cache|caches|logs|history|crashdumps|temp|tmp|workshop)[\\/]') { return $true }
@@ -97,6 +99,8 @@ function Convert-ToPortableText {
             $escapedCurrent = ([string]$pair.Current).Replace('\', '\\')
             $escapedToken = ([string]$pair.Marker).Replace('\', '\\')
             $Content = $Content.Replace($escapedCurrent, $escapedToken)
+            $slashCurrent = ([string]$pair.Current).Replace('\', '/')
+            $Content = $Content.Replace($slashCurrent, [string]$pair.Marker)
         }
     }
     return $Content
@@ -109,7 +113,7 @@ function Write-PortableText {
         [switch]$AllowSensitiveExample
     )
 
-    $raw = Get-Content -LiteralPath $Source -Raw
+    $raw = [System.IO.File]::ReadAllText($Source, [System.Text.Encoding]::UTF8)
     if (Test-SensitiveAssignment -Content $raw) {
         if ($AllowSensitiveExample) {
             $exampleLines = foreach ($line in ($raw -split "`r?`n")) {
@@ -121,14 +125,14 @@ function Write-PortableText {
             }
             $examplePath = "$Destination.example"
             Ensure-Directory -Path (Split-Path -Parent $examplePath)
-            Set-Content -LiteralPath $examplePath -Value ($exampleLines -join [Environment]::NewLine) -Encoding UTF8
+            [System.IO.File]::WriteAllText($examplePath, ($exampleLines -join [Environment]::NewLine), $utf8NoBom)
             return 'example-only'
         }
         return 'sensitive-skipped'
     }
 
     Ensure-Directory -Path (Split-Path -Parent $Destination)
-    Set-Content -LiteralPath $Destination -Value (Convert-ToPortableText -Content $raw) -Encoding UTF8
+    [System.IO.File]::WriteAllText($Destination, (Convert-ToPortableText -Content $raw), $utf8NoBom)
     return 'copied'
 }
 
@@ -219,7 +223,8 @@ function Copy-FlowSettings {
             Write-Status 'Flow Launcher/settings: source not found' 'Skipped'
             Add-Result -Name 'Flow Launcher/settings' -Status 'Skipped' -Detail 'Settings.json not found.'
         } else {
-            $obj = Get-Content -LiteralPath $source -Raw | ConvertFrom-Json
+            $jsonRaw = [System.IO.File]::ReadAllText($source, [System.Text.Encoding]::UTF8)
+            $obj = $jsonRaw | ConvertFrom-Json
             if ($null -ne $obj.Proxy) {
                 if ($null -ne $obj.Proxy.PSObject.Properties['UserName']) { $obj.Proxy.PSObject.Properties.Remove('UserName') }
                 $privateField = 'pass' + 'word'
@@ -233,7 +238,7 @@ function Copy-FlowSettings {
             }
             $json = $obj | ConvertTo-Json -Depth 100
             Ensure-Directory -Path (Split-Path -Parent $destination)
-            Set-Content -LiteralPath $destination -Value (Convert-ToPortableText -Content $json) -Encoding UTF8
+            [System.IO.File]::WriteAllText($destination, (Convert-ToPortableText -Content $json), $utf8NoBom)
             Write-Status 'Flow Launcher/settings: copied and sanitized' 'Success'
             Add-Result -Name 'Flow Launcher/settings' -Status 'Success' -Detail $destination
         }
@@ -273,7 +278,7 @@ function Copy-PowerShellProfile {
         if (Test-Path -LiteralPath $candidate -PathType Leaf) {
             $found = $true
             $profileDestination = Join-Path $ConfigsRoot 'powershell\Microsoft.PowerShell_profile.ps1'
-            $profileContent = Get-Content -LiteralPath $candidate -Raw
+            $profileContent = [System.IO.File]::ReadAllText($candidate, [System.Text.Encoding]::UTF8)
             $themePattern = '(?i)[A-Za-z]:\\[^"'']+\.omp\.json'
             foreach ($match in [Regex]::Matches($profileContent, $themePattern)) {
                 $themeSource = $match.Value
@@ -291,12 +296,12 @@ function Copy-PowerShellProfile {
                     if (Test-SensitiveAssignment -Content $line) { '# REVIEW LOCALLY: private value omitted from backup' } else { Convert-ToPortableText -Content $line }
                 }
                 Ensure-Directory -Path (Split-Path -Parent $profileDestination)
-                Set-Content -LiteralPath "$profileDestination.example" -Value ($exampleLines -join [Environment]::NewLine) -Encoding UTF8
+                [System.IO.File]::WriteAllText("$profileDestination.example", ($exampleLines -join [Environment]::NewLine), $utf8NoBom)
                 Write-Status 'PowerShell/profile: private value omitted; example written' 'Skipped'
                 Add-Result -Name 'PowerShell/profile' -Status 'Skipped' -Detail "$profileDestination.example"
             } else {
                 Ensure-Directory -Path (Split-Path -Parent $profileDestination)
-                Set-Content -LiteralPath $profileDestination -Value (Convert-ToPortableText -Content $profileContent) -Encoding UTF8
+                [System.IO.File]::WriteAllText($profileDestination, (Convert-ToPortableText -Content $profileContent), $utf8NoBom)
                 Write-Status 'PowerShell/profile: copied and made portable' 'Success'
                 Add-Result -Name 'PowerShell/profile' -Status 'Success' -Detail $profileDestination
             }
