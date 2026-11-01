@@ -50,9 +50,9 @@ function Get-AssetExtension {
 
 function Test-ExcludedFile {
     param([Parameter(Mandatory = $true)][IO.FileInfo]$File)
-    if ($File.Name -match '(?i)(^|\.)(log|bak|old|tmp|temp|cache)$') { return $true }
+    if ($File.Name -match '(?i)(^|\.)(log|bak|old|tmp|temp|cache)$|\.backup-') { return $true }
     if ($File.Name -match '(?i)(history|recent|state|last_update|crash|dump)') { return $true }
-    if ($File.FullName -match '(?i)[\\/](cache|caches|logs|history|crashdumps|temp|tmp|workshop)[\\/]') { return $true }
+    if ($File.FullName -match '(?i)[\\/](\.backup-|backup-|cache|caches|logs|history|crashdumps|temp|tmp|workshop)[\\/]') { return $true }
     return $false
 }
 

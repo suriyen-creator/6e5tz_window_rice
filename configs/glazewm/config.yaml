@@ -12,7 +12,7 @@
   - 'shell-exec taskkill /IM yasb.exe /F'
   - 'shell-exec taskkill /IM glazetiler.exe /F'
 
-  # Commands to run after the WM config is relà¹„oaded.
+  # Commands to run after the WM config is relÃ Â¹â€žoaded.
   config_reload_commands: []
 
   # Whether to automatically focus windows underneath the cursor.
@@ -323,3 +323,4 @@ keybindings:
     bindings: ['alt+shift+8']
   - commands: ['move --workspace 9', 'focus --workspace 9']
     bindings: ['alt+shift+9']
+

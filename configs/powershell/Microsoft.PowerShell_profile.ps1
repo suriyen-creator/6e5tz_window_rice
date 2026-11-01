@@ -1,10 +1,38 @@
-﻿# 1. à¹‚à¸«à¸¥à¸” Oh My Posh à¸ˆà¸²à¸ Cache (à¹€à¸›à¸´à¸”à¸›à¸¸à¹Šà¸š à¹à¸–à¸š Prompt à¸ªà¸§à¸¢à¹† à¸¡à¸²à¸—à¸±à¸™à¸—à¸µ à¹„à¸¡à¹ˆà¸£à¸­à¸™à¸²à¸™à¹à¸™à¹ˆà¸™à¸­à¸™!)
-. "__USERPROFILE__\.config\omp_cache.ps1"
-
-# 2. à¸œà¸¹à¸à¸„à¸µà¸¢à¹Œà¸¥à¸±à¸”à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸£à¸µà¸¢à¸ Fastfetch à¹à¸¡à¸™à¸™à¸§à¸¥
-Set-Alias -Name fastfetch -Value "__USERPROFILE__\fastfetch\fastfetch.exe"
-
-# 3. à¸ªà¸£à¹‰à¸²à¸‡à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¸™à¸¥à¸±à¸”à¸žà¸´à¸¡à¸žà¹Œ ff à¹€à¸žà¸·à¹ˆà¸­à¹‚à¸Šà¸§à¹Œà¸™à¹‰à¸­à¸‡à¸Ÿà¸£à¸µà¹€à¸£à¸™à¹à¸šà¸šà¸ˆà¸±à¸”à¹€à¸•à¹‡à¸¡
-function ff {
-    fastfetch -c "__USERPROFILE__\fastfetch\fastfetch.json"
+﻿# 1. Load Oh My Posh (Cache with fallback)
+if (Test-Path "$HOME\.config\omp_cache.ps1") {
+    try {
+        . "$HOME\.config\omp_cache.ps1"
+    } catch {
+        if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+            $ompTheme = if (Test-Path "$HOME\.config\jandedobbeleer.omp.json") { "$HOME\.config\jandedobbeleer.omp.json" } else { "jandedobbeleer" }
+            oh-my-posh init pwsh --config $ompTheme | Invoke-Expression
+        }
+    }
+} elseif (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    $ompTheme = if (Test-Path "$HOME\.config\jandedobbeleer.omp.json") { "$HOME\.config\jandedobbeleer.omp.json" } else { "jandedobbeleer" }
+    oh-my-posh init pwsh --config $ompTheme | Invoke-Expression
 }
+
+# 2. Fastfetch Alias
+if (-not (Get-Command fastfetch -ErrorAction SilentlyContinue)) {
+    if (Test-Path "$HOME\fastfetch\fastfetch.exe") {
+        Set-Alias -Name fastfetch -Value "$HOME\fastfetch\fastfetch.exe"
+    }
+}
+
+# 3. Shortcut ff for Fastfetch
+function ff {
+    $ffConfig = if (Test-Path "$HOME\fastfetch\fastfetch.json") {
+        "$HOME\fastfetch\fastfetch.json"
+    } elseif (Test-Path "$HOME\.config\fastfetch\fastfetch.json") {
+        "$HOME\.config\fastfetch\fastfetch.json"
+    } else {
+        $null
+    }
+    if ($ffConfig) {
+        fastfetch -c $ffConfig
+    } else {
+        fastfetch
+    }
+}
+
