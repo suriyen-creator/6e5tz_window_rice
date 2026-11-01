@@ -1,0 +1,12 @@
+{
+  "enabledThemes": [
+    "catppuccin-mocha.theme.css"
+  ],
+  "notifyAboutUpdates": true,
+  "useQuickCss": true,
+  "autoUpdateNotification": false,
+  "themeLinks": [
+    "https://catppuccin.github.io/discord/dist/catppuccin-mocha.theme.css"
+  ],
+  "autoUpdate": true
+}

@@ -1,4 +1,4 @@
-﻿{
+{
 	"?installdirectory" : "C:/Program Files (x86)/Steam/steamapps/common/wallpaper_engine",
 	"suriy" : 
 	{
@@ -449,7 +449,7 @@
 						}
 					},
 					"playlist" : false,
-					"title" : "Blue Archive Ã¥Â°ÂÃ©Â¸Å¸Ã¦Â¸Â¸Ã¦ËœÅ¸Ã©â€¡Å½ Ã§Âªâ€”Ã§â€¢â€Ã¥Â¼Â¦Ã¦Â­Å’Ã¢â‚¬â€Ã¢â‚¬â€Ã¥Â¤Å“Ã¨Å½ÂºNightÃ£â‚¬ÂÃ¦â‚¬Â»Ã¦Å“â€°Ã¤Âºâ€ºÃ¦Æ’Å Ã¥Â¥â€¡Ã§Å¡â€žÃ©â„¢â€¦Ã©Ââ€¡Ã¯Â¼Å’Ã¦Â¯â€Ã¦â€“Â¹Ã¨Â¯Â´Ã¥Â½â€œÃ¦Ë†â€˜Ã©Ââ€¡Ã¨Â§ÂÃ¤Â½Â Ã£â‚¬â€˜"
+					"title" : "Blue Archive å°é¸Ÿæ¸¸æ˜Ÿé‡Ž çª—ç•”å¼¦æ­Œâ€”â€”å¤œèŽºNightã€æ€»æœ‰äº›æƒŠå¥‡çš„é™…é‡ï¼Œæ¯”æ–¹è¯´å½“æˆ‘é‡è§ä½ ã€‘"
 				},
 				{
 					"config" : 
@@ -460,7 +460,7 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RINGÃ¢â€žÂ¢ 2024-07-20 23-09-54.mp4"
+								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RINGâ„¢ 2024-07-20 23-09-54.mp4"
 							},
 							"Monitor1" : 
 							{
@@ -500,7 +500,7 @@
 						{
 							"Monitor0" : 
 							{
-								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes Ã¢â‚¬â€œ Relaxing Aquarium.mp4"
+								"file" : "C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes â€“ Relaxing Aquarium.mp4"
 							},
 							"Monitor1" : 
 							{
@@ -509,7 +509,7 @@
 						}
 					},
 					"playlist" : false,
-					"title" : "[Lightweight] Minecraft Soothing Scenes Ã¢â‚¬â€œ Relaxing Aquarium (Cozy Ocean)"
+					"title" : "[Lightweight] Minecraft Soothing Scenes â€“ Relaxing Aquarium (Cozy Ocean)"
 				},
 				{
 					"config" : 
@@ -609,7 +609,7 @@
 						}
 					},
 					"playlist" : false,
-					"title" : "Minecraft Liminal space Poolcore Ã©ËœË†Ã©â„¢ÂÃ§Â©ÂºÃ©â€”Â´ Ã¦Â±Â Ã¦Â Â¸"
+					"title" : "Minecraft Liminal space Poolcore é˜ˆé™ç©ºé—´ æ± æ ¸"
 				}
 			],
 			"wallpaperconfigscreensaver" : 
@@ -630,7 +630,7 @@
 					"fnafui" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes Ã¢â‚¬â€œ Relaxing Aquarium.mp4" : 
+			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes â€“ Relaxing Aquarium.mp4" : 
 			{
 				"Monitor0" : 
 				{
@@ -651,7 +651,7 @@
 					"volume" : 41
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RINGÃ¢â€žÂ¢ 2024-07-20 23-09-54.mp4" : 
+			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RINGâ„¢ 2024-07-20 23-09-54.mp4" : 
 			{
 				"Monitor0" : 
 				{
@@ -665,7 +665,7 @@
 					"volume" : 0
 				}
 			},
-			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3444152820/Ã©Â»Å½Ã¦Â­Å’Ã¦Â Â¼Ã¥Â­Â 2.mp4" : 
+			"C:/Program Files (x86)/Steam/steamapps/workshop/content/431960/3444152820/é»Žæ­Œæ ¼å­ 2.mp4" : 
 			{
 				"Monitor0" : 
 				{

@@ -1,4 +1,4 @@
-﻿# This is default and very simple configuration file for Yasb. 
+# This is default and very simple configuration file for Yasb. 
 # For more information about configuration options, please visit the Wiki https://github.com/amnweb/yasb/wiki
 watch_stylesheet: true
 watch_config: true
@@ -135,8 +135,8 @@ widgets:
   traffic:
     type: "yasb.traffic.TrafficWidget"
     options:
-      label: "Ã¢â€ â€œ {download_speed}   Ã¢â€ â€˜ {upload_speed}"
-      label_alt: "Ã¢â€¡â€¦"
+      label: "â†“ {download_speed}   â†‘ {upload_speed}"
+      label_alt: "â‡…"
       update_interval: 3000
       interface: "Auto"
       hide_if_offline: true
@@ -167,7 +167,7 @@ widgets:
     type: "yasb.language.LanguageWidget"
     options:
       label: "{lang[language_code]}"
-      label_alt: "{lang[native_lang_name]} Ã¢â‚¬Â¢ {lang[layout_name]}"
+      label_alt: "{lang[native_lang_name]} â€¢ {lang[layout_name]}"
       update_interval: 2
       callbacks:
         on_left: "toggle_menu"

@@ -95,7 +95,7 @@ function Ensure-Directory {
 
 function Stop-RunningRiceProcesses {
     Write-Status "Closing running rice processes temporarily to safely update configs..." 'Info'
-    $procs = @('yasb', 'glazewm', 'glazetiler', 'HideTaskbar', 'cava')
+    $procs = @('yasb', 'glazewm', 'glazetiler', 'HideTaskbar', 'cava', 'ModernFlyouts', 'btop')
     foreach ($p in $procs) {
         $found = Get-Process -Name $p -ErrorAction SilentlyContinue
         if ($found) {
@@ -254,6 +254,20 @@ function Install-Packages {
             Add-Result -Name "Package/$($package.name)" -Status 'Failed' -Detail $_.Exception.Message
         }
     }
+
+    $scoopCommand = Get-Command scoop -ErrorAction SilentlyContinue
+    if ($null -ne $scoopCommand -and $null -ne $packageData.PSObject.Properties['scoop']) {
+        foreach ($pkg in @($packageData.scoop)) {
+            try {
+                Write-Status "Installing/Verifying Scoop package $($pkg.name)..." 'Info'
+                & $scoopCommand.Source 'install' $pkg.name
+                Write-Status "$($pkg.name): ready (scoop)" 'Success'
+                Add-Result -Name "Scoop/$($pkg.name)" -Status 'Success' -Detail $pkg.name
+            } catch {
+                Write-Status "Scoop $($pkg.name): $($_.Exception.Message)" 'Warning'
+            }
+        }
+    }
 }
 
 function Install-NerdFont {
@@ -372,12 +386,66 @@ function Deploy-AllConfigs {
             }
         }
     }
+
+    # 11. Btop
+    if (Test-Path (Join-Path $ConfigRoot 'btop')) {
+        Restore-Directory -Name 'Btop' -Source (Join-Path $ConfigRoot 'btop') -Target (Join-Path $env:USERPROFILE '.config\btop')
+        $scoopBtopPersist = Join-Path $env:USERPROFILE 'scoop\persist\btop'
+        if (Test-Path $scoopBtopPersist) {
+            if (Test-Path (Join-Path $ConfigRoot 'btop\btop.conf')) {
+                Copy-Item (Join-Path $ConfigRoot 'btop\btop.conf') "$scoopBtopPersist\btop.conf" -Force
+            }
+            if (Test-Path (Join-Path $ConfigRoot 'btop\themes')) {
+                Ensure-Directory "$scoopBtopPersist\themes"
+                Copy-Item (Join-Path $ConfigRoot 'btop\themes\*') "$scoopBtopPersist\themes\" -Recurse -Force
+            }
+        }
+    }
+
+    # 12. ExplorerBlurMica
+    $ebmSource = Join-Path $ConfigRoot 'explorer-blur-mica'
+    if (Test-Path $ebmSource) {
+        $ebmTarget = Join-Path $env:USERPROFILE '.config\ExplorerBlurMica'
+        Restore-Directory -Name 'ExplorerBlurMica' -Source $ebmSource -Target $ebmTarget
+    }
+
+    # 13. Spicetify
+    $spicetifySource = Join-Path $ConfigRoot 'spicetify'
+    if (Test-Path $spicetifySource) {
+        $spicetifyTarget = Join-Path $env:APPDATA 'spicetify'
+        Ensure-Directory $spicetifyTarget
+        if (Test-Path (Join-Path $spicetifySource 'config-xpui.ini')) {
+            Restore-File -Name 'Spicetify/config' -Source (Join-Path $spicetifySource 'config-xpui.ini') -Target (Join-Path $spicetifyTarget 'config-xpui.ini')
+        }
+        if (Test-Path (Join-Path $spicetifySource 'Themes')) {
+            Restore-Directory -Name 'Spicetify/themes' -Source (Join-Path $spicetifySource 'Themes') -Target (Join-Path $spicetifyTarget 'Themes')
+        }
+    }
+
+    # 14. ModernFlyouts
+    $mfPkg = Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Packages') -Filter '*ModernFlyouts*' -Directory -ErrorAction SilentlyContinue
+    if ($mfPkg) {
+        Write-Status "ModernFlyouts is installed" 'Success'
+    }
+
+    # 15. Vencord (Discord)
+    $vencordSource = Join-Path $ConfigRoot 'vencord'
+    if (Test-Path $vencordSource) {
+        $vencordTarget = Join-Path $env:APPDATA 'Vencord'
+        Ensure-Directory $vencordTarget
+        if (Test-Path (Join-Path $vencordSource 'settings.json')) {
+            Restore-File -Name 'Vencord/settings' -Source (Join-Path $vencordSource 'settings.json') -Target (Join-Path $vencordTarget 'settings\settings.json')
+        }
+        if (Test-Path (Join-Path $vencordSource 'themes')) {
+            Restore-Directory -Name 'Vencord/themes' -Source (Join-Path $vencordSource 'themes') -Target (Join-Path $vencordTarget 'themes')
+        }
+    }
 }
 
 # -------------------------------------------------------------------------
 # Main Execution Logic
 # -------------------------------------------------------------------------
-Clear-Host
+try { Clear-Host } catch {}
 Write-Host "==========================================================================" -ForegroundColor Cyan
 Write-Host "   🌸 6e5tz Windows Desktop Rice Installer                               " -ForegroundColor Magenta
 Write-Host "   GlazeWM • YASB • Flow Launcher • Oh My Posh • Fastfetch • CAVA         " -ForegroundColor Cyan
@@ -435,6 +503,9 @@ Write-Host "  - Alt + Space      : Open Flow Launcher"
 Write-Host "  - Alt + 1..9       : Switch GlazeWM workspaces"
 Write-Host "  - Alt + H/J/K/L    : Move focus between windows"
 Write-Host "  - Type 'ff' in pwsh: Launch Fastfetch with Frieren ASCII art"
+Write-Host "  - Type 'btop'      : Launch Btop monitor with Catppuccin Mocha theme"
+Write-Host "  - ExplorerBlurMica : Run ~/.config/ExplorerBlurMica/register.cmd as Admin to activate File Explorer blur"
+Write-Host "  - Spicetify        : Run 'spicetify backup apply' once Spotify is installed"
 Write-Host ""
 
 $startNow = $false

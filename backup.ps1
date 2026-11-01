@@ -402,6 +402,38 @@ Copy-OptionalCandidates -Name 'Wallpaper Engine' -Sources @(
     'C:\Program Files\Steam\steamapps\common\wallpaper_engine\config.json'
 ) -Destination (Join-Path $ConfigsRoot 'wallpaper-engine') -AllowSensitiveExample
 
+# 12. Btop
+Copy-OptionalCandidates -Name 'Btop' -Sources @(
+    (Join-Path $env:USERPROFILE '.config\btop'),
+    (Join-Path $env:USERPROFILE 'scoop\persist\btop\btop.conf'),
+    (Join-Path $env:USERPROFILE 'scoop\persist\btop\themes\catppuccin_mocha.theme')
+) -Destination (Join-Path $ConfigsRoot 'btop') -AllowSensitiveExample
+
+# 13. ExplorerBlurMica
+Copy-OptionalCandidates -Name 'ExplorerBlurMica' -Sources @(
+    (Join-Path $env:USERPROFILE '.config\ExplorerBlurMica\config.ini'),
+    (Join-Path $env:USERPROFILE '.config\ExplorerBlurMica\register.cmd'),
+    (Join-Path $env:USERPROFILE '.config\ExplorerBlurMica\uninstall.cmd')
+) -Destination (Join-Path $ConfigsRoot 'explorer-blur-mica') -AllowSensitiveExample
+
+# 14. Spicetify
+Copy-OptionalCandidates -Name 'Spicetify/config' -Sources @(
+    (Join-Path $env:APPDATA 'spicetify\config-xpui.ini')
+) -Destination (Join-Path $ConfigsRoot 'spicetify') -AllowSensitiveExample
+
+Copy-OptionalCandidates -Name 'Spicetify/catppuccin' -Sources @(
+    (Join-Path $env:APPDATA 'spicetify\Themes\catppuccin')
+) -Destination (Join-Path $ConfigsRoot 'spicetify\Themes\catppuccin') -AllowSensitiveExample
+
+# 15. Vencord (Discord)
+Copy-OptionalCandidates -Name 'Vencord/settings' -Sources @(
+    (Join-Path $env:APPDATA 'Vencord\settings\settings.json')
+) -Destination (Join-Path $ConfigsRoot 'vencord') -AllowSensitiveExample
+
+Copy-OptionalCandidates -Name 'Vencord/themes' -Sources @(
+    (Join-Path $env:APPDATA 'Vencord\themes')
+) -Destination (Join-Path $ConfigsRoot 'vencord\themes') -AllowSensitiveExample
+
 Write-Host ''
 Write-Host 'Backup summary' -ForegroundColor White
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object {

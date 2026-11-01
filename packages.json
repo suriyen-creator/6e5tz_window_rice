@@ -43,19 +43,57 @@
       "reason": "cava.exe and version 0.10.7 were detected"
     },
     {
+      "id": "aristocratos.btop4win",
+      "name": "Btop4win",
+      "reason": "Aesthetic TUI system and hardware resource monitor"
+    },
+    {
+      "id": "ModernFlyouts.ModernFlyouts",
+      "name": "ModernFlyouts",
+      "reason": "Fluent and modern on-screen display flyouts for volume and brightness"
+    },
+    {
+      "id": "Vendicated.Vencord",
+      "name": "Vencord",
+      "reason": "Lightweight Discord client mod with Catppuccin theme support"
+    },
+    {
+      "id": "Spotify.Spotify",
+      "name": "Spotify",
+      "reason": "Music player client styled with Spicetify Catppuccin theme"
+    },
+    {
       "id": "Valve.Steam",
       "name": "Steam",
       "reason": "Steam is the installed host for Wallpaper Engine"
     }
   ],
+  "scoop": [
+    {
+      "name": "btop",
+      "reason": "Modern TUI hardware monitor (can also be installed via Scoop)"
+    },
+    {
+      "name": "spicetify-cli",
+      "reason": "CLI tool to customize and theme the official Spotify client"
+    },
+    {
+      "name": "vencord-installer-cli",
+      "reason": "CLI installer to patch Discord with Vencord"
+    }
+  ],
   "manual": [
     {
+      "name": "ExplorerBlurMica",
+      "reason": "Included in configs/explorer-blur-mica; adds Acrylic blur and dark tint to File Explorer"
+    },
+    {
       "name": "GlazeTiler",
-      "reason": "No verified WinGet package was included; install from its official release/source"
+      "reason": "Auto-tiling companion for GlazeWM; pre-bundled in configs/glazetiler"
     },
     {
       "name": "HideTaskbar",
-      "reason": "No installed executable/config or verified WinGet package was found"
+      "reason": "Auto-hides default Windows taskbar; pre-bundled in configs/hidetaskbar"
     },
     {
       "name": "Wallpaper Engine",
