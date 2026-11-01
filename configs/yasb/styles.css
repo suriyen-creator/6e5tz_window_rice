@@ -8,10 +8,11 @@
 }
 
 .yasb-bar {
-    padding: 0 8px;
+    padding: 0 12px;
     margin: 0;
-    background-color: #1e1e2e;
+    background-color: rgba(30, 30, 46, 0.88);
     border-radius: 16px;
+    border: 1px solid rgba(137, 180, 250, 0.35);
 }
 
 .widget {

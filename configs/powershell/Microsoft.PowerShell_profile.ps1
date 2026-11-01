@@ -19,5 +19,30 @@ function pipes {
 }
 Set-Alias -Name pipe -Value pipes
 
-# 5. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal
+# 5. Hyprland CLI Shortcuts (TUI Arsenal)
+if (Get-Command eza -ErrorAction SilentlyContinue) {
+    Remove-Item alias:ls -Force -ErrorAction SilentlyContinue
+    function ls { eza --icons --group-directories-first $args }
+    function ll { eza -l --icons --git --group-directories-first $args }
+    function la { eza -la --icons --git --group-directories-first $args }
+    function lt { eza --tree --level=2 --icons $args }
+}
+
+if (Get-Command bat -ErrorAction SilentlyContinue) {
+    Set-Alias -Name cat -Value bat
+}
+
+if (Get-Command lazygit -ErrorAction SilentlyContinue) {
+    Set-Alias -Name lg -Value lazygit
+}
+
+if (Get-Command yazi -ErrorAction SilentlyContinue) {
+    Set-Alias -Name y -Value yazi
+}
+
+if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+    Invoke-Expression (& zoxide init powershell | Out-String)
+}
+
+# 6. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal
 ff

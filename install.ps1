@@ -517,15 +517,15 @@ Write-Host "====================================================================
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object { Write-Host ("  {0}: {1}" -f $_.Name, $_.Count) }
 Write-Host ""
 Write-Host "Tips:" -ForegroundColor Yellow
-Write-Host "  - Ctrl + Space     : Open Flow Launcher (Search apps & files)"
-Write-Host "  - Alt + Space      : Cycle window focus (GlazeWM)"
-Write-Host "  - Alt + 1..9       : Switch GlazeWM workspaces"
-Write-Host "  - Alt + H/J/K/L    : Move focus between windows"
-Write-Host "  - Type 'ff' in pwsh: Launch Fastfetch with Frieren ASCII art"
-Write-Host "  - Type 'btop'      : Launch Btop monitor with Catppuccin Mocha theme"
-Write-Host "  - Type 'pipes'     : Launch animated pipes screensaver"
-Write-Host "  - ExplorerBlurMica : Press Ctrl + F1 in File Explorer to minimize Ribbon for full Acrylic Blur"
-Write-Host "  - Spicetify        : Run 'spicetify backup apply' once Spotify is installed"
+Write-Host "  - Super / Alt + Enter : Open Windows Terminal (Hyprland style)"
+Write-Host "  - Ctrl / Super + Space: Open Flow Launcher (Rofi/Wofi search)"
+Write-Host "  - Super / Alt + 1..9  : Switch GlazeWM workspaces"
+Write-Host "  - Super / Alt + H/J/K/L: Move focus between windows (Vim keys)"
+Write-Host "  - Super + Q           : Close focused window"
+Write-Host "  - Super + V           : Toggle floating window"
+Write-Host "  - TUI Arsenal         : 'y' (Yazi), 'lg' (Lazygit), 'ls' (Eza), 'cat' (Bat), 'z' (Zoxide), 'pipes', 'ff', 'btop'"
+Write-Host "  - ExplorerBlurMica    : Press Ctrl + F1 in File Explorer to minimize Ribbon for full Acrylic Blur"
+Write-Host "  - Spicetify           : Run 'spicetify backup apply' once Spotify is installed"
 Write-Host ""
 
 $startNow = $false

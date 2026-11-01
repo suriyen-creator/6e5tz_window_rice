@@ -50,33 +50,36 @@ cd 6e5tz_window_rice
 
 ---
 
-## ⌨️ Keyboard Shortcuts & Controls (สารบัญคีย์ลัดฉบับสมบูรณ์)
+## ⌨️ Keyboard Shortcuts & Controls (สารบัญคีย์ลัดฉบับสมบูรณ์ - Dual Mode: Alt / Super)
+
+> [!TIP]
+> **Hyprland Experience:** ระบบรองรับทั้งปุ่ม **`Super` (Windows Key)** และปุ่ม **`Alt`** สลับใช้งานได้ตามความถนัดแบบ 100%!
 
 ### 1. 🪟 GlazeWM - โฟกัสและการเคลื่อนย้าย (Navigation & Focus)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + H` หรือ `Alt + Left` | เลื่อนโฟกัสไปหน้าต่างซ้าย |
-| `Alt + L` หรือ `Alt + Right` | เลื่อนโฟกัสไปหน้าต่างขวา |
-| `Alt + K` หรือ `Alt + Up` | เลื่อนโฟกัสไปหน้าต่างบน |
-| `Alt + J` หรือ `Alt + Down` | เลื่อนโฟกัสไปหน้าต่างล่าง |
-| `Alt + Space` | สลับโฟกัสวน (Cycle Focus: Tiling -> Floating -> Fullscreen) |
-| `Alt + S` | โฟกัสไปยัง Workspace ถัดไปที่มีหน้าต่างเปิดอยู่ (Next Active Workspace) |
-| `Alt + A` | โฟกัสไปยัง Workspace ก่อนหน้าที่มีหน้าต่างเปิดอยู่ (Prev Active Workspace) |
-| `Alt + D` | สลับกลับไปยัง Workspace ล่าสุดที่เพิ่งใช้งาน (Recent Workspace) |
+| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
+| --- | --- | --- |
+| `Super + H` / `Left` | `Alt + H` / `Left` | เลื่อนโฟกัสไปหน้าต่างซ้าย |
+| `Super + L` / `Right` | `Alt + L` / `Right` | เลื่อนโฟกัสไปหน้าต่างขวา |
+| `Super + K` / `Up` | `Alt + K` / `Up` | เลื่อนโฟกัสไปหน้าต่างบน |
+| `Super + J` / `Down` | `Alt + J` / `Down` | เลื่อนโฟกัสไปหน้าต่างล่าง |
+| `Super + Space` | `Alt + Space` | สลับโฟกัสวน (Cycle Focus: Tiling -> Floating -> Fullscreen) |
+| `Super + S` | `Alt + S` | โฟกัสไปยัง Workspace ถัดไปที่มีหน้าต่างเปิดอยู่ (Next Active Workspace) |
+| `Super + A` | `Alt + A` | โฟกัสไปยัง Workspace ก่อนหน้าที่มีหน้าต่างเปิดอยู่ (Prev Active Workspace) |
+| `Super + D` | `Alt + D` | สลับกลับไปยัง Workspace ล่าสุดที่เพิ่งใช้งาน (Recent Workspace) |
 
 ### 2. 🧩 GlazeWM - การจัดการเลย์เอาต์หน้าต่าง (Window Layout & Placement)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + Shift + H` หรือ `Left` | ย้ายตำแหน่งหน้าต่างไปทางซ้าย |
-| `Alt + Shift + L` หรือ `Right` | ย้ายตำแหน่งหน้าต่างไปทางขวา |
-| `Alt + Shift + K` หรือ `Up` | ย้ายตำแหน่งหน้าต่างขึ้นบน |
-| `Alt + Shift + J` หรือ `Down` | ย้ายตำแหน่งหน้าต่างลงล่าง |
-| `Alt + V` | สลับทิศทางการแยกหน้าต่าง (Toggle Horizontal / Vertical Split) |
-| `Alt + T` | เปลี่ยนหน้าต่างปัจจุบันเป็นโหมด Tiling (เรียงต่อกัน) |
-| `Alt + Shift + Space` | ปลดหน้าต่างเป็นโหมด Floating (ลอยอยู่ตรงกลางจอ) |
-| `Alt + F` | เปิด / ปิดโหมดขยายเต็มหน้าจอ (Toggle Fullscreen) |
-| `Alt + M` | ย่อหน้าต่างลง Taskbar (Minimize Window) |
-| `Alt + Shift + Q` | ปิดหน้าต่างที่กำลังโฟกัส (Close Window) |
+| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
+| --- | --- | --- |
+| `Super + Shift + H` / `Left` | `Alt + Shift + H` / `Left` | ย้ายตำแหน่งหน้าต่างไปทางซ้าย |
+| `Super + Shift + L` / `Right` | `Alt + Shift + L` / `Right` | ย้ายตำแหน่งหน้าต่างไปทางขวา |
+| `Super + Shift + K` / `Up` | `Alt + Shift + K` / `Up` | ย้ายตำแหน่งหน้าต่างขึ้นบน |
+| `Super + Shift + J` / `Down` | `Alt + Shift + J` / `Down` | ย้ายตำแหน่งหน้าต่างลงล่าง |
+| `Super + V` | `Alt + Shift + Space` | ปลดหน้าต่างเป็นโหมด Floating (ลอยตรงกลางจอ) |
+| `Super + T` | `Alt + T` | เปลี่ยนหน้าต่างปัจจุบันกลับเป็นโหมด Tiling (เรียงต่อกัน) |
+| `Super + F` | `Alt + F` | เปิด / ปิดโหมดขยายเต็มหน้าจอ (Toggle Fullscreen) |
+| `Super + M` | `Alt + M` | ย่อหน้าต่างลง Taskbar (Minimize Window) |
+| `Super + Q` | `Alt + Shift + Q` | **ปิดหน้าต่างที่กำลังโฟกัส (Close Window)** |
+| `Alt + V` | `Alt + V` | สลับทิศทางการแยกหน้าต่าง (Horizontal / Vertical Split) |
 
 ### 3. 📐 GlazeWM - ปรับขนาดหน้าต่าง (Window Resizing)
 | Hotkey | คำสั่ง / การทำงาน |
@@ -86,25 +89,25 @@ cd 6e5tz_window_rice
 | `Alt + R` | **เข้าสู่โหมดปรับขนาด (Resize Mode)**: จากนั้นสามารถกด `H/J/K/L` หรือลูกศร `← ↑ ↓ →` เพื่อยืดหดได้อย่างอิสระ แล้วกด `Enter` หรือ `Esc` เพื่อออกจากโหมด |
 
 ### 4. 🚀 GlazeWM - Workspaces & Monitors (การสลับพื้นที่ทำงาน)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + 1` .. `Alt + 9` | สลับไปยัง Workspace หมายเลข 1 ถึง 9 |
-| `Alt + Shift + 1` .. `9` | ย้ายหน้าต่างปัจจุบันไปยัง Workspace นั้นๆ พร้อมสลับหน้าจอตามไปทันที |
-| `Alt + Shift + A` | ย้าย Workspace ปัจจุบันไปยังจอด้านซ้าย (กรณีต่อหลายจอ) |
-| `Alt + Shift + F` | ย้าย Workspace ปัจจุบันไปยังจอด้านขวา |
-| `Alt + Shift + D` | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
-| `Alt + Shift + S` | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
+| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
+| --- | --- | --- |
+| `Super + 1` .. `Super + 9` | `Alt + 1` .. `Alt + 9` | สลับไปยัง Workspace หมายเลข 1 ถึง 9 |
+| `Super + Shift + 1` .. `9` | `Alt + Shift + 1` .. `9` | ย้ายหน้าต่างปัจจุบันไปยัง Workspace นั้นๆ พร้อมสลับหน้าจอตามไปทันที |
+| `Super + Shift + A` | `Alt + Shift + A` | ย้าย Workspace ปัจจุบันไปยังจอด้านซ้าย (กรณีต่อหลายจอ) |
+| `Super + Shift + F` | `Alt + Shift + F` | ย้าย Workspace ปัจจุบันไปยังจอด้านขวา |
+| `Super + Shift + D` | `Alt + Shift + D` | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
+| `Super + Shift + S` | `Alt + Shift + S` | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
 
 ### 5. ⚙️ GlazeWM - ควบคุมระบบและกระบวนการ (System Controls)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + Enter` | เปิดหน้าต่าง **Windows Terminal** ทันที |
-| `Alt + Shift + R` | โหลดคอนฟิก GlazeWM ใหม่ทันทีโดยไม่ต้องปิดโปรแกรม (Reload Config) |
-| `Alt + Shift + W` | วาดหน้าต่างทั้งหมดใหม่ แก้บั๊กจอกระพริบหรือภาพค้าง (Redraw Windows) |
-| `Alt + Shift + P` | หยุดการทำงานของ GlazeWM ชั่วคราว (Pause WM / คืนการควบคุมให้ Windows) และกดซ้ำเพื่อเปิดใหม่ |
-| `Alt + Shift + E` | ออกจาก GlazeWM อย่างปลอดภัย (Exit Process) |
+| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
+| --- | --- | --- |
+| `Super + Enter` | `Alt + Enter` | **เปิดหน้าต่าง Windows Terminal ทันที** |
+| `Super + Shift + C` | `Alt + Shift + R` | โหลดคอนฟิก GlazeWM ใหม่ทันทีโดยไม่ต้องปิดโปรแกรม (Reload Config) |
+| `Alt + Shift + W` | `Alt + Shift + W` | วาดหน้าต่างทั้งหมดใหม่ แก้บั๊กจอกระพริบหรือภาพค้าง (Redraw Windows) |
+| `Super + Shift + P` | `Alt + Shift + P` | หยุดการทำงาน GlazeWM ชั่วคราว (Pause WM / คืนการควบคุม) กดซ้ำเพื่อเปิดใหม่ |
+| `Super + Shift + M` | `Alt + Shift + E` | ออกจาก GlazeWM อย่างปลอดภัย (Exit Process) |
 
-### 6. 🔍 Flow Launcher - ค้นหาและเปิดแอปด่วน
+### 6. 🔍 Flow Launcher - ค้นหาและเปิดแอปด่วน (Rofi / Wofi Style)
 | Hotkey | คำสั่ง / การทำงาน |
 | --- | --- |
 | `Ctrl + Space` | **เปิดแถบค้นหา Flow Launcher** (ค้นหาโปรแกรม, ไฟล์, คำนวณเลข, ค้นเว็บ) |
@@ -115,12 +118,18 @@ cd 6e5tz_window_rice
 | `Tab` / `Ctrl + Tab` | เลือกผลลัพธ์ถัดไป / เติมคำอัตโนมัติ (Auto-complete) |
 | `Alt + Up` / `Down` | เลื่อนดูประวัติการพิมพ์ย้อนหลัง |
 
-### 7. 💻 Terminal & PowerShell Aliases (คำสั่งลัดในคอมมานด์ไลน์)
-| Command | คำสั่ง / การทำงาน |
-| --- | --- |
-| `ff` | เรียก **Fastfetch** พร้อมรูป Frieren ASCII Art และสรุปสเปกเครื่องแบบครบถ้วน |
-| `btop` | เปิดมอนิเตอร์ฮาร์ดแวร์ CPU / GPU / RAM / Network / Process สไตล์ TUI Catppuccin Mocha |
-| `pipes` หรือ `pipe` | เปิดอนิเมชันท่อพักหน้าจอแบบเรโทร (**pipes-rs** 60fps สุดคมชัด) กด `q` หรือ `Ctrl+C` เพื่อออก |
+### 7. 💻 The Hyprland TUI Arsenal (ชุดอาวุธเทอร์มินัลระดับโปร)
+| Command | คำสั่งย่อ | คำสั่ง / การทำงาน |
+| --- | --- | --- |
+| `yazi` | `y` | **Yazi Terminal File Manager**: จัดการไฟล์ด้วยความเร็วแสง + Vim keybindings |
+| `eza` | `ls`, `ll`, `la`, `lt` | **Eza**: แสดงรายการไฟล์พร้อมไอคอน Nerd Font, สถานะ Git, และ Tree View |
+| `bat` | `cat` | **Bat**: แสดงโค้ด/ไฟล์พร้อมสี Catppuccin, ไฮไลต์ไวยากรณ์, และเลขบรรทัด |
+| `lazygit` | `lg` | **Lazygit**: Terminal UI สำหรับจัดการ Git แบบมือโปร |
+| `zoxide` | `z <folder>` | **Zoxide**: กระโดดไปยังโฟลเดอร์ที่เคยเปิดด้วยความเร็วสูง |
+| `fzf` | `fzf` | **FZF**: Interactive Fuzzy Finder ค้นหาไฟล์ฉับไว |
+| `fastfetch` | `ff` | เรียก **Fastfetch** พร้อมรูป Frieren ASCII Art และสเปกเครื่องแบบครบถ้วน |
+| `btop` | `btop` | เปิดมอนิเตอร์ฮาร์ดแวร์ CPU / GPU / RAM / Network สไตล์ Catppuccin Mocha |
+| `pipes-rs` | `pipes`, `pipe` | เปิดอนิเมชันท่อพักหน้าจอแบบเรโทร (60fps สุดคมชัด กด `q` เพื่อออก) |
 
 ### 8. 📊 YASB Bar - วิดเจ็ตและการคลิกควบคุม (Top Bar Interactions)
 | Widget | คลิกซ้าย / การทำงาน |
@@ -154,6 +163,11 @@ cd 6e5tz_window_rice
 | **Oh My Posh** | ตกแต่ง PowerShell Prompt สไตล์โมเดิร์น | `configs/oh-my-posh/jandedobbeleer.omp.json` |
 | **CAVA** | Audio Visualizer คลื่นเสียงบน YASB | `configs/cava/config`, ธีมสี |
 | **pipes-rs** | Terminal Animated Pipes Screensaver 60fps (`pipes`) | ติดตั้งผ่าน Scoop |
+| **yazi** | Blazing Fast Modern Terminal File Manager (`y`) | ติดตั้งผ่าน Scoop |
+| **eza** | Modern replacement for `ls` with icons & git (`ls`, `ll`, `la`) | ติดตั้งผ่าน Scoop |
+| **bat** | Cat clone with syntax highlighting & git (`cat`) | ติดตั้งผ่าน Scoop |
+| **lazygit** | Terminal UI for Git (`lg`) | ติดตั้งผ่าน Scoop |
+| **zoxide** | Smarter `cd` command for instant folder jump (`z`) | ติดตั้งผ่าน Scoop |
 | **Windows Terminal** | ธีมและฟอนต์โปร่งแสง Acrylic | `configs/terminal/settings.json` |
 | **PowerShell 7** | `$PROFILE` คำสั่งลัด `ff`, `pipes` และโหลด OMP อัตโนมัติ | `configs/powershell/` |
 | **HideTaskbar** | ซ่อน Windows Taskbar ดั้งเดิม | `configs/hidetaskbar/HideTaskbar.exe` |

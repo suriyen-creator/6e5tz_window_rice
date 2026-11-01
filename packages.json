@@ -78,6 +78,30 @@
       "reason": "Animated terminal screensaver pipes for Windows Terminal"
     },
     {
+      "name": "yazi",
+      "reason": "Blazing fast modern terminal file manager with vim bindings and preview"
+    },
+    {
+      "name": "eza",
+      "reason": "Modern replacement for ls with icons, git status, tree view"
+    },
+    {
+      "name": "bat",
+      "reason": "Cat clone with syntax highlighting and git integration"
+    },
+    {
+      "name": "fzf",
+      "reason": "General-purpose command-line fuzzy finder"
+    },
+    {
+      "name": "lazygit",
+      "reason": "Simple terminal UI for git commands"
+    },
+    {
+      "name": "zoxide",
+      "reason": "Smarter cd command for lightning fast directory navigation"
+    },
+    {
       "name": "spicetify-cli",
       "reason": "CLI tool to customize and theme the official Spotify client"
     },
