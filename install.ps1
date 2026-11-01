@@ -457,12 +457,19 @@ function Deploy-AllConfigs {
     # 16. Nilesoft Shell
     $nsSource = Join-Path $ConfigRoot 'nilesoft-shell\shell.nss'
     if (Test-Path $nsSource) {
+        $scoopNsTarget = Join-Path $env:USERPROFILE 'scoop\persist\nilesoft-shell\shell.nss'
+        $scoopNsCurrent = Join-Path $env:USERPROFILE 'scoop\apps\nilesoft-shell\current\shell.nss'
+        $nsUserTarget = Join-Path $env:USERPROFILE '.config\nilesoft-shell\shell.nss'
         if (Test-Path 'C:\Program Files\Nilesoft Shell') {
-            Restore-File -Name 'Nilesoft Shell' -Source $nsSource -Target 'C:\Program Files\Nilesoft Shell\shell.nss'
-        } else {
-            $nsUserTarget = Join-Path $env:USERPROFILE '.config\nilesoft-shell\shell.nss'
-            Restore-File -Name 'Nilesoft Shell (config)' -Source $nsSource -Target $nsUserTarget
+            Restore-File -Name 'Nilesoft Shell (Program Files)' -Source $nsSource -Target 'C:\Program Files\Nilesoft Shell\shell.nss'
         }
+        if (Test-Path (Split-Path -Parent $scoopNsTarget)) {
+            Restore-File -Name 'Nilesoft Shell (Scoop Persist)' -Source $nsSource -Target $scoopNsTarget
+        }
+        if (Test-Path (Split-Path -Parent $scoopNsCurrent)) {
+            Restore-File -Name 'Nilesoft Shell (Scoop Current)' -Source $nsSource -Target $scoopNsCurrent
+        }
+        Restore-File -Name 'Nilesoft Shell (User Config)' -Source $nsSource -Target $nsUserTarget
     }
 }
 

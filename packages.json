@@ -78,6 +78,10 @@
       "reason": "Animated terminal screensaver pipes for Windows Terminal"
     },
     {
+      "name": "nilesoft-shell",
+      "reason": "Customizable Acrylic context menu manager for Windows Explorer"
+    },
+    {
       "name": "yazi",
       "reason": "Blazing fast modern terminal file manager with vim bindings and preview"
     },

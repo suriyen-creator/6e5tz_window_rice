@@ -64,6 +64,6 @@ menu(type='desktop' separator='after' title='Desktop Rice' image=\uE149)
 	item(title='Open Hardware Monitor (Btop)' image=\uE1C3 cmd='wt' args='-w 0 pwsh -NoExit -Command "btop"')
 	item(title='Screensaver Pipes' image=\uE1CE cmd='wt' args='-w 0 pwsh -NoExit -Command "pipes"')
 	separator
-	item(title='Reload GlazeWM' image=\uE107 cmd='glazewm' args='command reload-config')
+	item(title='Reload GlazeWM' image=\uE107 cmd='glazewm' args='command wm-reload-config')
 	item(title='Restart Explorer' image=\uE117 cmd='powershell' args='-NoProfile -Command "Stop-Process -Name explorer -Force"')
 }

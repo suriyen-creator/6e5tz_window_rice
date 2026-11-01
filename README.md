@@ -137,6 +137,7 @@ cd 6e5tz_window_rice
 | **GlazeWM Workspaces (1-9)** | คลิกเพื่อสลับหน้าต่างไปยัง Workspace นั้นๆ |
 | **Media Player** | เล่น/หยุดเพลง, คลิกชื่อเพลงเพื่อเปิดโปรแกรมเล่นเพลง |
 | **Clock / Date** | เปิดแผงปฏิทินและเวลา |
+| **Wallpapers Gallery** | **คลิกซ้าย**: เปิด Popup Gallery เลือกดูรูปวอลเปเปอร์ทั้งหมดพร้อมพรีวิว (ดับเบิ้ลคลิกเพื่อเปลี่ยนวอลเปเปอร์)<br>**คลิกขวา**: สุ่มเปลี่ยนภาพวอลเปเปอร์ถัดไปทันที |
 | **Network / Wi-Fi** | เปิดหน้าต่าง Popups รายละเอียดการเชื่อมต่อ Wi-Fi และ IP |
 | **Bluetooth** | เปิด Popups จัดการอุปกรณ์ Bluetooth |
 | **Volume Slider** | เลื่อนลูกกลิ้งเมาส์บนไอคอนเพื่อเพิ่ม/ลดเสียง, คลิกซ้ายเพื่อ Mute หรือเปิด Sound Popups |
@@ -190,9 +191,13 @@ cd 6e5tz_window_rice
    - หากต้องการยกเลิก ให้รัน `uninstall.cmd` แบบ Administrator
 
 2. **Nilesoft Shell (แต่งเมนูคลิกขวา Catppuccin):**
-   - ดาวน์โหลดและติดตั้ง Nilesoft Shell จาก [nilesoft.org](https://nilesoft.org)
-   - คัดลอกไฟล์ `configs/nilesoft-shell/shell.nss` ไปไว้ที่ `C:\Program Files\Nilesoft Shell\shell.nss` (Run as Administrator)
-   - รีสตาร์ต Explorer เพื่อเปิดใช้เมนูคลิกขวา Acrylic Catppuccin Mocha ทันที
+   - ติดตั้งผ่าน Scoop: `scoop install extras/nilesoft-shell`
+   - คอนฟิก `shell.nss` จะถูกวางไว้ที่ `%USERPROFILE%\scoop\persist\nilesoft-shell\shell.nss` อัตโนมัติ
+   - ลงทะเบียนเมนูคลิกขวาด้วยคำสั่ง:
+     ```powershell
+     shell -register
+     ```
+   - รีสตาร์ต Explorer เพื่อเปิดใช้เมนูคลิกขวา Acrylic Catppuccin Mocha ทันที (หรือกด `Ctrl + คลิกขวา` เพื่อเปิดเมนูจัดการของ Nilesoft Shell)
 
 3. **pipes-rs (อนิเมชันท่อพักหน้าจอ):**
    - ติดตั้งผ่าน Scoop: `scoop install pipes-rs`

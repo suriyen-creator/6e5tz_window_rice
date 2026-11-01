@@ -50,6 +50,7 @@ bars:
       right: [
         "cava",
         "media",
+        "wallpapers",
         "cpu",
         "memory",
         "traffic",
@@ -389,9 +390,9 @@ widgets:
     type: "yasb.wallpapers.WallpapersWidget"
     options:
       label: "<span>\udb83\ude09</span>"
-      image_path:  # Example path to folder with images
-      change_automatically: false # Automatically change wallpaper
-      update_interval: 60 # If change_automatically is true, update interval in seconds
+      image_path: "__USERPROFILE__\\Pictures\\Wallpapers"
+      change_automatically: false
+      update_interval: 300
       gallery:
           enabled: true
           blur: true
@@ -401,10 +402,11 @@ widgets:
           orientation: "portrait"
           image_spacing: 8
           lazy_load: true
-          lazy_load_delay: 80
           lazy_load_fadein: 400
-          image_corner_radius: 20
-          enable_cache: true
+          image_corner_radius: 12
+      callbacks:
+        on_left: "toggle_gallery"
+        on_right: "change_wallpaper"
   cava:
     type: "yasb.cava.CavaWidget"
     options:

@@ -454,7 +454,9 @@ Copy-OptionalCandidates -Name 'Vencord/themes' -Sources @(
 # 16. Nilesoft Shell
 Copy-OptionalCandidates -Name 'Nilesoft Shell' -Sources @(
     'C:\Program Files\Nilesoft Shell\shell.nss',
-    (Join-Path $env:USERPROFILE '.config\nilesoft-shell\shell.nss')
+    (Join-Path $env:USERPROFILE '.config\nilesoft-shell\shell.nss'),
+    (Join-Path $env:USERPROFILE 'scoop\persist\nilesoft-shell\shell.nss'),
+    (Join-Path $env:USERPROFILE 'scoop\apps\nilesoft-shell\current\shell.nss')
 ) -Destination (Join-Path $ConfigsRoot 'nilesoft-shell') -AllowSensitiveExample
 
 Write-Host ''
