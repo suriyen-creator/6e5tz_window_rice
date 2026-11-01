@@ -5,269 +5,274 @@
 
 A clean, aesthetic pastel-themed Windows tiling desktop setup featuring **GlazeWM**, **YASB**, **Flow Launcher**, **Oh My Posh**, **CAVA**, **Fastfetch** (with Frieren ASCII art), **Btop**, **ExplorerBlurMica**, **Spicetify**, **ModernFlyouts**, and **Vencord**.
 
+*(ชุดตกแต่งเดสก์ท็อป Windows สไตล์มินิมอลโมเดิร์น ธีมสีพาสเทล Catppuccin พร้อมระบบ Tiling Window Management)*
+
 ---
 
-## ⚡ Quick Install (ลงง่ายใน 1 คำสั่ง)
+## ⚡ Quick Install / ติดตั้งด่วนใน 1 คำสั่ง
 
-เปิด **PowerShell** (Run as Administrator แนะนำ) แล้วคัดลอกคำสั่งด้านล่างนี้ไปวางแล้วกด `Enter`:
+Open **PowerShell** (Run as Administrator recommended), paste the command below, and press `Enter`:
+
+*(เปิด **PowerShell** ในฐานะ Administrator แล้วคัดลอกคำสั่งด้านล่างนี้ไปวางแล้วกด `Enter`:)*
 
 ```powershell
 irm https://raw.githubusercontent.com/suriyen-creator/6e5tz_window_rice/main/install.ps1 | iex
 ```
 
-### สิ่งที่ตัวติดตั้งจะทำให้อัตโนมัติ:
-1. **ดาวน์โหลดโปรเจกต์** ลงใน `$HOME\.dotfiles\window_rice`
-2. **เมนูติดตั้งแบบ Interactive:**
-   - `[1] Full Installation`: ติดตั้งโปรแกรมที่ต้องใช้ทั้งหมดผ่าน WinGet + ติดตั้ง MesloLGL Nerd Font + วางคอนฟิกทั้งหมด
-   - `[2] Deploy Configs Only`: สำหรับคนที่มีโปรแกรมครบแล้ว ต้องการเฉพาะไฟล์คอนฟิก
-   - `[3] Install Font Only`: ติดตั้งเฉพาะฟอนต์ MesloLGL Nerd Font
-3. **Backup อัตโนมัติ:** คอนฟิกเดิมของคุณจะถูกสำรองไว้เป็น `.backup-<timestamp>` เสมอ ไม่มีไฟล์หายแน่นอน
-4. **เปิดใช้งาน GlazeWM & YASB ทันที** เมื่อติดตั้งเสร็จ
+### What the installer handles automatically / สิ่งที่ตัวติดตั้งทำให้โดยอัตโนมัติ:
+1. **Repository Setup:** Clones dotfiles directly to `$HOME\.dotfiles\window_rice`.
+2. **Interactive Menu / เมนูติดตั้ง:**
+   - `[1] Full Installation`: Installs all required packages via WinGet + MesloLGL Nerd Font + deploys all configurations.
+   - `[2] Deploy Configs Only`: Deploys configuration files only (for existing setups).
+   - `[3] Install Font Only`: Downloads and registers MesloLGL Nerd Font only.
+3. **Automatic Backup:** Existing configurations are automatically preserved with `.backup-<timestamp>` timestamps.
+4. **Auto-Start:** Automatically launches GlazeWM and YASB once installation completes.
 
 ---
 
-## 🛠 Manual Installation (ลงแบบโคลนเอง)
+## 🛠 Manual Installation / ติดตั้งแบบโคลนเอง
 
-หากต้องการโคลนและตรวจดูไฟล์ก่อนติดตั้ง:
+If you prefer to inspect the source files before deploying:
+
+*(หากต้องการโคลนและตรวจดูโค้ดก่อนติดตั้ง:)*
 
 ```powershell
-# 1. โคลน Repository
+# 1. Clone the repository / โคลนโปรเจกต์
 git clone https://github.com/suriyen-creator/6e5tz_window_rice.git
 cd 6e5tz_window_rice
 
-# 2. รันตัวติดตั้ง
+# 2. Run the installer / รันตัวติดตั้ง
 .\install.ps1
 ```
 
-### คำสั่งเพิ่มเติม (Flags):
+### Optional Installer Flags / ออปชันคำสั่งเพิ่มเติม:
 ```powershell
-# ลงเฉพาะคอนฟิก (ข้ามการโหลดโปรแกรม WinGet)
+# Deploy configs only (skips WinGet package downloads)
 .\install.ps1 -ConfigOnly
 
-# ติดตั้งแบบไม่ถาม (Non-interactive)
+# Non-interactive / unattended installation
 .\install.ps1 -Full -NonInteractive
 
-# บังคับเลือกโหมด Wallpaper (Static หรือ WallpaperEngine)
+# Force specific Wallpaper mode (Static or WallpaperEngine)
 .\install.ps1 -WallpaperMode Static
 .\install.ps1 -WallpaperMode WallpaperEngine
 ```
 
 ---
 
-## 🖼️ Wallpaper System (ระบบสลับวอลเปเปอร์ 2 โหมด: Wallpaper Engine / Static Gallery)
+## 🖼️ Wallpaper System / ระบบจัดการภาพพื้นหลัง (Dual-Mode)
 
-ระบบรองรับทั้งผู้ใช้งานที่มี **Wallpaper Engine** (Steam) และผู้ที่ไม่มี (ใช้ภาพ **Static Wallpapers** ปกติของ Windows):
+The rice supports both **Wallpaper Engine** (Steam) users and **Static Wallpaper** users with seamless switching:
 
-### 1. โหมด Wallpaper Engine (ค่าเริ่มต้นเมื่อตรวจพบ Steam / Wallpaper Engine)
-- **การควบคุมบนแถบ YASB (ไอคอน 󰸉):**
-  - **คลิกซ้าย:** สลับไปวอลเปเปอร์ถัดไปทันที (`nextWallpaper`)
-  - **คลิกขวา:** สลับหยุดชั่วคราว / เล่นต่อ (`Pause / Resume`) อนิเมชัน
-  - **คลิกกลาง:** เปิดหน้าต่างตั้งค่า Wallpaper Engine
-- คอนฟิกต้นฉบับอยู่ที่ [config.wallpaper-engine.yaml](file:///C:/Users/suriy/Documents/window_rice/configs/yasb/config.wallpaper-engine.yaml)
+*(ระบบรองรับทั้งคนที่มี Wallpaper Engine บน Steam และคนที่ชอบใช้ภาพนิ่งปกติของ Windows)*
 
-### 2. โหมด Static Wallpapers (สำหรับคนไม่มี Wallpaper Engine หรือชอบภาพนิ่ง)
-- **การควบคุมบนแถบ YASB (ไอคอน 󰸉):**
-  - **คลิกซ้าย:** เปิด **Popup Gallery** สวยงาม แสดงรูปตัวอย่างขนาดย่อ (Thumbnails) เลื่อนหน้าได้ และคลิกเพื่อเปลี่ยน Wallpaper หน้าจอ Windows ได้ทันที
-  - ดึงรูปภาพอัตโนมัติจากโฟลเดอร์ `~/Pictures/Wallpapers/`
-  - มีภาพตัวอย่าง Anime Wallpapers ความละเอียดสูง 10 รูปแถมมาให้ในตัวโปรเจกต์ (`wallpapers/`)
-- คอนฟิกต้นฉบับอยู่ที่ [config.static.yaml](file:///C:/Users/suriy/Documents/window_rice/configs/yasb/config.static.yaml)
+### 1. Wallpaper Engine Mode (Auto-detected if installed)
+- **YASB Bar Controls (󰸉 Icon):**
+  - **Left Click:** Advance to next wallpaper in active playlist (`nextWallpaper`).
+  - **Right Click:** Toggle pause / resume playback (`Pause / Resume`) to save system resources.
+  - **Middle Click:** Open Wallpaper Engine main interface.
+- Template file: [configs/yasb/config.wallpaper-engine.yaml](file:///C:/Users/suriy/Documents/window_rice/configs/yasb/config.wallpaper-engine.yaml)
 
-### 🔄 วิธีสลับโหมด Wallpaper ได้ทุกเมื่อ:
-คุณสามารถรันสคริปต์สลับโหมดได้ทันที (ระบบจะสลับคอนฟิกและรีสตาร์ต YASB ให้แบบไร้รอยต่อ):
+### 2. Static Wallpapers Mode (For native Windows desktop)
+- **YASB Bar Controls (󰸉 Icon):**
+  - **Left Click:** Opens an interactive **Popup Gallery** with thumbnails, pagination, and instant 1-click wallpaper selection.
+  - Automatically loads images from `~/Pictures/Wallpapers/`.
+  - Comes bundled with 10 high-resolution anime wallpapers in `wallpapers/`.
+- Template file: [configs/yasb/config.static.yaml](file:///C:/Users/suriy/Documents/window_rice/configs/yasb/config.static.yaml)
 
+### 🔄 Switch Wallpaper Modes Anytime / วิธีสลับโหมดได้ทุกเมื่อ:
 ```powershell
-# เปิดเมนูเลือกโหมด (Interactive Menu)
+# Open interactive mode switcher / เปิดเมนูเลือกโหมด
 .\scripts\switch-wallpaper-mode.ps1
 
-# หรือสั่งสลับตรงๆ
+# Direct switch / สลับโหมดโดยตรง
 .\scripts\switch-wallpaper-mode.ps1 -Mode Static
 .\scripts\switch-wallpaper-mode.ps1 -Mode WallpaperEngine
 ```
 
 ---
 
-## ⌨️ Keyboard Shortcuts & Controls (สารบัญคีย์ลัดฉบับสมบูรณ์)
+## ⌨️ Keyboard Shortcuts & Controls / สารบัญคีย์ลัด
 
 > [!NOTE]
-> คีย์ลัดทั้งหมดของ GlazeWM ใช้ปุ่ม **`Alt`** เป็นหลัก เพื่อไม่ให้แย่งคีย์ลัดของระบบ Windows เช่น **`Win + Space`** (สำหรับสลับภาษาคีย์บอร์ดไทย-อังกฤษ) และปุ่ม `Win` สำหรับ Flow Launcher / Windows Taskbar
+> All GlazeWM hotkeys use the **`Alt`** modifier key. This ensures **zero interference** with native Windows key combinations, specifically **`Win + Space`** for language switching (Thai / English) and the Windows key for the Start Menu and Flow Launcher.
+>
+> *(คีย์ลัด GlazeWM ทั้งหมดใช้ปุ่ม `Alt` เป็นหลัก เพื่อไม่ให้แย่งปุ่ม `Win + Space` สลับภาษาไทย-อังกฤษ และปุ่ม Windows ของระบบ)*
 
-### 1. 🪟 GlazeWM - โฟกัสและการเคลื่อนย้าย (Navigation & Focus)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + H` / `Left` | เลื่อนโฟกัสไปหน้าต่างซ้าย |
-| `Alt + L` / `Right` | เลื่อนโฟกัสไปหน้าต่างขวา |
-| `Alt + K` / `Up` | เลื่อนโฟกัสไปหน้าต่างบน |
-| `Alt + J` / `Down` | เลื่อนโฟกัสไปหน้าต่างล่าง |
-| `Alt + Space` | สลับโฟกัสวน (Cycle Focus: Tiling -> Floating -> Fullscreen) |
-| `Alt + S` | โฟกัสไปยัง Workspace ถัดไปที่มีหน้าต่างเปิดอยู่ (Next Active Workspace) |
-| `Alt + A` | โฟกัสไปยัง Workspace ก่อนหน้าที่มีหน้าต่างเปิดอยู่ (Prev Active Workspace) |
-| `Alt + D` | สลับกลับไปยัง Workspace ล่าสุดที่เพิ่งใช้งาน (Recent Workspace) |
-
-### 2. 🧩 GlazeWM - การจัดการเลย์เอาต์หน้าต่าง (Window Layout & Placement)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + Shift + H` / `Left` | ย้ายตำแหน่งหน้าต่างไปทางซ้าย |
-| `Alt + Shift + L` / `Right` | ย้ายตำแหน่งหน้าต่างไปทางขวา |
-| `Alt + Shift + K` / `Up` | ย้ายตำแหน่งหน้าต่างขึ้นบน |
-| `Alt + Shift + J` / `Down` | ย้ายตำแหน่งหน้าต่างลงล่าง |
-| `Alt + Shift + Space` | ปลดหน้าต่างเป็นโหมด Floating (ลอยตรงกลางจอ) |
-| `Alt + T` | เปลี่ยนหน้าต่างปัจจุบันกลับเป็นโหมด Tiling (เรียงต่อกัน) |
-| `Alt + F` | เปิด / ปิดโหมดขยายเต็มหน้าจอ (Toggle Fullscreen) |
-| `Alt + M` | ย่อหน้าต่างลง Taskbar (Minimize Window) |
-| `Alt + Shift + Q` | **ปิดหน้าต่างที่กำลังโฟกัส (Close Window)** |
-| `Alt + V` | สลับทิศทางการแยกหน้าต่าง (Horizontal / Vertical Split) |
-
-### 3. 📐 GlazeWM - ปรับขนาดหน้าต่าง (Window Resizing)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + U` / `Alt + P` | ลด / เพิ่มความกว้างของหน้าต่าง (-2% / +2%) |
-| `Alt + I` / `Alt + O` | ลด / เพิ่มความสูงของหน้าต่าง (-2% / +2%) |
-| `Alt + R` | **เข้าสู่โหมดปรับขนาด (Resize Mode)**: จากนั้นสามารถกด `H/J/K/L` หรือลูกศร `← ↑ ↓ →` เพื่อยืดหดได้อย่างอิสระ แล้วกด `Enter` หรือ `Esc` เพื่อออกจากโหมด |
-
-### 4. 🚀 GlazeWM - Workspaces & Monitors (การสลับพื้นที่ทำงาน)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + 1` .. `Alt + 9` | สลับไปยัง Workspace หมายเลข 1 ถึง 9 |
-| `Alt + Shift + 1` .. `9` | ย้ายหน้าต่างปัจจุบันไปยัง Workspace นั้นๆ พร้อมสลับหน้าจอตามไปทันที |
-| `Alt + Shift + A` | ย้าย Workspace ปัจจุบันไปยังจอด้านซ้าย (กรณีต่อหลายจอ) |
-| `Alt + Shift + F` | ย้าย Workspace ปัจจุบันไปยังจอด้านขวา |
-| `Alt + Shift + D` | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
-| `Alt + Shift + S` | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
-
-### 5. ⚙️ GlazeWM - ควบคุมระบบและกระบวนการ (System Controls)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Alt + Enter` | **เปิดหน้าต่าง Windows Terminal ทันที** |
-| `Alt + Shift + R` | โหลดคอนฟิก GlazeWM ใหม่ทันทีโดยไม่ต้องปิดโปรแกรม (Reload Config) |
-| `Alt + Shift + W` | วาดหน้าต่างทั้งหมดใหม่ แก้บั๊กจอกระพริบหรือภาพค้าง (Redraw Windows) |
-| `Alt + Shift + P` | หยุดการทำงาน GlazeWM ชั่วคราว (Pause WM / คืนการควบคุม) กดซ้ำเพื่อเปิดใหม่ |
-| `Alt + Shift + E` | ออกจาก GlazeWM อย่างปลอดภัย (Exit Process) |
-
-### 6. 🔍 Flow Launcher - ค้นหาและเปิดแอปด่วน (Rofi / Wofi Style)
-| Hotkey | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Ctrl + Space` | **เปิดแถบค้นหา Flow Launcher** (ค้นหาโปรแกรม, ไฟล์, คำนวณเลข, ค้นเว็บ) |
-| `F1` | เปิดดูตัวอย่างไฟล์ (Quick Preview) |
-| `Ctrl + O` | เปิด Context Menu ของผลการค้นหา |
-| `Ctrl + I` | เปิดหน้าต่าง Settings ของ Flow Launcher |
-| `Ctrl + H` | ดูประวัติการค้นหาย้อนหลัง (History) |
-| `Tab` / `Ctrl + Tab` | เลือกผลลัพธ์ถัดไป / เติมคำอัตโนมัติ (Auto-complete) |
-| `Alt + Up` / `Down` | เลื่อนดูประวัติการพิมพ์ย้อนหลัง |
-
-### 7. 💻 The Hyprland TUI Arsenal (ชุดอาวุธเทอร์มินัลระดับโปร)
-| Command | คำสั่งย่อ | คำสั่ง / การทำงาน |
+### 1. 🪟 GlazeWM - Focus & Navigation / การเลื่อนโฟกัสหน้าต่าง
+| Hotkey | Action (English) | คำสั่ง / การทำงาน (ไทย) |
 | --- | --- | --- |
-| `yazi` | `y` | **Yazi Terminal File Manager**: จัดการไฟล์ด้วยความเร็วแสง + Vim keybindings |
-| `eza` | `ls`, `ll`, `la`, `lt` | **Eza**: แสดงรายการไฟล์พร้อมไอคอน Nerd Font, สถานะ Git, และ Tree View |
-| `bat` | `cat` | **Bat**: แสดงโค้ด/ไฟล์พร้อมสี Catppuccin, ไฮไลต์ไวยากรณ์, และเลขบรรทัด |
-| `lazygit` | `lg` | **Lazygit**: Terminal UI สำหรับจัดการ Git แบบมือโปร |
-| `zoxide` | `z <folder>` | **Zoxide**: กระโดดไปยังโฟลเดอร์ที่เคยเปิดด้วยความเร็วสูง |
-| `fzf` | `fzf` | **FZF**: Interactive Fuzzy Finder ค้นหาไฟล์ฉับไว |
-| `fastfetch` | `ff` | เรียก **Fastfetch** พร้อมรูป Frieren ASCII Art และสเปกเครื่องแบบครบถ้วน |
-| `btop` | `btop` | เปิดมอนิเตอร์ฮาร์ดแวร์ CPU / GPU / RAM / Network สไตล์ Catppuccin Mocha |
-| `pipes-rs` | `pipes`, `pipe` | เปิดอนิเมชันท่อพักหน้าจอแบบเรโทร (60fps สุดคมชัด กด `q` เพื่อออก) |
+| `Alt + H` / `Left` | Focus left window | เลื่อนโฟกัสไปหน้าต่างซ้าย |
+| `Alt + L` / `Right` | Focus right window | เลื่อนโฟกัสไปหน้าต่างขวา |
+| `Alt + K` / `Up` | Focus window above | เลื่อนโฟกัสไปหน้าต่างบน |
+| `Alt + J` / `Down` | Focus window below | เลื่อนโฟกัสไปหน้าต่างล่าง |
+| `Alt + Space` | Cycle focus (Tiling -> Floating -> Fullscreen) | สลับโฟกัสวนข้ามสถานะหน้าต่าง |
+| `Alt + S` | Focus next active workspace | โฟกัสไปยัง Workspace ถัดไปที่มีหน้าต่างเปิดอยู่ |
+| `Alt + A` | Focus previous active workspace | โฟกัสไปยัง Workspace ก่อนหน้าที่มีหน้าต่างเปิดอยู่ |
+| `Alt + D` | Switch to recent workspace | สลับกลับไปยัง Workspace ล่าสุดที่เพิ่งใช้งาน |
 
-### 8. 📊 YASB Bar - วิดเจ็ตและการคลิกควบคุม (Top Bar Interactions)
-| Widget | คลิกซ้าย / การทำงาน |
-| --- | --- |
-| **GlazeWM Workspaces (1-9)** | คลิกเพื่อสลับหน้าต่างไปยัง Workspace นั้นๆ |
-| **Media Player** | เล่น/หยุดเพลง, คลิกชื่อเพลงเพื่อเปิดโปรแกรมเล่นเพลง |
-| **Clock / Date** | เปิดแผงปฏิทินและเวลา |
-| **Wallpaper Controller / Gallery (󰸉)** | **โหมด Wallpaper Engine:**<br>- คลิกซ้าย: สลับไปวอลเปเปอร์ถัดไปทันที (`nextWallpaper`)<br>- คลิกขวา: สลับหยุดชั่วคราว / เล่นต่อ (`Pause / Resume`)<br>- คลิกกลาง: เปิดหน้าต่างโปรแกรม Wallpaper Engine<br><br>**โหมด Static Wallpaper:**<br>- คลิกซ้าย: เปิด Gallery Popup เลือกรูปภาพจาก `~/Pictures/Wallpapers` พร้อม Thumbnail |
-| **Network / Wi-Fi** | เปิดหน้าต่าง Popups รายละเอียดการเชื่อมต่อ Wi-Fi และ IP |
-| **Bluetooth** | เปิด Popups จัดการอุปกรณ์ Bluetooth |
-| **Volume Slider** | เลื่อนลูกกลิ้งเมาส์บนไอคอนเพื่อเพิ่ม/ลดเสียง, คลิกซ้ายเพื่อ Mute หรือเปิด Sound Popups |
-| **Battery** | คลิกดูสถานะแบตเตอรี่, เวลาคงเหลือ และ Power Mode |
-| **Language** | คลิกซ้ายเพื่อเปิดเมนูภาษาและคีย์บอร์ดเลย์เอาต์ |
-| **Traffic** | คลิกเพื่อสลับโหมดดู Speed ละเอียด (`↓` Download `↑` Upload) หรือแบบย่อ (`⇅`) |
-
-### 9. 🗂️ File Explorer & Visual Ricing Tips
-| คำสั่ง / ทริค | คำสั่ง / การทำงาน |
-| --- | --- |
-| `Ctrl + F1` ใน File Explorer | ย่อ/ขยายแถบ Ribbon ด้านบน เพื่อให้หน้าต่างแสดงผลเป็น **Acrylic Blur เต็มบาน** สวยงามโปร่งใสที่สุด |
-| `Ctrl + Right-Click` บน Desktop | เข้าเมนูตั้งค่าและรีโหลดของ **Nilesoft Shell** (หากติดตั้งไว้) |
-
----
-
-## 📦 Software & Components
-
-| Software | รายละเอียด | คอนฟิกใน Repo |
+### 2. 🧩 GlazeWM - Window Layout & Placement / การจัดการเลย์เอาต์หน้าต่าง
+| Hotkey | Action (English) | คำสั่ง / การทำงาน (ไทย) |
 | --- | --- | --- |
-| **GlazeWM** | Tiling Window Manager สำหรับ Windows | `configs/glazewm/config.yaml` |
-| **YASB** | Status Bar ด้านบนสไตล์ Polybar/Waybar | `configs/yasb/config.yaml`, `styles.css` |
-| **Flow Launcher** | Spotlight-like App Launcher (`Ctrl+Space`) | `configs/flow-launcher/` |
-| **Fastfetch** | System Fetch พร้อมรูป Frieren และไอคอน Windows (`ff`) | `configs/fastfetch/fastfetch.json`, `frieren.txt` |
-| **Oh My Posh** | ตกแต่ง PowerShell Prompt สไตล์โมเดิร์น | `configs/oh-my-posh/jandedobbeleer.omp.json` |
-| **CAVA** | Audio Visualizer คลื่นเสียงบน YASB | `configs/cava/config`, ธีมสี |
-| **pipes-rs** | Terminal Animated Pipes Screensaver 60fps (`pipes`) | ติดตั้งผ่าน Scoop |
-| **yazi** | Blazing Fast Modern Terminal File Manager (`y`) | ติดตั้งผ่าน Scoop |
-| **eza** | Modern replacement for `ls` with icons & git (`ls`, `ll`, `la`) | ติดตั้งผ่าน Scoop |
-| **bat** | Cat clone with syntax highlighting & git (`cat`) | ติดตั้งผ่าน Scoop |
-| **lazygit** | Terminal UI for Git (`lg`) | ติดตั้งผ่าน Scoop |
-| **zoxide** | Smarter `cd` command for instant folder jump (`z`) | ติดตั้งผ่าน Scoop |
-| **Windows Terminal** | ธีมและฟอนต์โปร่งแสง Acrylic | `configs/terminal/settings.json` |
-| **PowerShell 7** | `$PROFILE` คำสั่งลัด `ff`, `pipes` และโหลด OMP อัตโนมัติ | `configs/powershell/` |
-| **HideTaskbar** | ซ่อน Windows Taskbar ดั้งเดิม | `configs/hidetaskbar/HideTaskbar.exe` |
-| **GlazeTiler** | ออโต้ไทล์เสริมสำหรับ GlazeWM | `configs/glazetiler/glazetiler.exe` |
-| **Btop** | TUI Hardware & Process Monitor ธีม Catppuccin Mocha (`btop`) | `configs/btop/btop.conf`, themes |
-| **ExplorerBlurMica** | เอฟเฟกต์ Acrylic Blur + Catppuccin Tint บน Windows Explorer | `configs/explorer-blur-mica/` |
-| **Nilesoft Shell** | ปรับแต่งเมนูคลิกขวา Acrylic ธีม Catppuccin Mocha | `configs/nilesoft-shell/shell.nss` |
-| **Spicetify** | ปรับแต่ง UI ของ Spotify Desktop ธีม Catppuccin Mocha + Marketplace (ร้านเลือกลงของเสริม) + Adblock (`adblock.js`) | `configs/spicetify/` |
-| **ModernFlyouts** | Modern Fluent OSD แถบเสียง/มีเดียแบบโปร่งแสง | ติดตั้งผ่าน WinGet |
-| **Vencord** | Discord Client Mod พร้อมธีม Catppuccin Mocha | `configs/vencord/` |
+| `Alt + Shift + H` / `Left` | Move window left | ย้ายหน้าต่างไปทางซ้าย |
+| `Alt + Shift + L` / `Right` | Move window right | ย้ายหน้าต่างไปทางขวา |
+| `Alt + Shift + K` / `Up` | Move window up | ย้ายหน้าต่างขึ้นบน |
+| `Alt + Shift + J` / `Down` | Move window down | ย้ายหน้าต่างลงล่าง |
+| `Alt + Shift + Space` | Toggle floating (centered) | ปลดหน้าต่างเป็นโหมดลอยอิสระ (Floating) |
+| `Alt + T` | Return window to tiling | เปลี่ยนหน้าต่างกลับเป็นโหมดเรียงชิด (Tiling) |
+| `Alt + F` | Toggle fullscreen | เปิด / ปิดโหมดขยายเต็มหน้าจอ |
+| `Alt + M` | Minimize window | ย่อหน้าต่างลง Taskbar |
+| `Alt + Shift + Q` | **Close focused window** | **ปิดหน้าต่างที่กำลังโฟกัส** |
+| `Alt + V` | Toggle tiling direction (H / V split) | สลับทิศทางการแยกหน้าต่าง (แนวนอน / แนวตั้ง) |
+
+### 3. 📐 GlazeWM - Window Resizing / การปรับขนาดหน้าต่าง
+| Hotkey | Action (English) | คำสั่ง / การทำงาน (ไทย) |
+| --- | --- | --- |
+| `Alt + U` / `Alt + P` | Decrease / Increase window width (-2% / +2%) | ลด / เพิ่มความกว้างของหน้าต่าง |
+| `Alt + I` / `Alt + O` | Decrease / Increase window height (-2% / +2%) | ลด / เพิ่มความสูงของหน้าต่าง |
+| `Alt + R` | **Enter Resize Mode** (Use `H/J/K/L` or arrows `← ↑ ↓ →`, press `Enter` or `Esc` to exit) | **เข้าสู่โหมดปรับขนาดอิสระ** (กดลูกศรเพื่อปรับ, กด Enter เพื่อเสร็จสิ้น) |
+
+### 4. 🚀 GlazeWM - Workspaces & Monitors / การสลับพื้นที่ทำงานและหน้าจอ
+| Hotkey | Action (English) | คำสั่ง / การทำงาน (ไทย) |
+| --- | --- | --- |
+| `Alt + 1` .. `Alt + 9` | Switch to Workspace 1 through 9 | สลับไปยัง Workspace หมายเลข 1 ถึง 9 |
+| `Alt + Shift + 1` .. `9` | Move window to Workspace and follow focus | ย้ายหน้าต่างไปยัง Workspace นั้นๆ พร้อมตามไปทันที |
+| `Alt + Shift + A` | Move workspace to left monitor | ย้าย Workspace ปัจจุบันไปยังจอด้านซ้าย |
+| `Alt + Shift + F` | Move workspace to right monitor | ย้าย Workspace ปัจจุบันไปยังจอด้านขวา |
+| `Alt + Shift + D` | Move workspace to upper monitor | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
+| `Alt + Shift + S` | Move workspace to lower monitor | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
+
+### 5. ⚙️ GlazeWM - Process & System Controls / การควบคุมระบบ GlazeWM
+| Hotkey | Action (English) | คำสั่ง / การทำงาน (ไทย) |
+| --- | --- | --- |
+| `Alt + Enter` | **Launch Windows Terminal** | **เปิดหน้าต่าง Windows Terminal ทันที** |
+| `Alt + Shift + R` | Reload GlazeWM configuration | โหลดคอนฟิก GlazeWM ใหม่ทันทีโดยไม่ต้องรีสตาร์ต |
+| `Alt + Shift + W` | Redraw all windows | วาดหน้าต่างใหม่ แก้ปัญหากระพริบหรือภาพค้าง |
+| `Alt + Shift + P` | Toggle pause window management | หยุด/คืนค่าการจัดหน้าต่างอัตโนมัติชั่วคราว |
+| `Alt + Shift + E` | Exit GlazeWM process | ออกจากโปรแกรม GlazeWM อย่างปลอดภัย |
+
+### 6. 🔍 Flow Launcher - App Search & Productivity / ค้นหาและเปิดแอปด่วน
+| Hotkey | Action (English) | คำสั่ง / การทำงาน (ไทย) |
+| --- | --- | --- |
+| `Ctrl + Space` | **Toggle Flow Launcher search bar** | **เปิดแถบค้นหา Flow Launcher** |
+| `F1` | Quick preview file / item | เปิดหน้าต่างดูตัวอย่างไฟล์ |
+| `Ctrl + O` | Open context menu for selected result | เปิดเมนู Context ของรายการที่เลือก |
+| `Ctrl + I` | Open Flow Launcher settings | เปิดหน้าต่างการตั้งค่า Flow Launcher |
+| `Ctrl + H` | View query history | ดูประวัติการค้นหาย้อนหลัง |
+| `Tab` / `Ctrl + Tab` | Select next result / Auto-complete | เลือกผลลัพธ์ถัดไป / เติมคำค้นหาอัตโนมัติ |
+| `Alt + Up` / `Down` | Browse input history | เลื่อนดูคำค้นหาที่เคยพิมพ์ |
+
+### 7. 💻 The Terminal & TUI Arsenal / ชุดคำสั่งเทอร์มินัลระดับโปร
+| Command | Alias | Description (English) | คำอธิบาย (ไทย) |
+| --- | --- | --- | --- |
+| `yazi` | `y` | Fast modern terminal file manager | จัดการไฟล์ผ่านเทอร์มินัลความเร็วสูง |
+| `eza` | `ls`, `ll`, `la`, `lt` | Modern `ls` with Nerd Font icons & Git status | แสดงรายการไฟล์พร้อมไอคอนและสถานะ Git |
+| `bat` | `cat` | Cat clone with syntax highlighting & Git diffs | แสดงโค้ดพร้อมไฮไลต์ไวยากรณ์และเลขบรรทัด |
+| `lazygit` | `lg` | Terminal UI for Git operations | TUI จัดการ Git แบบมืออาชีพ |
+| `zoxide` | `z <dir>` | Smart directory jumper | กระโดดไปยังโฟลเดอร์ที่เคยเปิดอย่างรวดเร็ว |
+| `fzf` | `fzf` | Interactive command-line fuzzy finder | ค้นหาไฟล์ฉับไวแบบ Fuzzy Search |
+| `fastfetch` | `ff` | System fetch with Frieren ASCII art | แสดงสเปกเครื่องพร้อมรูปน้องฟรีเรน |
+| `btop` | `btop` | Resource monitor (Catppuccin Mocha theme) | ดูการทำงานของ CPU, GPU, RAM, Network |
+| `pipes-rs` | `pipes`, `pipe` | 60fps retro screensaver pipes animation (`q` to quit) | อนิเมชันท่อพักหน้าจอแบบเรโทร 60fps |
+
+### 8. 📊 YASB Top Bar Interactions / การคลิกควบคุมบนแถบ YASB
+| Widget | Click Actions (English) | การทำงาน (ไทย) |
+| --- | --- | --- |
+| **GlazeWM Workspaces (1-9)** | Click to navigate directly to workspace | คลิกเพื่อสลับหน้าต่างไปยัง Workspace นั้นๆ |
+| **Media Player** | Play / Pause media, click track name to focus player | เล่น/หยุดเพลง, คลิกชื่อเพลงเพื่อเปิดโปรแกรมเล่นเพลง |
+| **Clock / Date** | Open calendar and time panel | เปิดแผงปฏิทินและเวลา |
+| **Wallpaper Controller (󰸉)** | **Wallpaper Engine:** Left click next, Right click pause/play, Middle click open UI<br>**Static Mode:** Left click opens thumbnail gallery | **โหมด Wallpaper Engine:** คลิกซ้ายเปลี่ยนภาพ, คลิกขวาหยุด/เล่นต่อ, คลิกกลางเปิด UI<br>**โหมด Static:** คลิกซ้ายเปิด Gallery Popup |
+| **Network / Wi-Fi** | Open connection details and IP menu | เปิดป๊อปอัปดูรายละเอียดการเชื่อมต่อและ IP |
+| **Bluetooth** | Open Bluetooth devices menu | เปิดเมนูจัดการอุปกรณ์ Bluetooth |
+| **Volume Slider** | Scroll to adjust volume, Left click to mute / open sound menu | เลื่อนลูกกลิ้งเมาส์เพื่อปรับเสียง, คลิกซ้ายเพื่อ Mute |
+| **Battery** | View percentage, remaining time, and power mode | ดูสถานะแบตเตอรี่, เวลาคงเหลือ และโหมดพลังงาน |
+| **Language** | Left click to toggle input menu | คลิกซ้ายเพื่อดูเมนูภาษา |
+| **Traffic** | Left click toggles detailed rate (`↓`/`↑`) or compact (`⇅`) | คลิกเพื่อสลับดูเน็ตแบบละเอียดหรือแบบย่อ |
+
+### 9. 🗂️ File Explorer & Visual Ricing Tips / เคล็ดลับการตกแต่ง
+| Action / Shortcut | Description (English) | รายละเอียด (ไทย) |
+| --- | --- | --- |
+| `Ctrl + F1` in File Explorer | Collapse / expand the top Ribbon bar to reveal full **edge-to-edge Acrylic blur** | ย่อแถบ Ribbon ด้านบนเพื่อให้กระจก Acrylic Blur แสดงผลเต็มบานแบบไม่ทึบแสง |
+| `Ctrl + Right-Click` on Desktop | Open **Nilesoft Shell** settings and reload menu | เข้าเมนูตั้งค่าและรีโหลดของ Nilesoft Shell |
 
 ---
 
-## 🎨 Post-Installation Guide (การเปิดใช้งานโมดูลเสริม)
+## 📦 Software & Components / รายการโปรแกรมที่ใช้งาน
 
-1. **ExplorerBlurMica (ทำให้ File Explorer โปร่งแสง):**
-   - ไปที่ `~/.config/ExplorerBlurMica`
-   - คลิกขวาที่ `register.cmd` แล้วเลือก **Run as administrator** เพื่อลงทะเบียน Shell Extension
-   - กด `Ctrl + F1` ใน File Explorer เพื่อย่อแถบ Ribbon ด้านบน ให้กระจก Acrylic Blur แสดงผลเต็มบานแบบไม่ทึบแสง
-   - หากต้องการยกเลิก ให้รัน `uninstall.cmd` แบบ Administrator
-
-2. **Nilesoft Shell (แต่งเมนูคลิกขวา Catppuccin):**
-   - ติดตั้งผ่าน Scoop: `scoop install extras/nilesoft-shell`
-   - คอนฟิก `shell.nss` จะถูกวางไว้ที่ `%USERPROFILE%\scoop\persist\nilesoft-shell\shell.nss` อัตโนมัติ
-   - ลงทะเบียนเมนูคลิกขวาด้วยคำสั่ง:
-     ```powershell
-     shell -register
-     ```
-   - รีสตาร์ต Explorer เพื่อเปิดใช้เมนูคลิกขวา Acrylic Catppuccin Mocha ทันที (หรือกด `Ctrl + คลิกขวา` เพื่อเปิดเมนูจัดการของ Nilesoft Shell)
-
-3. **pipes-rs (อนิเมชันท่อพักหน้าจอ):**
-   - ติดตั้งผ่าน Scoop: `scoop install pipes-rs`
-   - พิมพ์ `pipes` หรือ `pipe` ใน PowerShell เพื่อรันอนิเมชันท่อหลากสี 60fps (กด `q` เพื่อออก)
-
-4. **Spicetify + Marketplace & Adblock (แต่ง Spotify พร้อมหน้าเลือกลงของเสริม & บล็อกโฆษณา):**
-   - มี **Marketplace** ("หน้าร้านเลือกลงของเสริม") ติดตั้งมาให้แล้วในแถบด้านซ้ายของ Spotify สามารถคลิกเพื่อเลือกติดตั้ง Themes, Extensions, และ Custom Apps เพิ่มเติมได้ง่ายๆ
-   - มี **Adblock** (`adblock.js` / Adblockify) เปิดใช้งานมาให้อัตโนมัติ บล็อกทั้งเสียงโฆษณาและแบนเนอร์
-   - เมื่อมี Spotify Desktop ติดตั้งอยู่แล้ว ให้รันคำสั่งใน PowerShell:
-     ```powershell
-     spicetify backup apply
-     ```
-   - หากต้องการอัปเดตคอนฟิกหรือรีสตาร์ต Spotify:
-     ```powershell
-     spicetify apply
-     # หรือ
-     spicetify restart
-     ```
-
-5. **Vencord (ธีม Catppuccin Discord):**
-   - สคริปต์ติดตั้งจะทำการแพตช์ Discord ให้อัตโนมัติและวางธีมไว้ที่ `%APPDATA%\Vencord\themes\catppuccin-mocha.theme.css`
-   - เมื่อเปิด Discord สามารถไปที่ `Settings > Vencord > Themes` เพื่อตรวจสอบการเปิดใช้งาน
+| Software | Description (English) | คำอธิบาย (ไทย) | Config Path |
+| --- | --- | --- | --- |
+| **GlazeWM** | Tiling window manager for Windows | ตัวจัดเรียงหน้าต่างอัตโนมัติ | `configs/glazewm/config.yaml` |
+| **YASB** | Configurable top status bar (Waybar/Polybar style) | แถบสถานะด้านบนสไตล์ Waybar | `configs/yasb/` |
+| **Flow Launcher** | Quick app and file launcher (`Ctrl+Space`) | เมนูค้นหาโปรแกรมและไฟล์แบบรวดเร็ว | `configs/flow-launcher/` |
+| **Fastfetch** | System information fetch with Frieren ASCII | แสดงสเปกเครื่องพร้อมรูปภาพ Frieren | `configs/fastfetch/` |
+| **Oh My Posh** | Modern shell prompt engine | ธีมตกแต่ง Command Prompt และ PowerShell | `configs/oh-my-posh/` |
+| **CAVA** | Audio spectrum visualizer integrated into YASB | แถบคลื่นเสียงอนิเมชันตามจังหวะเพลง | `configs/cava/` |
+| **pipes-rs** | 60fps Rust-native terminal pipes animation | อนิเมชันท่อพักหน้าจอแบบเรโทร 60fps | Scoop Package |
+| **yazi** | Blazing-fast terminal file manager | โปรแกรมจัดการไฟล์ใน Terminal | Scoop Package |
+| **eza** | Modern `ls` with Nerd Font glyphs | คำสั่งลิสต์ไฟล์พร้อมไอคอน | Scoop Package |
+| **bat** | Cat clone with syntax highlighting | โปรแกรมเปิดดูไฟล์โค้ดพร้อมไฮไลต์ | Scoop Package |
+| **lazygit** | Fast terminal UI for Git | หน้าต่างจัดการ Git บน Terminal | Scoop Package |
+| **zoxide** | Intelligent directory navigation (`cd`) | คำสั่งกระโดดไปยังโฟลเดอร์อัตโนมัติ | Scoop Package |
+| **Windows Terminal** | Translucent Acrylic themed terminal | เทอร์มินัลโปร่งใสพร้อมฟอนต์และสี Catppuccin | `configs/terminal/settings.json` |
+| **PowerShell 7** | Modern PowerShell profile with aliases | คอนฟิก `$PROFILE` พร้อมคีย์ลัดด่วน | `configs/powershell/` |
+| **HideTaskbar** | Utility to auto-hide native Windows taskbar | โปรแกรมซ่อน Taskbar เดิมของ Windows | `configs/hidetaskbar/` |
+| **GlazeTiler** | Auto-tiling assistant for GlazeWM | ตัวช่วยไทล์เสริมสำหรับ GlazeWM | `configs/glazetiler/` |
+| **Btop** | Hardware resource monitor (Catppuccin Mocha) | มอนิเตอร์สเปกเครื่อง CPU/RAM/GPU | `configs/btop/` |
+| **ExplorerBlurMica** | Acrylic blur & Catppuccin tint for File Explorer | เอฟเฟกต์เบลอกระจก Acrylic สำหรับ File Explorer | `configs/explorer-blur-mica/` |
+| **Nilesoft Shell** | Modern Acrylic context menu with Catppuccin theme | ปรับแต่งเมนูคลิกขวาเป็นกระจก Acrylic | `configs/nilesoft-shell/shell.nss` |
+| **Spicetify** | Spotify desktop mod with Marketplace & Adblock | แต่ง Spotify ธีม Catppuccin + Marketplace + บล็อกโฆษณา | `configs/spicetify/` |
+| **ModernFlyouts** | Fluent translucent on-screen display (OSD) | แถบแสดงระดับเสียงและมีเดียแบบโปร่งแสง | WinGet Package |
+| **Vencord** | Discord client mod with Catppuccin Mocha theme | ตัวแต่ง Discord พร้อมธีม Catppuccin | `configs/vencord/` |
 
 ---
 
-## 💾 How to Backup your changes (การเซฟการตั้งค่ากลับเข้า Repo)
+## 🎨 Post-Installation Guide / คู่มือหลังการติดตั้ง
 
-หากคุณปรับแต่งตำแหน่งแท็บ สี หรือคีย์ลัดเพิ่มเติม และต้องการแบ็กอัปกลับมาที่โฟลเดอร์ repository:
+### 1. ExplorerBlurMica (Transparent Acrylic File Explorer)
+- Navigate to `~/.config/ExplorerBlurMica`.
+- Right-click `register.cmd` and select **Run as administrator** to register the shell extension.
+- Press `Ctrl + F1` inside File Explorer to collapse the ribbon and experience full edge-to-edge Acrylic blur.
+- *(หากต้องการยกเลิก ให้รัน `uninstall.cmd` ในฐานะ Administrator)*
+
+### 2. Nilesoft Shell (Catppuccin Context Menu)
+- Installed via Scoop: `scoop install extras/nilesoft-shell`.
+- Register the context menu extension:
+  ```powershell
+  shell -register
+  ```
+- Restart Windows Explorer (`Stop-Process -Name explorer`) to enjoy the themed context menu.
+- Access Nilesoft Shell preferences anytime by pressing `Ctrl + Right-Click` on the desktop.
+
+### 3. Spicetify + Marketplace & Adblock
+- Pre-configured with the **Marketplace** (extension store on Spotify's left sidebar) and **Adblock** (`adblock.js` / Adblockify).
+- Once Spotify Desktop is installed, run:
+  ```powershell
+  spicetify backup apply
+  ```
+- To update configs or restart Spotify:
+  ```powershell
+  spicetify apply
+  # or
+  spicetify restart
+  ```
+
+### 4. Vencord (Catppuccin Discord Theme)
+- The installer automatically patches Discord and places the theme at `%APPDATA%\Vencord\themes\catppuccin-mocha.theme.css`.
+- Open Discord and verify theme activation under `Settings > Vencord > Themes`.
+
+---
+
+## 💾 How to Backup Your Changes / วิธีสำรองข้อมูลกลับเข้า Repo
+
+If you customize layouts, colors, or keybindings and wish to commit them back to your repository:
+
+*(หากคุณปรับแต่งตำแหน่งหรือสีเพิ่มเติม และต้องการบันทึกกลับเข้าโฟลเดอร์โปรเจกต์:)*
 
 ```powershell
 .\backup.ps1
 ```
 
-สคริปต์จะแปลงพาธชื่อผู้ใช้ให้เป็นค่าพกพา (`__USERPROFILE__`, `__APPDATA__` ฯลฯ) และตัดรหัสผ่าน/โทเค็นส่วนตัวออกให้อัตโนมัติ ปลอดภัยต่อการ `git push`
+The script automatically converts local paths to portable tokens (`__USERPROFILE__`, `__APPDATA__`, etc.) and strips sensitive API tokens and credentials, keeping commits clean and secure.
 
 ---
 
@@ -276,15 +281,4 @@ cd 6e5tz_window_rice
 - **Base YASB + GlazeWM Configuration:** Based on [SleepyCatHey/Yasb-GlazeWM-Config](https://github.com/SleepyCatHey/Yasb-GlazeWM-Config) by [@SleepyCatHey](https://github.com/SleepyCatHey).
 - **Catppuccin Theme Community:** [catppuccin/catppuccin](https://github.com/catppuccin) for the soothing pastel palette across Btop, Spicetify, Vencord, and ExplorerBlurMica.
 - **Fastfetch Frieren ASCII Art:** Anime braille art community.
-- **Tools & Projects:**
-  - [GlazeWM](https://github.com/glzr-io/glazewm)
-  - [YASB](https://github.com/amnweb/yasb)
-  - [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher)
-  - [Oh My Posh](https://ohmyposh.dev/)
-  - [Fastfetch](https://github.com/fastfetch-cli/fastfetch)
-  - [CAVA](https://github.com/karlstav/cava)
-  - [btop4win](https://github.com/aristocratos/btop4win)
-  - [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica)
-  - [Spicetify](https://github.com/spicetify/cli)
-  - [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts)
-  - [Vencord](https://github.com/Vendicated/Vencord)
+- **Upstream Projects:** [GlazeWM](https://github.com/glzr-io/glazewm), [YASB](https://github.com/amnweb/yasb), [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher), [Oh My Posh](https://ohmyposh.dev/), [Fastfetch](https://github.com/fastfetch-cli/fastfetch), [CAVA](https://github.com/karlstav/cava), [btop4win](https://github.com/aristocratos/btop4win), [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica), [Spicetify](https://github.com/spicetify/cli), [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts), [Vencord](https://github.com/Vendicated/Vencord).
