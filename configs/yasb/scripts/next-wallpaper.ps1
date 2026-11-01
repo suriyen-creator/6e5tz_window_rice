@@ -37,13 +37,12 @@ if ($target -eq 'Auto') {
 
 if ($target -eq 'WallpaperEngine' -and (Test-Path $weControlScript)) {
     & $weControlScript -Action next
+    exit 0
 }
 
 # -------------------------------------------------------------
 # Static Wallpaper Cycling (Windows Desktop)
-# We update static wallpaper as well so:
-# 1) If WE is closed, paused, or uninstalled, desktop is fresh.
-# 2) If in Static mode, changes desktop wallpaper immediately.
+# Only cycles static desktop wallpapers when in Static mode
 # -------------------------------------------------------------
 $wallDir = Join-Path $env:USERPROFILE "Pictures\Wallpapers"
 if (-not (Test-Path $wallDir)) {

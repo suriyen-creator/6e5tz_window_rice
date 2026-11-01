@@ -409,6 +409,16 @@ function Deploy-AllConfigs {
         }
     }
 
+    # Ensure silent next-wallpaper.exe launcher exists (GUI subsystem, zero console flash)
+    $targetExe = Join-Path $env:USERPROFILE '.config\yasb\scripts\next-wallpaper.exe'
+    if (-not (Test-Path $targetExe)) {
+        $csc = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe'
+        $srcCs = Join-Path $ConfigRoot 'yasb\scripts\NextWallpaperLauncher.cs'
+        if ((Test-Path $csc) -and (Test-Path $srcCs)) {
+            & $csc /target:winexe /optimize /nologo /out:"$targetExe" "$srcCs" | Out-Null
+        }
+    }
+
     # Always ensure sample wallpapers are available in ~/Pictures/Wallpapers
     $targetWallpapersDir = Join-Path $env:USERPROFILE 'Pictures\Wallpapers'
     Ensure-Directory $targetWallpapersDir

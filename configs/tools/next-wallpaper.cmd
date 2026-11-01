@@ -1,2 +1,6 @@
 @echo off
-powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "%USERPROFILE%\.config\yasb\scripts\next-wallpaper.ps1"
+if exist "%USERPROFILE%\.config\yasb\scripts\next-wallpaper.exe" (
+    start "" /B "%USERPROFILE%\.config\yasb\scripts\next-wallpaper.exe" %*
+) else (
+    wscript.exe //nologo "%USERPROFILE%\.config\yasb\scripts\next-wallpaper.vbs" %*
+)

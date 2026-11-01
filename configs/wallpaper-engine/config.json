@@ -222,6 +222,44 @@
 				"showselectionbox" : true,
 				"showstats" : false
 			},
+			"playlists" : 
+			[
+				{
+					"items" : 
+					[
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3444152820/黎歌格子 2.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3647696675/project.json",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3313986886/IQ2lQYIfKYc_1080p.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415017806/Muse Dash × Arknights2 wisadel_2_prob4.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3417601930/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3585875739/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3262160063/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RING™ 2024-07-20 23-09-54.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415297400/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3404976219/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3286963854/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3337568904/kisaki.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes – Relaxing Aquarium.mp4",
+						"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3531810771/index.html"
+					],
+					"name" : "test",
+					"settings" : 
+					{
+						"delay" : 60,
+						"mode" : "timer",
+						"order" : "random",
+						"transition" : "0",
+						"transitiontime" : 100,
+						"updateonpause" : false,
+						"videosequence" : false
+					}
+				}
+			],
 			"user" : 
 			{
 				"adjustdwmcolormode" : "disabled",
@@ -397,90 +435,17 @@
 			},
 			"wallpaperconfig" : 
 			{
-				"profile" : null
+				"profile" : null,
+				"selectedwallpapers" : 
+				{
+					"Monitor0" : 
+					{
+						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3286963854/scene.pkg"
+					}
+				}
 			},
 			"wallpaperconfigrecent" : 
 			[
-				{
-					"config" : 
-					{
-						"layout" : 0,
-						"profile" : null,
-						"selectedwallpapers" : 
-						{
-							"Monitor0" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2517518192/index.html"
-							},
-							"Monitor1" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							}
-						}
-					},
-					"playlist" : false,
-					"title" : "Five Nights at Freddy's 1 Camera View (Interactive)"
-				},
-				{
-					"config" : 
-					{
-						"layout" : 0,
-						"profile" : null,
-						"selectedwallpapers" : 
-						{
-							"Monitor0" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes – Relaxing Aquarium.mp4"
-							},
-							"Monitor1" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							}
-						}
-					},
-					"playlist" : false,
-					"title" : "[Lightweight] Minecraft Soothing Scenes – Relaxing Aquarium (Cozy Ocean)"
-				},
-				{
-					"config" : 
-					{
-						"layout" : 0,
-						"profile" : null,
-						"selectedwallpapers" : 
-						{
-							"Monitor0" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3417601930/scene.pkg"
-							},
-							"Monitor1" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							}
-						}
-					},
-					"playlist" : false,
-					"title" : "KAngel | NEEDY GIRL OVERDOSE [Interactive]"
-				},
-				{
-					"config" : 
-					{
-						"layout" : 0,
-						"profile" : null,
-						"selectedwallpapers" : 
-						{
-							"Monitor0" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg"
-							},
-							"Monitor1" : 
-							{
-								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-							}
-						}
-					},
-					"playlist" : false,
-					"title" : "Cat with headphones on the roof"
-				},
 				{
 					"config" : 
 					{
@@ -616,6 +581,142 @@
 					},
 					"playlist" : true,
 					"title" : "Jinhsi 今汐 금희 (7)"
+				},
+				{
+					"config" : 
+					{
+						"layout" : null,
+						"profile" : null,
+						"selectedwallpapers" : 
+						{
+							"Monitor0" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg",
+								"playlist" : 
+								{
+									"items" : 
+									[
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3444152820/黎歌格子 2.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3647696675/project.json",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3313986886/IQ2lQYIfKYc_1080p.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415017806/Muse Dash × Arknights2 wisadel_2_prob4.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3417601930/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3585875739/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3262160063/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RING™ 2024-07-20 23-09-54.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415297400/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3404976219/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3286963854/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3337568904/kisaki.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes – Relaxing Aquarium.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3531810771/index.html"
+									],
+									"name" : "",
+									"settings" : 
+									{
+										"delay" : 60,
+										"mode" : "timer",
+										"order" : "random",
+										"transition" : "0",
+										"transitiontime" : 100,
+										"updateonpause" : false,
+										"videosequence" : false
+									}
+								}
+							}
+						}
+					},
+					"playlist" : true,
+					"title" : "Cat with headphones on the roof (19)"
+				},
+				{
+					"config" : 
+					{
+						"layout" : null,
+						"profile" : null,
+						"selectedwallpapers" : 
+						{
+							"Monitor0" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg"
+							}
+						}
+					},
+					"playlist" : false,
+					"title" : "Persona 3 Reload [4K + Day/Night cycle]"
+				},
+				{
+					"config" : 
+					{
+						"layout" : null,
+						"profile" : null,
+						"selectedwallpapers" : 
+						{
+							"Monitor0" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2802745314/scene.pkg"
+							}
+						}
+					},
+					"playlist" : false,
+					"title" : "Mahiro and The End"
+				},
+				{
+					"config" : 
+					{
+						"layout" : null,
+						"profile" : null,
+						"selectedwallpapers" : 
+						{
+							"Monitor0" : 
+							{
+								"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3444152820/黎歌格子 2.mp4",
+								"playlist" : 
+								{
+									"items" : 
+									[
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3444152820/黎歌格子 2.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3647696675/project.json",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3313986886/IQ2lQYIfKYc_1080p.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415017806/Muse Dash × Arknights2 wisadel_2_prob4.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3417601930/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3585875739/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3262160063/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RING™ 2024-07-20 23-09-54.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415297400/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3404976219/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3286963854/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3477054430/scene.pkg",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3337568904/kisaki.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2902931482/Minecraft Soothing Scenes – Relaxing Aquarium.mp4",
+										"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3531810771/index.html"
+									],
+									"name" : "test",
+									"settings" : 
+									{
+										"delay" : 60,
+										"mode" : "timer",
+										"order" : "random",
+										"transition" : "0",
+										"transitiontime" : 100,
+										"updateonpause" : false,
+										"videosequence" : false
+									}
+								}
+							}
+						}
+					},
+					"playlist" : true,
+					"title" : "黎歌neeko可爱出框动态壁纸~ (19)"
 				}
 			],
 			"wallpaperconfigscreensaver" : 
@@ -654,7 +755,7 @@
 			{
 				"Monitor0" : 
 				{
-					"volume" : 41
+					"volume" : 0
 				}
 			},
 			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3302436589/ELDEN RING™ 2024-07-20 23-09-54.mp4" : 
@@ -672,6 +773,13 @@
 				}
 			},
 			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3404976219/scene.pkg" : 
+			{
+				"Monitor0" : 
+				{
+					"volume" : 0
+				}
+			},
+			"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3415017806/Muse Dash × Arknights2 wisadel_2_prob4.mp4" : 
 			{
 				"Monitor0" : 
 				{
