@@ -1614,20 +1614,26 @@ Example: "Windows Media" becomes "windows-media" */
 
 
 
-/* Wallpapers Widget & Gallery */
-.wallpapers-widget {
+/* Wallpapers Widget & Wallpaper Engine Controller */
+.wallpapers-widget,
+.widget.wallpapers,
+.custom-widget.wallpapers {
     padding: 0 4px;
     margin: 0;
 }
 
 .wallpapers-widget .icon,
-.wallpapers-widget .label {
+.wallpapers-widget .label,
+.widget.wallpapers .label,
+.custom-widget.wallpapers .label {
     color: #f5c2e7;
     font-size: 14px;
     padding: 0 4px;
 }
 
-.wallpapers-widget:hover {
+.wallpapers-widget:hover,
+.widget.wallpapers:hover,
+.custom-widget.wallpapers:hover {
     background-color: rgba(255, 255, 255, 0.08);
     border-radius: 8px;
 }

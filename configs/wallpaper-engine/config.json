@@ -397,19 +397,7 @@
 			},
 			"wallpaperconfig" : 
 			{
-				"layout" : 0,
-				"profile" : null,
-				"selectedwallpapers" : 
-				{
-					"Monitor0" : 
-					{
-						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4"
-					},
-					"Monitor1" : 
-					{
-						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/2986163106/index.html"
-					}
-				}
+				"profile" : null
 			},
 			"wallpaperconfigrecent" : 
 			[

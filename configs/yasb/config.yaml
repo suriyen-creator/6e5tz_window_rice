@@ -387,26 +387,17 @@ widgets:
         on_right: "do_nothing"
         on_middle: "toggle_label"
   wallpapers:
-    type: "yasb.wallpapers.WallpapersWidget"
+    type: "yasb.custom.CustomWidget"
     options:
-      label: "<span>\udb83\ude09</span>"
-      image_path: "__USERPROFILE__\\Pictures\\Wallpapers"
-      change_automatically: false
-      update_interval: 300
-      gallery:
-          enabled: true
-          blur: true
-          image_width: 220
-          image_per_page: 8
-          show_buttons: true
-          orientation: "portrait"
-          image_spacing: 8
-          lazy_load: true
-          lazy_load_fadein: 400
-          image_corner_radius: 12
+      class_name: "wallpapers-widget"
+      label: "<span>󰸉</span>"
+      label_alt: "<span>󰸉</span>"
+      tooltip: true
+      tooltip_label: "Wallpaper Engine\n• Left click: Next Wallpaper\n• Right click: Pause / Resume\n• Middle click: Open Wallpaper Engine"
       callbacks:
-        on_left: "toggle_gallery"
-        on_right: "change_wallpaper"
+        on_left: "exec \"__PROGRAMFILES__ (x86)\\Steam\\steamapps\\common\\wallpaper_engine\\wallpaper64.exe\" -control nextWallpaper"
+        on_right: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__\\.config\\yasb\\scripts\\wallpaper_engine_control.ps1\" -Action toggle"
+        on_middle: "exec cmd.exe /c start steam://rungameid/431960"
   cava:
     type: "yasb.cava.CavaWidget"
     options:
