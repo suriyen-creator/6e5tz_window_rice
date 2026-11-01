@@ -18,38 +18,43 @@
 
 ## จุดเด่น
 
-- **ระบบจัดหน้าต่าง (Tiling):** ขับเคลื่อนด้วย GlazeWM เว้นระยะขอบสมมาตร 8px รอบด้าน พร้อมเปิดใช้งาน Focus-Follows-Cursor (เมาส์ชี้หน้าต่างไหน โฟกัสตามทันที)
-- **แถบสถานะด้านบน (Top Bar):** YASB ทรงแคปซูลลอย แสดงความเร็วอินเทอร์เน็ตสด, เปอร์เซ็นต์แบตเตอรี่, แถบปรับเสียง, ควบคุมเพลง, และคลื่นเสียง CAVA Visualizer
+- **ระบบจัดหน้าต่าง (Tiling):** GlazeWM เว้นระยะขอบสมมาตร 8px รอบด้าน พร้อมเปิดใช้งาน Focus-Follows-Cursor (เลื่อนเมาส์ไปหน้าต่างไหน โฟกัสตามทันที)
+- **แถบสถานะด้านบน (Top Bar):** YASB ทรงแคปซูลลอย แสดงความเร็วเน็ตสด, เปอร์เซ็นต์แบตเตอรี่, แถบปรับเสียง, ควบคุมเพลง, และคลื่นเสียง CAVA Visualizer
 - **ระบบ Wallpaper 2 โหมด:** รองรับทั้งคนที่ใช้ Wallpaper Engine (สั่ง Next/Pause ผ่าน CLI) และคนที่ใช้ภาพนิ่งปกติ (มี Popup Gallery เลือกรูปภาพขนาดย่อในตัว)
-- **เทอร์มินัล:** Windows Terminal แบบโปร่งแสง Acrylic + PowerShell 7 + Oh My Posh + Fastfetch รูปน้องฟรีเรน
-- **เมนูค้นหาด่วน:** Flow Launcher ธีม Catppuccin พร้อมฟังก์ชันค้นหาแอป ไฟล์ และคิดเลขฉับไว
-- **ไม่ทับปุ่มลัดระบบ:** คีย์ลัดจัดการหน้าต่างทั้งหมดใช้ปุ่ม `Alt` เพื่อไม่ให้แย่งคีย์ลัดสำคัญของ Windows เช่น `Win + Space` (สลับภาษาไทย-อังกฤษ) และปุ่ม `Win` ของ Flow Launcher
+- **ปุ่มลัดสลับ Wallpaper สากล:** กด `Alt + W` เพื่อสลับไปภาพถัดไปได้ทันทีทั้งสองโหมด
+- **เทอร์มินัลครบชุด:** Windows Terminal โปร่งแสง Acrylic + PowerShell 7 + Oh My Posh + Fastfetch ฟรีเรน พร้อมคำสั่งนาฬิกา `clock` และเอฟเฟกต์ฝนดิจิทัล `matrix`
+- **เมนูค้นหาด่วน:** Flow Launcher ธีม Catppuccin ค้นหาแอป ไฟล์ และคิดเลขได้รวดเร็ว
+- **ไม่ทับปุ่มลัดระบบ:** คีย์ลัดจัดการหน้าต่างทั้งหมดใช้ปุ่ม `Alt` เพื่อไม่ให้แย่งคีย์ลัดสำคัญของ Windows โดยเฉพาะ `Win + Space` สำหรับสลับภาษาไทย-อังกฤษที่ใช้งานได้ลื่นไหล 100%
 
 ---
 
-## การติดตั้งด่วน (Quick Install)
+## การติดตั้งด่วน (รองรับเครื่องใหม่แกะกล่อง)
 
-เปิด **PowerShell** ในฐานะ Administrator แล้วคัดลอกคำสั่งด้านล่างไปวางแล้วกด `Enter`:
+สคริปต์ติดตั้งถูกออกแบบมาให้ทำงานได้ทันทีบน Windows เครื่องใหม่ที่เพิ่งลงวินโดวส์เสร็จและยังไม่เคยลงโปรแกรมสำหรับนักพัฒนาหรือ Package Manager ใดๆ มาก่อน
+
+เปิด **PowerShell** (Run as Administrator) แล้ววางคำสั่งนี้แล้วกด Enter:
 
 ```powershell
-irm https://raw.githubusercontent.com/suriyen-creator/6e5tz_window_rice/main/install.ps1 | iex
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm https://raw.githubusercontent.com/suriyen-creator/6e5tz_window_rice/main/install.ps1 | iex
 ```
 
-### สิ่งที่ตัวติดตั้งจะจัดการให้:
-1. โคลน dotfiles ไปไว้ที่ `$HOME\.dotfiles\window_rice`
-2. แสดงเมนูให้เลือก:
-   - `[1] Full Installation`: ติดตั้งโปรแกรมทั้งหมดผ่าน WinGet + โหลดฟอนต์ MesloLGL Nerd Font + วางคอนฟิกทั้งหมด
-   - `[2] Deploy Configs Only`: ข้ามการโหลดโปรแกรมและวางเฉพาะไฟล์คอนฟิก (สำหรับเครื่องที่มีโปรแกรมครบแล้ว)
-   - `[3] Install Font Only`: ติดตั้งเฉพาะฟอนต์ MesloLGL Nerd Font
-3. แบ็กอัปคอนฟิกเดิมของผู้ใช้เก็บไว้เป็น `.backup-<timestamp>` ป้องกันข้อมูลสูญหาย
-4. ตรวจจับอัตโนมัติว่าในเครื่องมี Wallpaper Engine หรือไม่ แล้วเลือกคอนฟิก YASB ที่เหมาะสมให้อัตโนมัติ
-5. เริ่มการทำงานของ GlazeWM และ YASB ทันที
+### สิ่งที่ตัวติดตั้งจะจัดการให้อัตโนมัติ:
+1. เปิดสิทธิ์การรันสคริปต์ PowerShell (`RemoteSigned` เฉพาะ CurrentUser)
+2. โคลน dotfiles ไปไว้ที่ `$HOME\.dotfiles\window_rice`
+3. ติดตั้งโปรแกรมหลักทั้งหมดผ่าน Microsoft WinGet
+4. ตรวจสอบและติดตั้ง Scoop พร้อมเพิ่ม bucket `extras` อัตโนมัติหากยังไม่มีในเครื่อง
+5. ติดตั้ง Python 3.12 และไลบรารี curses สำหรับรันสกรีนเซฟเวอร์เทอร์มินัล
+6. ดาวน์โหลดและลงทะเบียนฟอนต์ MesloLGL Nerd Font ลงระบบ Windows Fonts
+7. วางไฟล์คอนฟิก, สคริปต์เครื่องมือเสริม (`clock`, `unimatrix`) และชุดรูปภาพวอลเปเปอร์ตัวอย่าง
+8. แบ็กอัปคอนฟิกเดิมของผู้ใช้เก็บไว้เป็น `.backup-<timestamp>` ป้องกันข้อมูลทับซ้อน
+9. ตรวจจับอัตโนมัติว่าในเครื่องมี Wallpaper Engine หรือไม่ แล้วเลือกคอนฟิก YASB ที่เหมาะสมให้ทันที
+10. เริ่มการทำงานของ GlazeWM และ YASB
 
 ---
 
 ## การติดตั้งแบบแมนนวล (ผ่าน install.ps1)
 
-หากต้องการโคลน Repository มาตรวจสอบไฟล์ก่อนติดตั้ง:
+หากต้องการโคลน Repository มาตรวจสอบไฟล์ในเครื่องก่อนรัน:
 
 ```powershell
 # โคลนโปรเจกต์
@@ -62,7 +67,7 @@ cd 6e5tz_window_rice
 
 ### พารามิเตอร์เพิ่มเติม:
 ```powershell
-# ลงเฉพาะไฟล์คอนฟิก (ไม่ดาวน์โหลดโปรแกรม)
+# วางเฉพาะไฟล์คอนฟิก (ไม่ดาวน์โหลดโปรแกรม)
 .\install.ps1 -ConfigOnly
 
 # ติดตั้งแบบ Non-interactive (ไม่ถามคำถาม)
@@ -77,29 +82,33 @@ cd 6e5tz_window_rice
 
 ## ติดตั้งเองทีละขั้นตอน (Zero-Script DIY Guide)
 
-สำหรับผู้ที่กังวลเรื่องความปลอดภัยและไม่ต้องการรันสคริปต์อัตโนมัติจากอินเทอร์เน็ต สามารถติดตั้งโปรแกรมและคัดลอกไฟล์คอนฟิกได้ด้วยตนเอง 100% ไฟล์ทั้งหมดใน repo นี้เป็น Plain Text (YAML, JSON, CSS) ตรวจสอบได้ก่อนใช้งาน
+สำหรับผู้ที่กังวลเรื่องความปลอดภัยและไม่ต้องการรันสคริปต์อัตโนมัติจากอินเทอร์เน็ต สามารถติดตั้งโปรแกรมและคัดลอกไฟล์คอนฟิกได้ด้วยตนเอง 100% ไฟล์ทั้งหมดใน Repository นี้เป็น Plain Text (YAML, JSON, CSS) ตรวจสอบโค้ดทั้งหมดได้ก่อนนำไปใช้
 
 ### 1. ติดตั้งโปรแกรมผ่าน Official Source
 
-สามารถติดตั้งโปรแกรมหลักผ่านคำสั่ง WinGet ทางการของ Microsoft:
+ติดตั้งโปรแกรมหลักผ่าน WinGet ของ Microsoft:
 
 ```powershell
 # Window Manager และ Launcher
 winget install glzr-io.glazewm
 winget install Flow-Launcher.Flow-Launcher
 
-# Terminal และ Shell Prompt
+# Terminal, Shell, Prompt และ Python
 winget install Microsoft.WindowsTerminal
 winget install Microsoft.PowerShell
 winget install JanDeDobbeleer.OhMyPosh
 winget install Fastfetch-cli.Fastfetch
+winget install Python.Python.3.12
+
+# ไลบรารีสำหรับ Unimatrix
+pip install windows-curses
 ```
 
-- **YASB:** ดาวน์โหลดตัวติดตั้ง `.msi` หรือ `.zip` โดยตรงจาก [amnweb/yasb Releases](https://github.com/amnweb/yasb/releases)
+- **YASB:** ดาวน์โหลดตัวติดตั้งทางการจาก [amnweb/yasb Releases](https://github.com/amnweb/yasb/releases)
 - **MesloLGL Nerd Font:** ดาวน์โหลด `Meslo.zip` จาก [Nerd Fonts Releases](https://github.com/ryanoasis/nerd-fonts/releases) แตกไฟล์ `.ttf` แล้วคลิกขวาเลือก **Install for all users**
 - **เครื่องมือเสริมบน Terminal (ผ่าน Scoop):** `scoop install yazi eza bat lazygit zoxide btop pipes-rs`
 
-### 2. คัดลอกไฟล์คอนฟิกไปยังตำแหน่งของระบบ
+### 2. คัดลอกไฟล์คอนฟิกไปยังโฟลเดอร์ของระบบ
 
 ดาวน์โหลด Repository นี้มา แล้วคัดลอกไฟล์ไปยังโฟลเดอร์ปลายทางตามตารางนี้:
 
@@ -107,6 +116,7 @@ winget install Fastfetch-cli.Fastfetch
 | --- | --- | --- |
 | **GlazeWM** | `configs/glazewm/config.yaml` | `%USERPROFILE%\.glzr\glazewm\config.yaml` |
 | **YASB Bar** | `configs/yasb/styles.css`<br>`configs/yasb/scripts/*` | `%USERPROFILE%\.config\yasb\styles.css`<br>`%USERPROFILE%\.config\yasb\scripts\` |
+| **Terminal Tools** | `configs/tools/*` | `%USERPROFILE%\.config\tools\` |
 | **Windows Terminal** | `configs/terminal/settings.json` | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json` |
 | **Flow Launcher** | `configs/flow-launcher/Settings.json`<br>`configs/flow-launcher/themes/*` | `%APPDATA%\FlowLauncher\Settings\Settings.json`<br>`%APPDATA%\FlowLauncher\Themes\` |
 | **Fastfetch** | `configs/fastfetch/*` | `%USERPROFILE%\.config\fastfetch\` |
@@ -145,7 +155,10 @@ winget install Fastfetch-cli.Fastfetch
 เหมาะสำหรับคนที่ใช้ภาพพื้นหลังปกติของ Windows โดยไม่ต้องรันโปรแกรมเสริม:
 - **คลิกซ้ายที่ `󰸉`:** เปิด Popup Gallery สวยงาม แสดงรูปตัวอย่างขนาดย่อ สามารถคลิกเลือกภาพเพื่อเปลี่ยนพื้นหลังหน้าจอได้ทันที
 - ดึงรูปภาพจากโฟลเดอร์ `%USERPROFILE%\Pictures\Wallpapers\`
-- มีภาพ Anime Wallpaper ความละเอียดสูงแถมมาให้ 10 รูปในโฟลเดอร์ `wallpapers/`
+- มีภาพ Wallpaper ความละเอียดสูงแถมมาให้ 10 รูปในโฟลเดอร์ `wallpapers/`
+
+### ปุ่มลัดสลับ Wallpaper สากล:
+- กด **`Alt + W`** ได้จากทุกหน้าจอเพื่อเปลี่ยนไปภาพถัดไปทันที ระบบจะตรวจจับโหมดอัตโนมัติ (หากเปิด Wallpaper Engine จะสั่งข้ามเพลง/ภาพในเพลย์ลิสต์ หากเป็น Static จะสลับรูปในโฟลเดอร์ให้ทันที)
 
 ### คำสั่งสลับโหมดได้ทุกเมื่อ:
 ```powershell
@@ -156,6 +169,25 @@ winget install Fastfetch-cli.Fastfetch
 .\scripts\switch-wallpaper-mode.ps1 -Mode Static
 .\scripts\switch-wallpaper-mode.ps1 -Mode WallpaperEngine
 ```
+
+---
+
+## คลังคำสั่ง Terminal (Terminal Arsenal)
+
+คำสั่งพร้อมใช้งานทันทีภายใน Windows Terminal (PowerShell 7):
+
+| คำสั่ง | รายละเอียดการทำงาน |
+| --- | --- |
+| `clock` | นาฬิกา ASCII / TUI สไตล์มินิมอล พร้อมฟังก์ชันจับเวลาและ Pomodoro (`sigye` พร้อมระบบ Fallback เป็นนาฬิกา Pure PowerShell) |
+| `matrix` / `unimatrix` | สกรีนเซฟเวอร์ฝนดิจิทัล The Matrix บน Terminal (Python + curses) |
+| `pipes` | สกรีนเซฟเวอร์ท่อเลี้ยวสามมิติ 60fps เขียนด้วย Rust (`pipes-rs`) |
+| `ff` | Fastfetch แสดงสเปกเครื่องพร้อม ASCII Art น้องฟรีเรน |
+| `btop` | หน้าจอมอนิเตอร์ซีพียู แรม การ์ดจอ เน็ต และโปรเซส ธีม Catppuccin Mocha |
+| `y` | ตัวจัดการไฟล์บน Terminal พร้อมคีย์ลัดสไตล์ Vim (`yazi`) |
+| `lg` | จัดการ Git แบบกราฟิกบน Terminal (`lazygit`) |
+| `ls` / `ll` | ดูรายการไฟล์พร้อมไอคอน Nerd Font และสถานะ Git (`eza`) |
+| `cat` | อ่านเนื้อหาไฟล์พร้อมไฮไลต์สีโค้ดและเลขบรรทัด (`bat`) |
+| `z <ชื่อโฟลเดอร์>` | กระโดดข้ามไดเรกทอรีด่วนอัจฉริยะ (`zoxide`) |
 
 ---
 
@@ -186,7 +218,7 @@ winget install Fastfetch-cli.Fastfetch
 | `Alt + T` | เปลี่ยนหน้าต่างกลับเป็นโหมดเรียงชิด (Tiling) |
 | `Alt + F` | เปิด / ปิดโหมดขยายเต็มหน้าจอ (Fullscreen) |
 | `Alt + M` | ย่อหน้าต่างลง Taskbar |
-| `Alt + Shift + Q` | **ปิดหน้าต่างที่กำลังโฟกัส** |
+| `Alt + Shift + Q` | ปิดหน้าต่างที่กำลังโฟกัส |
 | `Alt + V` | สลับทิศทางการแยกหน้าต่าง (แนวนอน / แนวตั้ง) |
 
 ### การปรับขนาดหน้าต่าง
@@ -194,7 +226,7 @@ winget install Fastfetch-cli.Fastfetch
 | --- | --- |
 | `Alt + U` / `Alt + P` | ลด / เพิ่มความกว้างหน้าต่าง (-2% / +2%) |
 | `Alt + I` / `Alt + O` | ลด / เพิ่มความสูงหน้าต่าง (-2% / +2%) |
-| `Alt + R` | เข้าสู่โหมดปรับขนาดอิสระ (ใช้ลูกศรยืดหดได้ตามใจ, กด Enter หรือ Esc เพื่อออก) |
+| `Alt + R` | เข้าสู่โหมดปรับขนาดอิสระ (ใช้ปุ่ม `H/J/K/L` หรือลูกศรยืดหด, กด `Enter` หรือ `Esc` เพื่อออก) |
 
 ### พื้นที่ทำงานและหน้าจอ (Workspaces & Monitors)
 | คีย์ลัด | คำสั่ง / การทำงาน |
@@ -206,10 +238,12 @@ winget install Fastfetch-cli.Fastfetch
 | `Alt + Shift + D` | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
 | `Alt + Shift + S` | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
 
-### ควบคุมกระบวนการและระบบ
+### ปุ่มลัดด่วนและควบคุมระบบ
 | คีย์ลัด | คำสั่ง / การทำงาน |
 | --- | --- |
 | `Alt + Enter` | **เปิด Windows Terminal ทันที** |
+| `Alt + W` | **สลับ Wallpaper ถัดไป** (ทั้ง Wallpaper Engine และ Static Gallery) |
+| `Win + Space` | **สลับภาษาไทย-อังกฤษของ Windows** (ไม่มีโปรแกรมใดดักจับ ใช้งานได้ 100%) |
 | `Alt + Shift + R` | รีโหลดคอนฟิก GlazeWM โดยไม่ต้องรีสตาร์ต |
 | `Alt + Shift + W` | วาดหน้าต่างใหม่ทั้งหมด แก้บั๊กจอกระพริบหรือภาพค้าง |
 | `Alt + Shift + P` | หยุด/คืนค่าระบบจัดเรียงหน้าต่างชั่วคราว |
@@ -234,12 +268,43 @@ winget install Fastfetch-cli.Fastfetch
 | **Workspaces (1-9)** | คลิกเพื่อสลับหน้าต่างไปยัง Workspace นั้น |
 | **Media Player** | คลิกซ้าย: เล่น/หยุดเพลง. คลิกที่ชื่อเพลงเพื่อเปิดโปรแกรมเล่นเพลง |
 | **นาฬิกา / วันที่** | คลิกซ้าย: เปิดแผงปฏิทินและเวลา |
-| **Wallpaper (󰸉)** | โหมด Wallpaper Engine: คลิกซ้ายเปลี่ยนภาพ, คลิกขวาหยุด/เล่นต่อ, คลิกกลางเปิด UI<br>โหมด Static: คลิกซ้ายเปิด Gallery Popup |
+| **Wallpaper (`󰸉`)** | โหมด Wallpaper Engine: คลิกซ้ายเปลี่ยนภาพ, คลิกขวาหยุด/เล่นต่อ, คลิกกลางเปิด UI<br>โหมด Static: คลิกซ้ายเปิด Gallery Popup |
 | **Network / Wi-Fi** | คลิกซ้าย: เปิดเมนูดูรายละเอียดการเชื่อมต่อและ IP |
 | **Bluetooth** | คลิกซ้าย: เปิดเมนูจัดการอุปกรณ์ Bluetooth |
-| **ระดับเสียง** | เลื่อนลูกกลิ้งเมาส์เพื่อปรับเสียง, คลิกซ้ายเพื่อ Mute |
+| **ระดับเสียง** | เลื่อนลูกกลิ้งเมาส์เพื่อปรับเสียง, คลิกซ้ายเพื่อ Mute (ทำงานแทน ModernFlyouts โดยไม่แย่งคีย์ลัด) |
 | **แบตเตอรี่** | คลิกซ้ายเพื่อสลับดูเปอร์เซ็นต์ / เวลาที่เหลือ / โหมดพลังงาน |
 | **Traffic (อินเทอร์เน็ต)** | คลิกซ้ายเพื่อสลับดูความเร็วแบบละเอียด (`↓`/`↑`) หรือแบบย่อ (`⇅`) |
+
+> **หมายเหตุเรื่อง ModernFlyouts:** โปรเจกต์นี้ไม่รวม ModernFlyouts เนื่องจากโปรแกรมมีบั๊ก Low-level Keyboard Hook (Issue #584) ซึ่งส่งผลให้ปุ่ม `Win + Space` สำหรับเปลี่ยนภาษาไทย-อังกฤษไม่ทำงาน การควบคุมเสียงและเพลงทั้งหมดถูกรวมไว้บน YASB เรียบร้อยแล้วโดยไม่มีการดักปุ่มลัดระบบใดๆ
+
+---
+
+## ส่วนประกอบทั้งหมดที่ติดตั้ง
+
+| โปรแกรม | หน้าที่ | ตำแหน่งคอนฟิก |
+| --- | --- | --- |
+| **GlazeWM** | ระบบจัดการหน้าต่างแบบเรียงชิด (Tiling) บน Windows | `configs/glazewm/config.yaml` |
+| **YASB** | แถบสถานะทรงแคปซูลลอยด้านบนจอ | `configs/yasb/` |
+| **Flow Launcher** | ตัวค้นหาโปรแกรม ไฟล์ และเครื่องคิดเลขด่วน | `configs/flow-launcher/` |
+| **Fastfetch** | แสดงสเปกเครื่องพร้อม ASCII Art น้องฟรีเรน | `configs/fastfetch/` |
+| **Oh My Posh** | ตกแต่งแถบ Shell Prompt พร้อมสถานะ Git | `configs/oh-my-posh/` |
+| **CAVA** | คลื่นเสียงดนตรีสดที่ฝังอยู่บน YASB | `configs/cava/` |
+| **sigye** | นาฬิกา TUI/ASCII และตัวจับเวลา Pomodoro (`clock`) | `configs/tools/sigye.exe` |
+| **unimatrix** | สกรีนเซฟเวอร์ฝนดิจิทัล The Matrix บน Terminal (`matrix`) | `configs/tools/unimatrix.py` |
+| **pipes-rs** | สกรีนเซฟเวอร์ท่อเลี้ยว 60fps (`pipes`) | ติดตั้งผ่าน Scoop |
+| **yazi** | ตัวจัดการไฟล์ใน Terminal คีย์ลัด Vim (`y`) | ติดตั้งผ่าน Scoop |
+| **eza** | แสดงรายการไฟล์พร้อมไอคอน (`ls`, `ll`) | ติดตั้งผ่าน Scoop |
+| **bat** | ตัวอ่านไฟล์พร้อมไฮไลต์โค้ด (`cat`) | ติดตั้งผ่าน Scoop |
+| **lazygit** | จัดการ Git บน Terminal (`lg`) | ติดตั้งผ่าน Scoop |
+| **zoxide** | กระโดดโฟลเดอร์อัจฉริยะ (`z`) | ติดตั้งผ่าน Scoop |
+| **Windows Terminal** | เทอร์มินัลโปร่งแสง Acrylic | `configs/terminal/settings.json` |
+| **PowerShell 7** | สคริปต์ Profile พร้อม Alias และคำสั่งลัด | `configs/powershell/` |
+| **HideTaskbar** | ยูทิลิตีซ่อน Windows Taskbar เดิม | `configs/hidetaskbar/` |
+| **Btop** | มอนิเตอร์ทรัพยากรระบบ ธีม Catppuccin Mocha | `configs/btop/` |
+| **ExplorerBlurMica** | ปรับแต่ง File Explorer ให้โปร่งแสง Acrylic | `configs/explorer-blur-mica/` |
+| **Nilesoft Shell** | เมนูคลิกขวาสไตล์โมเดิร์น Acrylic | `configs/nilesoft-shell/shell.nss` |
+| **Spicetify** | ปรับแต่ง Spotify พร้อมหน้าร้าน Extension และบล็อกโฆษณา | `configs/spicetify/` |
+| **Vencord** | Discord Client Mod พร้อมธีม Catppuccin | `configs/vencord/` |
 
 ---
 
@@ -279,13 +344,13 @@ winget install Fastfetch-cli.Fastfetch
 .\backup.ps1
 ```
 
-สคริปต์จะแปลงพาธเครื่องผู้ใช้เป็นตัวแปรพกพา (`__USERPROFILE__`, `__APPDATA__`) และตัดรหัสผ่าน/โทเค็นส่วนตัวออกให้อัตโนมัติ ปลอดภัยต่อการพุชขึ้น GitHub
+สคริปต์จะแปลงพาธเครื่องผู้ใช้เป็นตัวแปรพกพา (`__USERPROFILE__`, `__APPDATA__`) และตัดข้อมูลส่วนตัวออกให้อัตโนมัติ ปลอดภัยต่อการพุชขึ้น GitHub
 
 ---
 
 ## เครดิต (Credits)
 
 - **โครงคอนฟิกตั้งต้น:** ดัดแปลงมาจาก [SleepyCatHey/Yasb-GlazeWM-Config](https://github.com/SleepyCatHey/Yasb-GlazeWM-Config) โดย [@SleepyCatHey](https://github.com/SleepyCatHey)
-- **ชุดสี:** [Catppuccin](https://github.com/catppuccin) สำหรับโทนสีพาสเทลบน Btop, Spicetify, Vencord และ ExplorerBlurMica
+- **ชุดสี:** [Catppuccin](https://github.com/catppuccin) Mocha สำหรับโทนสีพาสเทลบน Btop, Spicetify, Vencord และ ExplorerBlurMica
 - **ASCII Art ฟรีเรน:** ชุมชน Anime braille art
-- **เครื่องมือโอเพนซอร์ส:** [GlazeWM](https://github.com/glzr-io/glazewm), [YASB](https://github.com/amnweb/yasb), [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher), [Oh My Posh](https://ohmyposh.dev/), [Fastfetch](https://github.com/fastfetch-cli/fastfetch), [CAVA](https://github.com/karlstav/cava), [btop4win](https://github.com/aristocratos/btop4win), [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica), [Spicetify](https://github.com/spicetify/cli), [ModernFlyouts](https://github.com/ModernFlyouts-Community/ModernFlyouts), [Vencord](https://github.com/Vendicated/Vencord)
+- **เครื่องมือโอเพนซอร์ส:** [GlazeWM](https://github.com/glzr-io/glazewm), [YASB](https://github.com/amnweb/yasb), [Flow Launcher](https://github.com/Flow-Launcher/Flow.Launcher), [Oh My Posh](https://ohmyposh.dev/), [Fastfetch](https://github.com/fastfetch-cli/fastfetch), [CAVA](https://github.com/karlstav/cava), [btop4win](https://github.com/aristocratos/btop4win), [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica), [Spicetify](https://github.com/spicetify/cli), [Vencord](https://github.com/Vendicated/Vencord), [sigye](https://github.com/koonwen/sigye), [unimatrix](https://github.com/will8211/unimatrix)

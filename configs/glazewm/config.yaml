@@ -4,7 +4,7 @@ general:
   # Example: The below command launches Zebar.
   startup_commands:
   - 'shell-exec yasb'
-  - 'shell-exec __USERPROFILE__\.cargo\bin\glazetiler.exe'
+  - 'shell-exec __USERPROFILE__/.cargo/bin/glazetiler.exe'
 
   # Commands to run just before the WM is shutdown.
   # Example: The below command kills Zebar.
@@ -12,7 +12,7 @@ general:
   - 'shell-exec taskkill /IM yasb.exe /F'
   - 'shell-exec taskkill /IM glazetiler.exe /F'
 
-  # Commands to run after the WM config is relà¹„oaded.
+  # Commands to run after the WM config is reloaded.
   config_reload_commands: []
 
   # Whether to automatically focus windows underneath the cursor.
@@ -260,8 +260,13 @@ keybindings:
   # Launch CMD terminal. Alternatively, use `shell-exec wt` or
   # `shell-exec %ProgramFiles%/Git/git-bash.exe` to start Windows
   # Terminal and Git Bash respectively.
+  # Launch Windows Terminal.
   - commands: ['shell-exec wt']
     bindings: ['alt+enter']
+
+  # Next wallpaper (auto-detects Wallpaper Engine or Static Gallery)
+  - commands: ['shell-exec __USERPROFILE__/.config/yasb/scripts/next-wallpaper.cmd']
+    bindings: ['alt+w']
 
   # Focus the next/previous active workspace defined in `workspaces` config.
   - commands: ['focus --next-active-workspace']

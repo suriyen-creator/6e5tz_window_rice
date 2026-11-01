@@ -14,6 +14,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 
+# Ensure script execution is enabled for current user on clean Windows installations
+try {
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
+} catch {}
+
 # -------------------------------------------------------------------------
 # 1. Bootstrap: If invoked remotely via `irm ... | iex`, download repo first
 # -------------------------------------------------------------------------
@@ -111,7 +116,7 @@ function Stop-RunningRiceProcesses {
 function Get-RestorableFiles {
     param([Parameter(Mandatory = $true)][string]$Source)
     if (-not (Test-Path -LiteralPath $Source -PathType Container)) { return @() }
-    $allowed = @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.ttf', '.otf', '')
+    $allowed = @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.ttf', '.otf', '.py', '.cmd', '.bat', '.exe', '')
     return @(Get-ChildItem -LiteralPath $Source -File -Recurse -Force | Where-Object {
         ($allowed -contains $_.Extension.ToLowerInvariant()) -and
         ($_.Name -notmatch '(?i)(^README\.md$|^\.gitkeep$|\.example$|\.bak$|\.log$|history|cache|state)')
@@ -123,18 +128,23 @@ function Convert-ToTargetText {
         [Parameter(Mandatory = $true)][string]$Content,
         [switch]$PowerShellProfile
     )
-    $userValue = if ($PowerShellProfile) { '$HOME' } else { $env:USERPROFILE }
     $userSlash = ($env:USERPROFILE).Replace('\', '/')
+    $userValue = if ($PowerShellProfile) { '$HOME' } else { $userSlash }
     $Content = $Content.Replace('__USERPROFILE__/', "$userSlash/")
+    $Content = $Content.Replace('__USERPROFILE__\', "$userSlash/")
     $Content = $Content.Replace('__USERPROFILE__', $userValue)
     $Content = $Content.Replace('__APPDATA__/', (($env:APPDATA).Replace('\', '/')) + '/')
-    $Content = $Content.Replace('__APPDATA__', $env:APPDATA)
+    $Content = $Content.Replace('__APPDATA__\', (($env:APPDATA).Replace('\', '/')) + '/')
+    $Content = $Content.Replace('__APPDATA__', ($env:APPDATA).Replace('\', '/'))
     $Content = $Content.Replace('__LOCALAPPDATA__/', (($env:LOCALAPPDATA).Replace('\', '/')) + '/')
-    $Content = $Content.Replace('__LOCALAPPDATA__', $env:LOCALAPPDATA)
+    $Content = $Content.Replace('__LOCALAPPDATA__\', (($env:LOCALAPPDATA).Replace('\', '/')) + '/')
+    $Content = $Content.Replace('__LOCALAPPDATA__', ($env:LOCALAPPDATA).Replace('\', '/'))
     $Content = $Content.Replace('__PROGRAMFILES__/', (($env:ProgramFiles).Replace('\', '/')) + '/')
-    $Content = $Content.Replace('__PROGRAMFILES__', $env:ProgramFiles)
+    $Content = $Content.Replace('__PROGRAMFILES__\', (($env:ProgramFiles).Replace('\', '/')) + '/')
+    $Content = $Content.Replace('__PROGRAMFILES__', ($env:ProgramFiles).Replace('\', '/'))
     $Content = $Content.Replace('__PROGRAMFILES_X86__/', ((${env:ProgramFiles(x86)}).Replace('\', '/')) + '/')
-    $Content = $Content.Replace('__PROGRAMFILES_X86__', ${env:ProgramFiles(x86)})
+    $Content = $Content.Replace('__PROGRAMFILES_X86__\', ((${env:ProgramFiles(x86)}).Replace('\', '/')) + '/')
+    $Content = $Content.Replace('__PROGRAMFILES_X86__', (${env:ProgramFiles(x86)}).Replace('\', '/'))
     $Content = $Content.Replace('__REPO_ROOT__', $RepoRoot)
     return $Content
 }
@@ -250,7 +260,7 @@ function Install-Packages {
     foreach ($package in @($packageData.winget)) {
         try {
             Write-Status "Installing/Verifying $($package.name)..." 'Info'
-            & $wingetCommand.Source 'install' '--id' $package.id '--exact' '--accept-package-agreements' '--accept-source-agreements'
+            & $wingetCommand.Source 'install' '--id' $package.id '--exact' '--accept-package-agreements' '--accept-source-agreements' '--disable-interactivity'
             if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq -1978335189) { # 0 = success, -1978335189 = already installed
                 Write-Status "$($package.name): ready" 'Success'
                 Add-Result -Name "Package/$($package.name)" -Status 'Success' -Detail $package.id
@@ -264,17 +274,52 @@ function Install-Packages {
         }
     }
 
+    # Scoop bootstrap (ensures TUI packages work on brand-new Windows machines)
     $scoopCommand = Get-Command scoop -ErrorAction SilentlyContinue
-    if ($null -ne $scoopCommand -and $null -ne $packageData.PSObject.Properties['scoop']) {
-        foreach ($pkg in @($packageData.scoop)) {
-            try {
-                Write-Status "Installing/Verifying Scoop package $($pkg.name)..." 'Info'
-                & $scoopCommand.Source 'install' $pkg.name
-                Write-Status "$($pkg.name): ready (scoop)" 'Success'
-                Add-Result -Name "Scoop/$($pkg.name)" -Status 'Success' -Detail $pkg.name
-            } catch {
-                Write-Status "Scoop $($pkg.name): $($_.Exception.Message)" 'Warning'
+    if ($null -eq $scoopCommand) {
+        Write-Status "Scoop is not installed. Bootstrapping Scoop package manager..." 'Info'
+        try {
+            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -ErrorAction SilentlyContinue
+            Invoke-RestMethod -Uri https://get.scoop.sh -UseBasicParsing | Invoke-Expression
+            $env:SCOOP = "$env:USERPROFILE\scoop"
+            $env:PATH = "$env:USERPROFILE\scoop\shims;$env:USERPROFILE\scoop\apps\scoop\current\bin;" + $env:PATH
+            $scoopCommand = Get-Command scoop -ErrorAction SilentlyContinue
+            if ($null -ne $scoopCommand) {
+                Write-Status "Scoop installed successfully!" 'Success'
             }
+        } catch {
+            Write-Status "Could not auto-install Scoop: $($_.Exception.Message)" 'Warning'
+        }
+    }
+
+    if ($null -ne $scoopCommand) {
+        try {
+            & $scoopCommand.Source 'bucket' 'add' 'extras' 2>$null
+        } catch {}
+
+        if ($null -ne $packageData.PSObject.Properties['scoop']) {
+            foreach ($pkg in @($packageData.scoop)) {
+                try {
+                    Write-Status "Installing/Verifying Scoop package $($pkg.name)..." 'Info'
+                    & $scoopCommand.Source 'install' $pkg.name
+                    Write-Status "$($pkg.name): ready (scoop)" 'Success'
+                    Add-Result -Name "Scoop/$($pkg.name)" -Status 'Success' -Detail $pkg.name
+                } catch {
+                    Write-Status "Scoop $($pkg.name): $($_.Exception.Message)" 'Warning'
+                }
+            }
+        }
+    }
+
+    # Python terminal tools (windows-curses for unimatrix)
+    $pyCommand = Get-Command python -ErrorAction SilentlyContinue
+    if ($null -ne $pyCommand) {
+        try {
+            Write-Status "Installing Python packages for terminal tools (windows-curses)..." 'Info'
+            & $pyCommand.Source '-m' 'pip' 'install' '--quiet' 'windows-curses'
+            Write-Status "Python windows-curses: ready" 'Success'
+        } catch {
+            Write-Status "Python windows-curses: $($_.Exception.Message)" 'Warning'
         }
     }
 }
@@ -357,25 +402,27 @@ function Deploy-AllConfigs {
         if (Test-Path $staticTmpl) {
             Restore-File -Name 'YASB/config (Static Wallpapers)' -Source $staticTmpl -Target (Join-Path $env:USERPROFILE '.config\yasb\config.yaml')
         }
-        $targetWallpapersDir = Join-Path $env:USERPROFILE 'Pictures\Wallpapers'
-        Ensure-Directory $targetWallpapersDir
-        $repoWallpapersDir = Join-Path $scriptDir 'wallpapers'
-        if (Test-Path $repoWallpapersDir) {
-            $sampleImgs = Get-ChildItem -Path $repoWallpapersDir -Filter '*.jpg' -ErrorAction SilentlyContinue
-            if ($sampleImgs) {
-                foreach ($img in $sampleImgs) {
-                    $destImg = Join-Path $targetWallpapersDir $img.Name
-                    if (-not (Test-Path $destImg)) {
-                        Copy-Item -LiteralPath $img.FullName -Destination $destImg -Force
-                    }
-                }
-                Write-Status "Static Wallpapers sample pack: copied to $targetWallpapersDir" 'Success'
-            }
-        }
     } else {
         $weTmpl = Join-Path $ConfigRoot 'yasb\config.wallpaper-engine.yaml'
         if (Test-Path $weTmpl) {
             Restore-File -Name 'YASB/config (Wallpaper Engine)' -Source $weTmpl -Target (Join-Path $env:USERPROFILE '.config\yasb\config.yaml')
+        }
+    }
+
+    # Always ensure sample wallpapers are available in ~/Pictures/Wallpapers
+    $targetWallpapersDir = Join-Path $env:USERPROFILE 'Pictures\Wallpapers'
+    Ensure-Directory $targetWallpapersDir
+    $repoWallpapersDir = Join-Path $scriptDir 'wallpapers'
+    if (Test-Path $repoWallpapersDir) {
+        $sampleImgs = Get-ChildItem -Path $repoWallpapersDir -Filter '*.jpg' -ErrorAction SilentlyContinue
+        if ($sampleImgs) {
+            foreach ($img in $sampleImgs) {
+                $destImg = Join-Path $targetWallpapersDir $img.Name
+                if (-not (Test-Path $destImg)) {
+                    Copy-Item -LiteralPath $img.FullName -Destination $destImg -Force
+                }
+            }
+            Write-Status "Wallpapers sample pack: copied to $targetWallpapersDir" 'Success'
         }
     }
 
@@ -493,10 +540,17 @@ function Deploy-AllConfigs {
         }
     }
 
-    # 14. ModernFlyouts
-    $mfPkg = Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Packages') -Filter '*ModernFlyouts*' -Directory -ErrorAction SilentlyContinue
-    if ($mfPkg) {
-        Write-Status "ModernFlyouts is installed" 'Success'
+    # 14. Terminal Tools (Clock / Unimatrix)
+    $toolsSource = Join-Path $ConfigRoot 'tools'
+    if (Test-Path $toolsSource) {
+        Restore-Directory -Name 'Tools (Clock/Unimatrix)' -Source $toolsSource -Target (Join-Path $env:USERPROFILE '.config\tools')
+    }
+
+    # Stop ModernFlyouts if running (prevents Win + Space keyboard layout conflict #584)
+    $mfProc = Get-Process -Name 'ModernFlyoutsHost', 'ModernFlyouts' -ErrorAction SilentlyContinue
+    if ($mfProc) {
+        Stop-Process -Name $mfProc.ProcessName -Force -ErrorAction SilentlyContinue
+        Write-Status "Stopped ModernFlyouts (avoids Win+Space conflict)" 'Info'
     }
 
     # 15. Vencord (Discord)
@@ -587,14 +641,16 @@ Write-Host "  Installation Completed!" -ForegroundColor Green
 Write-Host "==========================================================================" -ForegroundColor Green
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object { Write-Host ("  {0}: {1}" -f $_.Name, $_.Count) }
 Write-Host ""
-Write-Host "Tips:" -ForegroundColor Yellow
-Write-Host "  - Super / Alt + Enter : Open Windows Terminal (Hyprland style)"
-Write-Host "  - Ctrl / Super + Space: Open Flow Launcher (Rofi/Wofi search)"
-Write-Host "  - Super / Alt + 1..9  : Switch GlazeWM workspaces"
-Write-Host "  - Super / Alt + H/J/K/L: Move focus between windows (Vim keys)"
-Write-Host "  - Super + Q           : Close focused window"
-Write-Host "  - Super + V           : Toggle floating window"
-Write-Host "  - TUI Arsenal         : 'y' (Yazi), 'lg' (Lazygit), 'ls' (Eza), 'cat' (Bat), 'z' (Zoxide), 'pipes', 'ff', 'btop'"
+Write-Host "Tips & Hotkeys:" -ForegroundColor Yellow
+Write-Host "  - Alt + Enter         : Open Windows Terminal (Hyprland style)"
+Write-Host "  - Alt + D / Ctrl+Space: Open Flow Launcher (Search applications)"
+Write-Host "  - Alt + 1..9          : Switch GlazeWM workspaces"
+Write-Host "  - Alt + H / J / K / L : Move focus between windows (Vim keys)"
+Write-Host "  - Alt + Shift + Q     : Close focused window"
+Write-Host "  - Alt + Shift + Space : Toggle floating window"
+Write-Host "  - Alt + W             : Next Wallpaper (Wallpaper Engine or Static Gallery)"
+Write-Host "  - Win + Space         : Native Windows language switch (100% free of conflicts)"
+Write-Host "  - Terminal Arsenal    : 'clock' (aesthetic clock), 'matrix' (rain screensaver), 'pipes', 'ff', 'btop', 'y' (Yazi), 'lg' (Lazygit), 'ls' (Eza), 'cat' (Bat), 'z' (Zoxide)"
 Write-Host "  - ExplorerBlurMica    : Press Ctrl + F1 in File Explorer to minimize Ribbon for full Acrylic Blur"
 Write-Host "  - Spicetify           : Run 'spicetify backup apply' once Spotify is installed"
 Write-Host ""
@@ -608,9 +664,13 @@ if (-not $NonInteractive) {
 }
 
 if ($startNow) {
-    $glazeCmd = Get-Command glazewm -ErrorAction SilentlyContinue
-    if ($glazeCmd) {
-        Start-Process $glazeCmd.Source
+    $glazeExe = @(
+        'C:\Program Files\glzr.io\GlazeWM\glazewm.exe',
+        (Join-Path $env:LOCALAPPDATA 'Programs\glazewm\glazewm.exe')
+    ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+    if ($glazeExe) {
+        Start-Process $glazeExe
         Write-Host "[SUCCESS] GlazeWM started! (YASB will automatically start with it)" -ForegroundColor Green
     } else {
         $yasbCmd = Get-Command yasb -ErrorAction SilentlyContinue
