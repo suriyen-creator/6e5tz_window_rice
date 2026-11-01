@@ -175,7 +175,7 @@ cd 6e5tz_window_rice
 | **Btop** | TUI Hardware & Process Monitor ธีม Catppuccin Mocha (`btop`) | `configs/btop/btop.conf`, themes |
 | **ExplorerBlurMica** | เอฟเฟกต์ Acrylic Blur + Catppuccin Tint บน Windows Explorer | `configs/explorer-blur-mica/` |
 | **Nilesoft Shell** | ปรับแต่งเมนูคลิกขวา Acrylic ธีม Catppuccin Mocha | `configs/nilesoft-shell/shell.nss` |
-| **Spicetify** | ปรับแต่ง UI ของ Spotify Desktop ธีม Catppuccin Mocha | `configs/spicetify/` |
+| **Spicetify** | ปรับแต่ง UI ของ Spotify Desktop ธีม Catppuccin Mocha + Marketplace (ร้านเลือกลงของเสริม) + Adblock (`adblock.js`) | `configs/spicetify/` |
 | **ModernFlyouts** | Modern Fluent OSD แถบเสียง/มีเดียแบบโปร่งแสง | ติดตั้งผ่าน WinGet |
 | **Vencord** | Discord Client Mod พร้อมธีม Catppuccin Mocha | `configs/vencord/` |
 
@@ -198,14 +198,21 @@ cd 6e5tz_window_rice
    - ติดตั้งผ่าน Scoop: `scoop install pipes-rs`
    - พิมพ์ `pipes` หรือ `pipe` ใน PowerShell เพื่อรันอนิเมชันท่อหลากสี 60fps (กด `q` เพื่อออก)
 
-4. **Spicetify (ธีม Catppuccin Spotify):**
+4. **Spicetify + Marketplace & Adblock (แต่ง Spotify พร้อมหน้าเลือกลงของเสริม & บล็อกโฆษณา):**
+   - มี **Marketplace** ("หน้าร้านเลือกลงของเสริม") ติดตั้งมาให้แล้วในแถบด้านซ้ายของ Spotify สามารถคลิกเพื่อเลือกติดตั้ง Themes, Extensions, และ Custom Apps เพิ่มเติมได้ง่ายๆ
+   - มี **Adblock** (`adblock.js` / Adblockify) เปิดใช้งานมาให้อัตโนมัติ บล็อกทั้งเสียงโฆษณาและแบนเนอร์
    - เมื่อมี Spotify Desktop ติดตั้งอยู่แล้ว ให้รันคำสั่งใน PowerShell:
      ```powershell
      spicetify backup apply
      ```
-   - หากต้องการอัปเดตคอนฟิกในอนาคต รัน `spicetify apply`
+   - หากต้องการอัปเดตคอนฟิกหรือรีสตาร์ต Spotify:
+     ```powershell
+     spicetify apply
+     # หรือ
+     spicetify restart
+     ```
 
-3. **Vencord (ธีม Catppuccin Discord):**
+5. **Vencord (ธีม Catppuccin Discord):**
    - สคริปต์ติดตั้งจะทำการแพตช์ Discord ให้อัตโนมัติและวางธีมไว้ที่ `%APPDATA%\Vencord\themes\catppuccin-mocha.theme.css`
    - เมื่อเปิด Discord สามารถไปที่ `Settings > Vencord > Themes` เพื่อตรวจสอบการเปิดใช้งาน
 

@@ -427,6 +427,12 @@ function Deploy-AllConfigs {
         if (Test-Path (Join-Path $spicetifySource 'Themes')) {
             Restore-Directory -Name 'Spicetify/themes' -Source (Join-Path $spicetifySource 'Themes') -Target (Join-Path $spicetifyTarget 'Themes')
         }
+        if (Test-Path (Join-Path $spicetifySource 'CustomApps')) {
+            Restore-Directory -Name 'Spicetify/customapps' -Source (Join-Path $spicetifySource 'CustomApps') -Target (Join-Path $spicetifyTarget 'CustomApps')
+        }
+        if (Test-Path (Join-Path $spicetifySource 'Extensions')) {
+            Restore-Directory -Name 'Spicetify/extensions' -Source (Join-Path $spicetifySource 'Extensions') -Target (Join-Path $spicetifyTarget 'Extensions')
+        }
     }
 
     # 14. ModernFlyouts

@@ -42,7 +42,7 @@ function Ensure-Directory {
 }
 
 function Get-TextExtension {
-    return @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.md', '')
+    return @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.md', '.js', '.nss', '')
 }
 
 function Get-AssetExtension {
@@ -110,11 +110,12 @@ function Write-PortableText {
     param(
         [Parameter(Mandatory = $true)][string]$Source,
         [Parameter(Mandatory = $true)][string]$Destination,
-        [switch]$AllowSensitiveExample
+        [switch]$AllowSensitiveExample,
+        [switch]$NoSanitize
     )
 
     $raw = [System.IO.File]::ReadAllText($Source, [System.Text.Encoding]::UTF8)
-    if (Test-SensitiveAssignment -Content $raw) {
+    if (-not $NoSanitize -and (Test-SensitiveAssignment -Content $raw)) {
         if ($AllowSensitiveExample) {
             $exampleLines = foreach ($line in ($raw -split "`r?`n")) {
                 if (Test-SensitiveAssignment -Content $line) {
@@ -141,7 +142,8 @@ function Copy-SafeFile {
         [Parameter(Mandatory = $true)][string]$Name,
         [Parameter(Mandatory = $true)][string]$Source,
         [Parameter(Mandatory = $true)][string]$Destination,
-        [switch]$AllowSensitiveExample
+        [switch]$AllowSensitiveExample,
+        [switch]$NoSanitize
     )
 
     try {
@@ -153,7 +155,7 @@ function Copy-SafeFile {
 
         $extension = [IO.Path]::GetExtension($Source).ToLowerInvariant()
         if ((Get-TextExtension) -contains $extension) {
-            $mode = Write-PortableText -Source $Source -Destination $Destination -AllowSensitiveExample:$AllowSensitiveExample
+            $mode = Write-PortableText -Source $Source -Destination $Destination -AllowSensitiveExample:$AllowSensitiveExample -NoSanitize:$NoSanitize
             if ($mode -eq 'copied') {
                 Write-Status "${Name}: copied" 'Success'
                 Add-Result -Name $Name -Status 'Success' -Detail $Destination
@@ -184,7 +186,8 @@ function Copy-ConfigDirectory {
         [Parameter(Mandatory = $true)][string]$Name,
         [Parameter(Mandatory = $true)][string]$Source,
         [Parameter(Mandatory = $true)][string]$Destination,
-        [switch]$AllowSensitiveExample
+        [switch]$AllowSensitiveExample,
+        [switch]$NoSanitize
     )
 
     try {
@@ -201,7 +204,7 @@ function Copy-ConfigDirectory {
             if (((Get-TextExtension) -contains $extension) -or ((Get-AssetExtension) -contains $extension)) {
                 $relative = $file.FullName.Substring($Source.TrimEnd('\').Length).TrimStart('\')
                 $destinationFile = Join-Path $Destination $relative
-                Copy-SafeFile -Name "$Name/$relative" -Source $file.FullName -Destination $destinationFile -AllowSensitiveExample:$AllowSensitiveExample
+                Copy-SafeFile -Name "$Name/$relative" -Source $file.FullName -Destination $destinationFile -AllowSensitiveExample:$AllowSensitiveExample -NoSanitize:$NoSanitize
                 $copied++
             }
         }
@@ -319,7 +322,8 @@ function Copy-OptionalCandidates {
         [Parameter(Mandatory = $true)][string]$Name,
         [Parameter(Mandatory = $true)][string[]]$Sources,
         [Parameter(Mandatory = $true)][string]$Destination,
-        [switch]$AllowSensitiveExample
+        [switch]$AllowSensitiveExample,
+        [switch]$NoSanitize
     )
 
     $found = $false
@@ -327,10 +331,10 @@ function Copy-OptionalCandidates {
         try {
             if (Test-Path -LiteralPath $source -PathType Container) {
                 $found = $true
-                Copy-ConfigDirectory -Name $Name -Source $source -Destination $Destination -AllowSensitiveExample:$AllowSensitiveExample
+                Copy-ConfigDirectory -Name $Name -Source $source -Destination $Destination -AllowSensitiveExample:$AllowSensitiveExample -NoSanitize:$NoSanitize
             } elseif (Test-Path -LiteralPath $source -PathType Leaf) {
                 $found = $true
-                Copy-SafeFile -Name $Name -Source $source -Destination (Join-Path $Destination ([IO.Path]::GetFileName($source))) -AllowSensitiveExample:$AllowSensitiveExample
+                Copy-SafeFile -Name $Name -Source $source -Destination (Join-Path $Destination ([IO.Path]::GetFileName($source))) -AllowSensitiveExample:$AllowSensitiveExample -NoSanitize:$NoSanitize
             }
         } catch {
             Write-Status "${Name}: candidate inaccessible: $source" 'Skipped'
@@ -429,6 +433,14 @@ Copy-OptionalCandidates -Name 'Spicetify/config' -Sources @(
 Copy-OptionalCandidates -Name 'Spicetify/catppuccin' -Sources @(
     (Join-Path $env:APPDATA 'spicetify\Themes\catppuccin')
 ) -Destination (Join-Path $ConfigsRoot 'spicetify\Themes\catppuccin') -AllowSensitiveExample
+
+Copy-OptionalCandidates -Name 'Spicetify/customapps' -Sources @(
+    (Join-Path $env:APPDATA 'spicetify\CustomApps')
+) -Destination (Join-Path $ConfigsRoot 'spicetify\CustomApps') -NoSanitize
+
+Copy-OptionalCandidates -Name 'Spicetify/extensions' -Sources @(
+    (Join-Path $env:APPDATA 'spicetify\Extensions')
+) -Destination (Join-Path $ConfigsRoot 'spicetify\Extensions') -NoSanitize
 
 # 15. Vencord (Discord)
 Copy-OptionalCandidates -Name 'Vencord/settings' -Sources @(
