@@ -13,6 +13,10 @@
   <img src="screenshots/launcher.png" width="49%" alt="Flow Launcher" />
   <img src="screenshots/terminal.png" width="49%" alt="Terminal with Fastfetch" />
 </p>
+<p align="center">
+  <img src="screenshots/workflow.png" width="49%" alt="การจัดหน้าต่าง GlazeWM และ File Explorer โปร่งแสง" />
+  <img src="screenshots/tools.png" width="49%" alt="ชุดเครื่องมือ Terminal (Clock, Matrix, Pipes, Btop)" />
+</p>
 
 ---
 
