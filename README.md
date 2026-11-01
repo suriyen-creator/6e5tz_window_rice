@@ -60,6 +60,80 @@ cd 6e5tz_window_rice
 
 ---
 
+## 🛡️ Manual DIY Setup Guide (Zero-Scripts / ติดตั้งเองทีละสเต็ป ปลอดภัย 100%)
+
+> [!TIP]
+> **100% Transparency & Safety First / โปร่งใส ไร้ไวรัส ไร้สคริปต์แฝง:**
+> If you are cautious about running automated scripts (`iex` or `.ps1`) from the internet, you can set up everything **completely by hand**! All configuration files in this repository are plain-text YAML, JSON, CSS, and Markdown. No compiled binaries, no telemetry, and no hidden actions.
+>
+> *(สำหรับใครที่กังวลเรื่องความปลอดภัย ไม่ชอบรันสคริปต์อัตโนมัติ คุณสามารถดาวน์โหลดโปรแกรมจากผู้พัฒนาทางการโดยตรง และก๊อปปี้ไฟล์คอนฟิกไปวางตามโฟลเดอร์ปลายทางได้ด้วยตนเอง 100%)*
+
+### Step 1: Install Software via Official Sources / ติดตั้งโปรแกรมจากแหล่ง Official
+You can install the official tools using Microsoft's official **WinGet** package manager or download installers from their official GitHub releases:
+
+```powershell
+# Core Window Management & Launcher / ระบบจัดการหน้าต่างและค้นหา
+winget install glzr-io.glazewm
+winget install Flow-Launcher.Flow-Launcher
+
+# Terminal & Prompt Styling / เทอร์มินัลและพรอมต์
+winget install Microsoft.WindowsTerminal
+winget install Microsoft.PowerShell
+winget install JanDeDobbeleer.OhMyPosh
+winget install Fastfetch-cli.Fastfetch
+```
+
+- **YASB (Status Bar):** Download the official `.msi` or `.zip` installer directly from [amnweb/yasb Releases](https://github.com/amnweb/yasb/releases).
+- **MesloLGL Nerd Font (Required for icons):** Download `Meslo.zip` from [ryanoasis/nerd-fonts Releases](https://github.com/ryanoasis/nerd-fonts/releases), extract the `.ttf` files, right-click, and choose **Install for all users**.
+- *(Optional CLI tools)*: `scoop install yazi eza bat lazygit zoxide btop pipes-rs`
+
+---
+
+### Step 2: Copy Configuration Files / คัดลอกไฟล์คอนฟิกไปยังเครื่อง
+
+Clone or download this repository as a `.zip` from GitHub and copy the configuration files according to this mapping table:
+
+*(ดาวน์โหลดโปรเจกต์นี้มา แล้วก๊อปปี้ไฟล์จากโฟลเดอร์ `configs/` ไปวางยังปลายทางตามตารางด้านล่าง)*
+
+| Component / โปรแกรม | Source Path (in Repo) | Target Path (on your Windows PC) |
+| --- | --- | --- |
+| **GlazeWM** | `configs/glazewm/config.yaml` | `%USERPROFILE%\.glzr\glazewm\config.yaml` |
+| **YASB Bar (Styles & Scripts)** | `configs/yasb/styles.css`<br>`configs/yasb/scripts/*` | `%USERPROFILE%\.config\yasb\styles.css`<br>`%USERPROFILE%\.config\yasb\scripts\` |
+| **Windows Terminal** | `configs/terminal/settings.json` | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json` |
+| **Flow Launcher** | `configs/flow-launcher/Settings.json`<br>`configs/flow-launcher/themes/*` | `%APPDATA%\FlowLauncher\Settings\Settings.json`<br>`%APPDATA%\FlowLauncher\Themes\` |
+| **Fastfetch** | `configs/fastfetch/*` | `%USERPROFILE%\.config\fastfetch\` |
+| **Oh My Posh** | `configs/oh-my-posh/jandedobbeleer.omp.json` | `%USERPROFILE%\.config\jandedobbeleer.omp.json` |
+| **PowerShell Profile** | `configs/powershell/Microsoft.PowerShell_profile.ps1` | `%USERPROFILE%\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` |
+| **CAVA (Visualizer)** | `configs/cava/config` | `%USERPROFILE%\.config\cava\config` |
+| **ExplorerBlurMica** *(Optional)* | `configs/explorer-blur-mica/*` | `%USERPROFILE%\.config\ExplorerBlurMica\` |
+| **Nilesoft Shell** *(Optional)* | `configs/nilesoft-shell/shell.nss` | `%USERPROFILE%\.config\nilesoft-shell\shell.nss` |
+
+> [!NOTE]
+> If a target directory does not exist yet, simply create the folder yourself or run the app once to initialize it.
+
+---
+
+### Step 3: Choose Your Wallpaper Mode / เลือกไฟล์คอนฟิก Wallpaper
+
+In `%USERPROFILE%\.config\yasb\`, select which wallpaper configuration you want:
+
+- **If you use Wallpaper Engine:**
+  1. Copy `configs/yasb/config.wallpaper-engine.yaml` to `%USERPROFILE%\.config\yasb\config.yaml`.
+  2. Open the file in Notepad, find `__USERPROFILE__`, and replace it with your user path using forward slashes (e.g. `C:/Users/YourUsername`).
+- **If you use Static Wallpapers (Windows Backgrounds):**
+  1. Copy `configs/yasb/config.static.yaml` to `%USERPROFILE%\.config\yasb\config.yaml`.
+  2. Replace `__USERPROFILE__` with your user path (e.g. `C:/Users/YourUsername`).
+  3. Copy the sample anime pictures from repo `wallpapers/` into your `%USERPROFILE%\Pictures\Wallpapers\` folder.
+
+---
+
+### Step 4: Launch Applications / เปิดใช้งาน
+1. Start **GlazeWM** from the Start Menu (`glazewm.exe`).
+2. Start **YASB** from the Start Menu (`yasb.exe`).
+3. Press `Alt + Enter` to launch Windows Terminal, and enjoy your beautiful rice!
+
+---
+
 ## 🖼️ Wallpaper System / ระบบจัดการภาพพื้นหลัง (Dual-Mode)
 
 The rice supports both **Wallpaper Engine** (Steam) users and **Static Wallpaper** users with seamless switching:
