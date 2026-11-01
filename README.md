@@ -46,6 +46,42 @@ cd 6e5tz_window_rice
 
 # ติดตั้งแบบไม่ถาม (Non-interactive)
 .\install.ps1 -Full -NonInteractive
+
+# บังคับเลือกโหมด Wallpaper (Static หรือ WallpaperEngine)
+.\install.ps1 -WallpaperMode Static
+.\install.ps1 -WallpaperMode WallpaperEngine
+```
+
+---
+
+## 🖼️ Wallpaper System (ระบบสลับวอลเปเปอร์ 2 โหมด: Wallpaper Engine / Static Gallery)
+
+ระบบรองรับทั้งผู้ใช้งานที่มี **Wallpaper Engine** (Steam) และผู้ที่ไม่มี (ใช้ภาพ **Static Wallpapers** ปกติของ Windows):
+
+### 1. โหมด Wallpaper Engine (ค่าเริ่มต้นเมื่อตรวจพบ Steam / Wallpaper Engine)
+- **การควบคุมบนแถบ YASB (ไอคอน 󰸉):**
+  - **คลิกซ้าย:** สลับไปวอลเปเปอร์ถัดไปทันที (`nextWallpaper`)
+  - **คลิกขวา:** สลับหยุดชั่วคราว / เล่นต่อ (`Pause / Resume`) อนิเมชัน
+  - **คลิกกลาง:** เปิดหน้าต่างตั้งค่า Wallpaper Engine
+- คอนฟิกต้นฉบับอยู่ที่ [config.wallpaper-engine.yaml](file:///C:/Users/suriy/Documents/window_rice/configs/yasb/config.wallpaper-engine.yaml)
+
+### 2. โหมด Static Wallpapers (สำหรับคนไม่มี Wallpaper Engine หรือชอบภาพนิ่ง)
+- **การควบคุมบนแถบ YASB (ไอคอน 󰸉):**
+  - **คลิกซ้าย:** เปิด **Popup Gallery** สวยงาม แสดงรูปตัวอย่างขนาดย่อ (Thumbnails) เลื่อนหน้าได้ และคลิกเพื่อเปลี่ยน Wallpaper หน้าจอ Windows ได้ทันที
+  - ดึงรูปภาพอัตโนมัติจากโฟลเดอร์ `~/Pictures/Wallpapers/`
+  - มีภาพตัวอย่าง Anime Wallpapers ความละเอียดสูง 10 รูปแถมมาให้ในตัวโปรเจกต์ (`wallpapers/`)
+- คอนฟิกต้นฉบับอยู่ที่ [config.static.yaml](file:///C:/Users/suriy/Documents/window_rice/configs/yasb/config.static.yaml)
+
+### 🔄 วิธีสลับโหมด Wallpaper ได้ทุกเมื่อ:
+คุณสามารถรันสคริปต์สลับโหมดได้ทันที (ระบบจะสลับคอนฟิกและรีสตาร์ต YASB ให้แบบไร้รอยต่อ):
+
+```powershell
+# เปิดเมนูเลือกโหมด (Interactive Menu)
+.\scripts\switch-wallpaper-mode.ps1
+
+# หรือสั่งสลับตรงๆ
+.\scripts\switch-wallpaper-mode.ps1 -Mode Static
+.\scripts\switch-wallpaper-mode.ps1 -Mode WallpaperEngine
 ```
 
 ---
@@ -137,7 +173,7 @@ cd 6e5tz_window_rice
 | **GlazeWM Workspaces (1-9)** | คลิกเพื่อสลับหน้าต่างไปยัง Workspace นั้นๆ |
 | **Media Player** | เล่น/หยุดเพลง, คลิกชื่อเพลงเพื่อเปิดโปรแกรมเล่นเพลง |
 | **Clock / Date** | เปิดแผงปฏิทินและเวลา |
-| **Wallpaper Engine Controller** | **คลิกซ้าย**: สั่ง Wallpaper Engine สลับไปวอลเปเปอร์ถัดไปทันที (`nextWallpaper`)<br>**คลิกขวา**: สลับหยุดชั่วคราว / เล่นต่อ (`Pause / Resume`) วอลเปเปอร์อนิเมชัน<br>**คลิกกลาง**: เปิดหน้าต่างโปรแกรม Wallpaper Engine |
+| **Wallpaper Controller / Gallery (󰸉)** | **โหมด Wallpaper Engine:**<br>- คลิกซ้าย: สลับไปวอลเปเปอร์ถัดไปทันที (`nextWallpaper`)<br>- คลิกขวา: สลับหยุดชั่วคราว / เล่นต่อ (`Pause / Resume`)<br>- คลิกกลาง: เปิดหน้าต่างโปรแกรม Wallpaper Engine<br><br>**โหมด Static Wallpaper:**<br>- คลิกซ้าย: เปิด Gallery Popup เลือกรูปภาพจาก `~/Pictures/Wallpapers` พร้อม Thumbnail |
 | **Network / Wi-Fi** | เปิดหน้าต่าง Popups รายละเอียดการเชื่อมต่อ Wi-Fi และ IP |
 | **Bluetooth** | เปิด Popups จัดการอุปกรณ์ Bluetooth |
 | **Volume Slider** | เลื่อนลูกกลิ้งเมาส์บนไอคอนเพื่อเพิ่ม/ลดเสียง, คลิกซ้ายเพื่อ Mute หรือเปิด Sound Popups |

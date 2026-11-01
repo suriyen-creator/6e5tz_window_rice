@@ -5,7 +5,9 @@ param(
     [switch]$SkipPackages,
     [switch]$InstallFont,
     [switch]$UseLinks,
-    [switch]$NonInteractive
+    [switch]$NonInteractive,
+    [ValidateSet('Auto', 'WallpaperEngine', 'Static')]
+    [string]$WallpaperMode = 'Auto'
 )
 
 Set-StrictMode -Version Latest
@@ -320,6 +322,62 @@ function Deploy-AllConfigs {
 
     # 2. YASB
     Restore-Directory -Name 'YASB' -Source (Join-Path $ConfigRoot 'yasb') -Target (Join-Path $env:USERPROFILE '.config\yasb')
+
+    # Detect & apply wallpaper configuration mode
+    $wePaths = @(
+        'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe',
+        'C:\Program Files\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe',
+        'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper32.exe',
+        'C:\Program Files\Steam\steamapps\common\wallpaper_engine\wallpaper32.exe'
+    )
+    $hasWE = [bool]($wePaths | Where-Object { Test-Path $_ } | Select-Object -First 1)
+
+    $targetMode = $WallpaperMode
+    if ($targetMode -eq 'Auto') {
+        if (-not $NonInteractive) {
+            Write-Host "`nWallpaper Mode Configuration:" -ForegroundColor Yellow
+            if ($hasWE) {
+                Write-Host "  [1] Wallpaper Engine (Detected on this system) [Default]" -ForegroundColor Green
+                Write-Host "  [2] Static Wallpaper Gallery (Windows Desktop Wallpapers)" -ForegroundColor Cyan
+                $choice = Read-Host "Select wallpaper mode (1/2) [Default: 1]"
+                $targetMode = if ($choice -eq '2') { 'Static' } else { 'WallpaperEngine' }
+            } else {
+                Write-Host "  [1] Static Wallpaper Gallery (Recommended - Built-in YASB Gallery) [Default]" -ForegroundColor Green
+                Write-Host "  [2] Wallpaper Engine (Requires Steam Wallpaper Engine)" -ForegroundColor DarkGray
+                $choice = Read-Host "Select wallpaper mode (1/2) [Default: 1]"
+                $targetMode = if ($choice -eq '2') { 'WallpaperEngine' } else { 'Static' }
+            }
+        } else {
+            $targetMode = if ($hasWE) { 'WallpaperEngine' } else { 'Static' }
+        }
+    }
+
+    if ($targetMode -eq 'Static') {
+        $staticTmpl = Join-Path $ConfigRoot 'yasb\config.static.yaml'
+        if (Test-Path $staticTmpl) {
+            Restore-File -Name 'YASB/config (Static Wallpapers)' -Source $staticTmpl -Target (Join-Path $env:USERPROFILE '.config\yasb\config.yaml')
+        }
+        $targetWallpapersDir = Join-Path $env:USERPROFILE 'Pictures\Wallpapers'
+        Ensure-Directory $targetWallpapersDir
+        $repoWallpapersDir = Join-Path $scriptDir 'wallpapers'
+        if (Test-Path $repoWallpapersDir) {
+            $sampleImgs = Get-ChildItem -Path $repoWallpapersDir -Filter '*.jpg' -ErrorAction SilentlyContinue
+            if ($sampleImgs) {
+                foreach ($img in $sampleImgs) {
+                    $destImg = Join-Path $targetWallpapersDir $img.Name
+                    if (-not (Test-Path $destImg)) {
+                        Copy-Item -LiteralPath $img.FullName -Destination $destImg -Force
+                    }
+                }
+                Write-Status "Static Wallpapers sample pack: copied to $targetWallpapersDir" 'Success'
+            }
+        }
+    } else {
+        $weTmpl = Join-Path $ConfigRoot 'yasb\config.wallpaper-engine.yaml'
+        if (Test-Path $weTmpl) {
+            Restore-File -Name 'YASB/config (Wallpaper Engine)' -Source $weTmpl -Target (Join-Path $env:USERPROFILE '.config\yasb\config.yaml')
+        }
+    }
 
     # 3. Flow Launcher
     Restore-File -Name 'Flow Launcher/settings' -Source (Join-Path $ConfigRoot 'flow-launcher\Settings.json') -Target (Join-Path $env:APPDATA 'FlowLauncher\Settings\Settings.json')
