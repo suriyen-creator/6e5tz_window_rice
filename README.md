@@ -86,36 +86,36 @@ cd 6e5tz_window_rice
 
 ---
 
-## ⌨️ Keyboard Shortcuts & Controls (สารบัญคีย์ลัดฉบับสมบูรณ์ - Dual Mode: Alt / Super)
+## ⌨️ Keyboard Shortcuts & Controls (สารบัญคีย์ลัดฉบับสมบูรณ์)
 
-> [!TIP]
-> **Hyprland Experience:** ระบบรองรับทั้งปุ่ม **`Super` (Windows Key)** และปุ่ม **`Alt`** สลับใช้งานได้ตามความถนัดแบบ 100%!
+> [!NOTE]
+> คีย์ลัดทั้งหมดของ GlazeWM ใช้ปุ่ม **`Alt`** เป็นหลัก เพื่อไม่ให้แย่งคีย์ลัดของระบบ Windows เช่น **`Win + Space`** (สำหรับสลับภาษาคีย์บอร์ดไทย-อังกฤษ) และปุ่ม `Win` สำหรับ Flow Launcher / Windows Taskbar
 
 ### 1. 🪟 GlazeWM - โฟกัสและการเคลื่อนย้าย (Navigation & Focus)
-| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
-| --- | --- | --- |
-| `Super + H` / `Left` | `Alt + H` / `Left` | เลื่อนโฟกัสไปหน้าต่างซ้าย |
-| `Super + L` / `Right` | `Alt + L` / `Right` | เลื่อนโฟกัสไปหน้าต่างขวา |
-| `Super + K` / `Up` | `Alt + K` / `Up` | เลื่อนโฟกัสไปหน้าต่างบน |
-| `Super + J` / `Down` | `Alt + J` / `Down` | เลื่อนโฟกัสไปหน้าต่างล่าง |
-| `Super + Space` | `Alt + Space` | สลับโฟกัสวน (Cycle Focus: Tiling -> Floating -> Fullscreen) |
-| `Super + S` | `Alt + S` | โฟกัสไปยัง Workspace ถัดไปที่มีหน้าต่างเปิดอยู่ (Next Active Workspace) |
-| `Super + A` | `Alt + A` | โฟกัสไปยัง Workspace ก่อนหน้าที่มีหน้าต่างเปิดอยู่ (Prev Active Workspace) |
-| `Super + D` | `Alt + D` | สลับกลับไปยัง Workspace ล่าสุดที่เพิ่งใช้งาน (Recent Workspace) |
+| Hotkey | คำสั่ง / การทำงาน |
+| --- | --- |
+| `Alt + H` / `Left` | เลื่อนโฟกัสไปหน้าต่างซ้าย |
+| `Alt + L` / `Right` | เลื่อนโฟกัสไปหน้าต่างขวา |
+| `Alt + K` / `Up` | เลื่อนโฟกัสไปหน้าต่างบน |
+| `Alt + J` / `Down` | เลื่อนโฟกัสไปหน้าต่างล่าง |
+| `Alt + Space` | สลับโฟกัสวน (Cycle Focus: Tiling -> Floating -> Fullscreen) |
+| `Alt + S` | โฟกัสไปยัง Workspace ถัดไปที่มีหน้าต่างเปิดอยู่ (Next Active Workspace) |
+| `Alt + A` | โฟกัสไปยัง Workspace ก่อนหน้าที่มีหน้าต่างเปิดอยู่ (Prev Active Workspace) |
+| `Alt + D` | สลับกลับไปยัง Workspace ล่าสุดที่เพิ่งใช้งาน (Recent Workspace) |
 
 ### 2. 🧩 GlazeWM - การจัดการเลย์เอาต์หน้าต่าง (Window Layout & Placement)
-| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
-| --- | --- | --- |
-| `Super + Shift + H` / `Left` | `Alt + Shift + H` / `Left` | ย้ายตำแหน่งหน้าต่างไปทางซ้าย |
-| `Super + Shift + L` / `Right` | `Alt + Shift + L` / `Right` | ย้ายตำแหน่งหน้าต่างไปทางขวา |
-| `Super + Shift + K` / `Up` | `Alt + Shift + K` / `Up` | ย้ายตำแหน่งหน้าต่างขึ้นบน |
-| `Super + Shift + J` / `Down` | `Alt + Shift + J` / `Down` | ย้ายตำแหน่งหน้าต่างลงล่าง |
-| `Super + V` | `Alt + Shift + Space` | ปลดหน้าต่างเป็นโหมด Floating (ลอยตรงกลางจอ) |
-| `Super + T` | `Alt + T` | เปลี่ยนหน้าต่างปัจจุบันกลับเป็นโหมด Tiling (เรียงต่อกัน) |
-| `Super + F` | `Alt + F` | เปิด / ปิดโหมดขยายเต็มหน้าจอ (Toggle Fullscreen) |
-| `Super + M` | `Alt + M` | ย่อหน้าต่างลง Taskbar (Minimize Window) |
-| `Super + Q` | `Alt + Shift + Q` | **ปิดหน้าต่างที่กำลังโฟกัส (Close Window)** |
-| `Alt + V` | `Alt + V` | สลับทิศทางการแยกหน้าต่าง (Horizontal / Vertical Split) |
+| Hotkey | คำสั่ง / การทำงาน |
+| --- | --- |
+| `Alt + Shift + H` / `Left` | ย้ายตำแหน่งหน้าต่างไปทางซ้าย |
+| `Alt + Shift + L` / `Right` | ย้ายตำแหน่งหน้าต่างไปทางขวา |
+| `Alt + Shift + K` / `Up` | ย้ายตำแหน่งหน้าต่างขึ้นบน |
+| `Alt + Shift + J` / `Down` | ย้ายตำแหน่งหน้าต่างลงล่าง |
+| `Alt + Shift + Space` | ปลดหน้าต่างเป็นโหมด Floating (ลอยตรงกลางจอ) |
+| `Alt + T` | เปลี่ยนหน้าต่างปัจจุบันกลับเป็นโหมด Tiling (เรียงต่อกัน) |
+| `Alt + F` | เปิด / ปิดโหมดขยายเต็มหน้าจอ (Toggle Fullscreen) |
+| `Alt + M` | ย่อหน้าต่างลง Taskbar (Minimize Window) |
+| `Alt + Shift + Q` | **ปิดหน้าต่างที่กำลังโฟกัส (Close Window)** |
+| `Alt + V` | สลับทิศทางการแยกหน้าต่าง (Horizontal / Vertical Split) |
 
 ### 3. 📐 GlazeWM - ปรับขนาดหน้าต่าง (Window Resizing)
 | Hotkey | คำสั่ง / การทำงาน |
@@ -125,23 +125,23 @@ cd 6e5tz_window_rice
 | `Alt + R` | **เข้าสู่โหมดปรับขนาด (Resize Mode)**: จากนั้นสามารถกด `H/J/K/L` หรือลูกศร `← ↑ ↓ →` เพื่อยืดหดได้อย่างอิสระ แล้วกด `Enter` หรือ `Esc` เพื่อออกจากโหมด |
 
 ### 4. 🚀 GlazeWM - Workspaces & Monitors (การสลับพื้นที่ทำงาน)
-| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
-| --- | --- | --- |
-| `Super + 1` .. `Super + 9` | `Alt + 1` .. `Alt + 9` | สลับไปยัง Workspace หมายเลข 1 ถึง 9 |
-| `Super + Shift + 1` .. `9` | `Alt + Shift + 1` .. `9` | ย้ายหน้าต่างปัจจุบันไปยัง Workspace นั้นๆ พร้อมสลับหน้าจอตามไปทันที |
-| `Super + Shift + A` | `Alt + Shift + A` | ย้าย Workspace ปัจจุบันไปยังจอด้านซ้าย (กรณีต่อหลายจอ) |
-| `Super + Shift + F` | `Alt + Shift + F` | ย้าย Workspace ปัจจุบันไปยังจอด้านขวา |
-| `Super + Shift + D` | `Alt + Shift + D` | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
-| `Super + Shift + S` | `Alt + Shift + S` | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
+| Hotkey | คำสั่ง / การทำงาน |
+| --- | --- |
+| `Alt + 1` .. `Alt + 9` | สลับไปยัง Workspace หมายเลข 1 ถึง 9 |
+| `Alt + Shift + 1` .. `9` | ย้ายหน้าต่างปัจจุบันไปยัง Workspace นั้นๆ พร้อมสลับหน้าจอตามไปทันที |
+| `Alt + Shift + A` | ย้าย Workspace ปัจจุบันไปยังจอด้านซ้าย (กรณีต่อหลายจอ) |
+| `Alt + Shift + F` | ย้าย Workspace ปัจจุบันไปยังจอด้านขวา |
+| `Alt + Shift + D` | ย้าย Workspace ปัจจุบันไปยังจอด้านบน |
+| `Alt + Shift + S` | ย้าย Workspace ปัจจุบันไปยังจอด้านล่าง |
 
 ### 5. ⚙️ GlazeWM - ควบคุมระบบและกระบวนการ (System Controls)
-| Hyprland (Super) | Windows (Alt) | คำสั่ง / การทำงาน |
-| --- | --- | --- |
-| `Super + Enter` | `Alt + Enter` | **เปิดหน้าต่าง Windows Terminal ทันที** |
-| `Super + Shift + C` | `Alt + Shift + R` | โหลดคอนฟิก GlazeWM ใหม่ทันทีโดยไม่ต้องปิดโปรแกรม (Reload Config) |
-| `Alt + Shift + W` | `Alt + Shift + W` | วาดหน้าต่างทั้งหมดใหม่ แก้บั๊กจอกระพริบหรือภาพค้าง (Redraw Windows) |
-| `Super + Shift + P` | `Alt + Shift + P` | หยุดการทำงาน GlazeWM ชั่วคราว (Pause WM / คืนการควบคุม) กดซ้ำเพื่อเปิดใหม่ |
-| `Super + Shift + M` | `Alt + Shift + E` | ออกจาก GlazeWM อย่างปลอดภัย (Exit Process) |
+| Hotkey | คำสั่ง / การทำงาน |
+| --- | --- |
+| `Alt + Enter` | **เปิดหน้าต่าง Windows Terminal ทันที** |
+| `Alt + Shift + R` | โหลดคอนฟิก GlazeWM ใหม่ทันทีโดยไม่ต้องปิดโปรแกรม (Reload Config) |
+| `Alt + Shift + W` | วาดหน้าต่างทั้งหมดใหม่ แก้บั๊กจอกระพริบหรือภาพค้าง (Redraw Windows) |
+| `Alt + Shift + P` | หยุดการทำงาน GlazeWM ชั่วคราว (Pause WM / คืนการควบคุม) กดซ้ำเพื่อเปิดใหม่ |
+| `Alt + Shift + E` | ออกจาก GlazeWM อย่างปลอดภัย (Exit Process) |
 
 ### 6. 🔍 Flow Launcher - ค้นหาและเปิดแอปด่วน (Rofi / Wofi Style)
 | Hotkey | คำสั่ง / การทำงาน |

@@ -397,39 +397,7 @@
 			},
 			"wallpaperconfig" : 
 			{
-				"layout" : null,
-				"profile" : null,
-				"selectedwallpapers" : 
-				{
-					"Monitor0" : 
-					{
-						"file" : "__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg",
-						"playlist" : 
-						{
-							"items" : 
-							[
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3495874165/Base Profile 2025.06.09 - 12.13.58.09.mp4",
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3667411885/BMW M5.mp4",
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3404976219/scene.pkg",
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3474820484/scene.pkg",
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3545750539/いますぐ輪廻（Retry Now）  NAKISO feat. Hatsune Miku.mp4",
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3444152820/黎歌格子 2.mp4",
-								"__PROGRAMFILES__ (x86)/Steam/steamapps/workshop/content/431960/3151551777/scene.pkg"
-							],
-							"name" : "",
-							"settings" : 
-							{
-								"delay" : 60,
-								"mode" : "timer",
-								"order" : "random",
-								"transition" : "0",
-								"transitiontime" : 1500,
-								"updateonpause" : false,
-								"videosequence" : false
-							}
-						}
-					}
-				}
+				"profile" : null
 			},
 			"wallpaperconfigrecent" : 
 			[

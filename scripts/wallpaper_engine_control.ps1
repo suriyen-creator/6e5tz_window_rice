@@ -6,24 +6,44 @@ param(
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-$wePaths = @(
-    'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe',
-    'C:\Program Files\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe',
-    'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper32.exe',
-    'C:\Program Files\Steam\steamapps\common\wallpaper_engine\wallpaper32.exe'
+# 1. Resolve executable dynamically (never hardcode static markers)
+$candidates = @(
+    (Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\common\wallpaper_engine\wallpaper64.exe'),
+    (Join-Path $env:ProgramFiles 'Steam\steamapps\common\wallpaper_engine\wallpaper64.exe'),
+    (Join-Path ${env:ProgramFiles(x86)} 'Steam\steamapps\common\wallpaper_engine\wallpaper32.exe'),
+    (Join-Path $env:ProgramFiles 'Steam\steamapps\common\wallpaper_engine\wallpaper32.exe')
 )
 
-$weExe = $wePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+# Check if a process is already running
+$runningProc = Get-Process -Name 'wallpaper64', 'wallpaper32' -ErrorAction SilentlyContinue | Select-Object -First 1
+
+$weExe = $null
+if ($runningProc) {
+    try {
+        $weExe = $runningProc.Path
+    } catch {}
+}
+
+if (-not $weExe -or -not (Test-Path $weExe)) {
+    $weExe = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+}
 
 if (-not $weExe) {
     Write-Warning "Wallpaper Engine executable not found."
     exit 1
 }
 
+# If Wallpaper Engine isn't running yet, launch it
+if (-not $runningProc) {
+    Start-Process -FilePath $weExe -WindowStyle Hidden
+    Start-Sleep -Milliseconds 1200
+}
+
 $stateFile = Join-Path $env:TEMP 'yasb_we_state.txt'
 
 switch ($Action) {
     'next' {
+        # Trigger next wallpaper
         Start-Process -FilePath $weExe -ArgumentList '-control', 'nextWallpaper' -WindowStyle Hidden
     }
     'pause' {

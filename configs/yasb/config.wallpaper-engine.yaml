@@ -395,9 +395,9 @@ widgets:
       tooltip: true
       tooltip_label: "Wallpaper Engine\n• Left click: Next Wallpaper\n• Right click: Pause / Resume\n• Middle click: Open Wallpaper Engine"
       callbacks:
-        on_left: "exec \"__PROGRAMFILES__ (x86)\\Steam\\steamapps\\common\\wallpaper_engine\\wallpaper64.exe\" -control nextWallpaper"
-        on_right: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__\\.config\\yasb\\scripts\\wallpaper_engine_control.ps1\" -Action toggle"
-        on_middle: "exec cmd.exe /c start steam://rungameid/431960"
+        on_left: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__/.config/yasb/scripts/wallpaper_engine_control.ps1\" -Action next"
+        on_right: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__/.config/yasb/scripts/wallpaper_engine_control.ps1\" -Action toggle"
+        on_middle: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__/.config/yasb/scripts/wallpaper_engine_control.ps1\" -Action open"
   cava:
     type: "yasb.cava.CavaWidget"
     options:
