@@ -230,11 +230,56 @@ Restore-Directory -Name 'Flow Launcher/plugins' -Source (Join-Path $ConfigRoot '
 Restore-Directory -Name 'Flow Launcher/themes' -Source (Join-Path $ConfigRoot 'flow-launcher\themes') -Target (Join-Path $env:APPDATA 'FlowLauncher\Themes')
 Restore-File -Name 'Windows Terminal/settings' -Source (Join-Path $ConfigRoot 'terminal\settings.json') -Target (Join-Path $env:LOCALAPPDATA 'Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json')
 Restore-File -Name 'PowerShell/profile' -Source (Join-Path $ConfigRoot 'powershell\Microsoft.PowerShell_profile.ps1') -Target $PROFILE -PowerShellProfile
+
+# Oh My Posh
+if (Test-Path (Join-Path $ConfigRoot 'oh-my-posh\jandedobbeleer.omp.json')) {
+    Restore-File -Name 'Oh My Posh/theme' -Source (Join-Path $ConfigRoot 'oh-my-posh\jandedobbeleer.omp.json') -Target (Join-Path $env:USERPROFILE '.config\jandedobbeleer.omp.json')
+}
+if (Test-Path (Join-Path $ConfigRoot 'oh-my-posh\omp_cache.ps1')) {
+    Restore-File -Name 'Oh My Posh/cache' -Source (Join-Path $ConfigRoot 'oh-my-posh\omp_cache.ps1') -Target (Join-Path $env:USERPROFILE '.config\omp_cache.ps1')
+}
 Restore-Directory -Name 'Oh My Posh/themes' -Source (Join-Path $ConfigRoot 'oh-my-posh\themes') -Target (Join-Path $env:USERPROFILE '.config\oh-my-posh\themes')
-Restore-Directory -Name 'Fastfetch' -Source (Join-Path $ConfigRoot 'fastfetch') -Target (Join-Path $env:USERPROFILE '.config\fastfetch')
-Restore-Directory -Name 'CAVA' -Source (Join-Path $ConfigRoot 'cava') -Target (Join-Path $env:USERPROFILE '.config\cava')
-Restore-Directory -Name 'HideTaskbar' -Source (Join-Path $ConfigRoot 'hidetaskbar') -Target (Join-Path $env:APPDATA 'HideTaskbar')
-Restore-Directory -Name 'GlazeTiler' -Source (Join-Path $ConfigRoot 'glazetiler') -Target (Join-Path $env:APPDATA 'GlazeTiler')
+
+# Fastfetch
+Restore-Directory -Name 'Fastfetch (config)' -Source (Join-Path $ConfigRoot 'fastfetch') -Target (Join-Path $env:USERPROFILE '.config\fastfetch')
+if (Test-Path (Join-Path $ConfigRoot 'fastfetch\fastfetch.json')) {
+    Restore-File -Name 'Fastfetch (home)' -Source (Join-Path $ConfigRoot 'fastfetch\fastfetch.json') -Target (Join-Path $env:USERPROFILE 'fastfetch\fastfetch.json')
+}
+if (Test-Path (Join-Path $ConfigRoot 'fastfetch\frieren.txt')) {
+    Restore-File -Name 'Fastfetch/logo' -Source (Join-Path $ConfigRoot 'fastfetch\frieren.txt') -Target (Join-Path $env:USERPROFILE 'fastfetch\frieren.txt')
+}
+
+# CAVA
+if (Test-Path (Join-Path $ConfigRoot 'cava\config')) {
+    Restore-File -Name 'CAVA/config' -Source (Join-Path $ConfigRoot 'cava\config') -Target (Join-Path $env:USERPROFILE '.config\cava\config')
+}
+if (Test-Path (Join-Path $ConfigRoot 'cava\yasb_cava_config_1')) {
+    Restore-File -Name 'CAVA/yasb_config' -Source (Join-Path $ConfigRoot 'cava\yasb_cava_config_1') -Target (Join-Path $env:LOCALAPPDATA 'YASB\yasb_cava_config_1')
+}
+
+# HideTaskbar
+if (Test-Path (Join-Path $ConfigRoot 'hidetaskbar\HideTaskbar.exe')) {
+    Restore-File -Name 'HideTaskbar' -Source (Join-Path $ConfigRoot 'hidetaskbar\HideTaskbar.exe') -Target (Join-Path $env:USERPROFILE 'Downloads\HideTaskbar.exe')
+}
+
+# GlazeTiler
+if (Test-Path (Join-Path $ConfigRoot 'glazetiler\glazetiler.exe')) {
+    Restore-File -Name 'GlazeTiler' -Source (Join-Path $ConfigRoot 'glazetiler\glazetiler.exe') -Target (Join-Path $env:USERPROFILE '.cargo\bin\glazetiler.exe')
+}
+
+# Wallpaper Engine
+if (Test-Path (Join-Path $ConfigRoot 'wallpaper-engine\config.json')) {
+    $steamWeCandidates = @(
+        'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\config.json',
+        'C:\Program Files\Steam\steamapps\common\wallpaper_engine\config.json'
+    )
+    foreach ($cand in $steamWeCandidates) {
+        if (Test-Path (Split-Path -Parent $cand)) {
+            Restore-File -Name 'Wallpaper Engine' -Source (Join-Path $ConfigRoot 'wallpaper-engine\config.json') -Target $cand
+            break
+        }
+    }
+}
 
 Write-Host ''
 Write-Host 'Install/restore summary' -ForegroundColor White

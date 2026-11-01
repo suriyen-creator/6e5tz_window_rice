@@ -41,11 +41,11 @@ function Ensure-Directory {
 }
 
 function Get-TextExtension {
-    return @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.md')
+    return @('.yaml', '.yml', '.json', '.jsonc', '.css', '.ps1', '.psm1', '.ini', '.toml', '.conf', '.cfg', '.txt', '.md', '')
 }
 
 function Get-AssetExtension {
-    return @('.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.ttf', '.otf')
+    return @('.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.webp', '.ttf', '.otf', '.exe')
 }
 
 function Test-ExcludedFile {
@@ -72,14 +72,16 @@ function Get-SensitiveFieldNames {
 }
 
 function Test-SensitiveAssignment {
-    param([Parameter(Mandatory = $true)][string]$Content)
+    param([Parameter(Mandatory = $false)][AllowEmptyString()][string]$Content = '')
+    if ([string]::IsNullOrWhiteSpace($Content)) { return $false }
     $names = (Get-SensitiveFieldNames | ForEach-Object { [Regex]::Escape($_) }) -join '|'
-    $pattern = '(?im)(?:' + $names + ')\s*["'']?\s*[:=]\s*["'']?[^"''\s,}]+'
+    $pattern = '(?im)(?:' + $names + ')\s*["'']?\s*[:=]\s*["'']?(?!\s*#)(?!\s*["'']?\s*($|\r|\n))[^"''\s,}]+'
     return $Content -match $pattern
 }
 
 function Convert-ToPortableText {
-    param([Parameter(Mandatory = $true)][string]$Content)
+    param([Parameter(Mandatory = $false)][AllowEmptyString()][string]$Content = '')
+    if ([string]::IsNullOrEmpty($Content)) { return $Content }
 
     $pairs = @(
         @{ Current = $env:USERPROFILE; Marker = '__USERPROFILE__' },
@@ -261,7 +263,9 @@ function Copy-PowerShellProfile {
     $candidates = @(
         $PROFILE,
         (Join-Path $env:USERPROFILE 'Documents\PowerShell\Microsoft.PowerShell_profile.ps1'),
-        (Join-Path $env:USERPROFILE 'Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1')
+        (Join-Path $env:USERPROFILE 'Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1'),
+        (Join-Path $env:USERPROFILE 'OneDrive\Documents\PowerShell\Microsoft.PowerShell_profile.ps1'),
+        (Join-Path $env:USERPROFILE 'OneDrive\เอกสาร\PowerShell\Microsoft.PowerShell_profile.ps1')
     ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
 
     $found = $false
@@ -335,40 +339,68 @@ function Copy-OptionalCandidates {
 
 Ensure-Directory -Path $ConfigsRoot
 
+# 1. GlazeWM
 Copy-SafeFile -Name 'GlazeWM/config' -Source (Join-Path $env:USERPROFILE '.glzr\glazewm\config.yaml') -Destination (Join-Path $ConfigsRoot 'glazewm\config.yaml') -AllowSensitiveExample
+
+# 2. YASB
 Copy-ConfigDirectory -Name 'YASB' -Source (Join-Path $env:USERPROFILE '.config\yasb') -Destination (Join-Path $ConfigsRoot 'yasb') -AllowSensitiveExample
+
+# 3. Flow Launcher
 Copy-FlowSettings
+
+# 4. Windows Terminal
 Copy-SafeFile -Name 'Windows Terminal/settings' -Source (Join-Path $env:LOCALAPPDATA 'Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json') -Destination (Join-Path $ConfigsRoot 'terminal\settings.json') -AllowSensitiveExample
+
+# 5. PowerShell Profile
 Copy-PowerShellProfile
 
-Copy-OptionalCandidates -Name 'Oh My Posh/themes' -Sources @(
+# 6. Oh My Posh
+Copy-OptionalCandidates -Name 'Oh My Posh' -Sources @(
+    (Join-Path $env:USERPROFILE '.config\jandedobbeleer.omp.json'),
+    (Join-Path $env:USERPROFILE '.config\omp_cache.ps1'),
     (Join-Path $env:USERPROFILE '.poshthemes'),
     (Join-Path $env:USERPROFILE '.config\oh-my-posh\themes'),
     (Join-Path $env:USERPROFILE 'Documents\PowerShell\themes')
-) -Destination (Join-Path $ConfigsRoot 'oh-my-posh\themes') -AllowSensitiveExample
+) -Destination (Join-Path $ConfigsRoot 'oh-my-posh') -AllowSensitiveExample
 
+# 7. Fastfetch
 Copy-OptionalCandidates -Name 'Fastfetch' -Sources @(
+    (Join-Path $env:USERPROFILE 'fastfetch\fastfetch.json'),
+    (Join-Path $env:USERPROFILE 'fastfetch\frieren.txt'),
     (Join-Path $env:USERPROFILE '.config\fastfetch'),
     (Join-Path $env:APPDATA 'fastfetch'),
     (Join-Path $env:LOCALAPPDATA 'fastfetch')
 ) -Destination (Join-Path $ConfigsRoot 'fastfetch') -AllowSensitiveExample
 
+# 8. CAVA
 Copy-OptionalCandidates -Name 'CAVA' -Sources @(
+    (Join-Path $env:USERPROFILE '.config\cava\config'),
+    (Join-Path $env:LOCALAPPDATA 'YASB\yasb_cava_config_1'),
     (Join-Path $env:USERPROFILE '.config\cava'),
     (Join-Path $env:APPDATA 'cava'),
     (Join-Path $env:LOCALAPPDATA 'cava\config')
 ) -Destination (Join-Path $ConfigsRoot 'cava') -AllowSensitiveExample
 
+# 9. HideTaskbar
 Copy-OptionalCandidates -Name 'HideTaskbar' -Sources @(
+    (Join-Path $env:USERPROFILE 'Downloads\HideTaskbar.exe'),
     (Join-Path $env:APPDATA 'HideTaskbar'),
     (Join-Path $env:LOCALAPPDATA 'HideTaskbar'),
     (Join-Path $env:USERPROFILE '.config\hidetaskbar')
 ) -Destination (Join-Path $ConfigsRoot 'hidetaskbar') -AllowSensitiveExample
 
+# 10. GlazeTiler
 Copy-OptionalCandidates -Name 'GlazeTiler' -Sources @(
+    (Join-Path $env:USERPROFILE '.cargo\bin\glazetiler.exe'),
     (Join-Path $env:APPDATA 'GlazeTiler'),
     (Join-Path $env:USERPROFILE '.config\glazetiler')
 ) -Destination (Join-Path $ConfigsRoot 'glazetiler') -AllowSensitiveExample
+
+# 11. Wallpaper Engine
+Copy-OptionalCandidates -Name 'Wallpaper Engine' -Sources @(
+    'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\config.json',
+    'C:\Program Files\Steam\steamapps\common\wallpaper_engine\config.json'
+) -Destination (Join-Path $ConfigsRoot 'wallpaper-engine') -AllowSensitiveExample
 
 Write-Host ''
 Write-Host 'Backup summary' -ForegroundColor White

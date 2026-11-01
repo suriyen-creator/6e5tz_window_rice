@@ -1,4 +1,4 @@
-general:
+﻿general:
   # Commands to run when the WM has started. This is useful for running a
   # script or launching another application.
   # Example: The below command launches Zebar.
@@ -12,7 +12,7 @@ general:
   - 'shell-exec taskkill /IM yasb.exe /F'
   - 'shell-exec taskkill /IM glazetiler.exe /F'
 
-  # Commands to run after the WM config is relไoaded.
+  # Commands to run after the WM config is relà¹„oaded.
   config_reload_commands: []
 
   # Whether to automatically focus windows underneath the cursor.

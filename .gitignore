@@ -63,3 +63,6 @@ assets/wallpaper-engine-workshop/
 # Temporary backup reports
 backup-report*.json
 security-scan*.txt
+
+# Agent configurations
+.agents/

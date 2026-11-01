@@ -1,3 +1,5 @@
 # YASB
 
-The source inspection found YASB installed, but `%USERPROFILE%\.config\yasb` returned `Access denied` in the read-only session. `backup.ps1` checks this path again in a normal PowerShell session. No runtime files from `%LOCALAPPDATA%\YASB` are included.
+Base configuration and styles adapted from [SleepyCatHey/Yasb-GlazeWM-Config](https://github.com/SleepyCatHey/Yasb-GlazeWM-Config) by [@SleepyCatHey](https://github.com/SleepyCatHey).
+
+This directory contains `config.yaml` and `styles.css` backed up from `%USERPROFILE%\.config\yasb`.

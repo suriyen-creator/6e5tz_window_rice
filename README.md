@@ -4,6 +4,10 @@ Portable backup and restore files for the Windows 10 desktop setup detected on t
 
 > This repository was created from a read-only inspection of the source machine. It does not contain browser profiles, private history, Steam Workshop downloads, logs, caches, or credentials.
 
+## Credits & Acknowledgments
+
+- **Base YASB + GlazeWM Configuration:** Based on [SleepyCatHey/Yasb-GlazeWM-Config](https://github.com/SleepyCatHey/Yasb-GlazeWM-Config) by [@SleepyCatHey](https://github.com/SleepyCatHey).
+
 ## Preview
 
 No screenshot was present in the source workspace at creation time. Add personal, owned screenshots under [`screenshots/`](screenshots/) and link them here when ready.
@@ -12,17 +16,17 @@ No screenshot was present in the source workspace at creation time. Add personal
 
 | Software | Detected state | Config discovered |
 | --- | --- | --- |
-| YASB | `yasb.exe` at `C:\Program Files\YASB\yasb.exe` | `%USERPROFILE%\.config\yasb` was inaccessible to this read-only session; backup script checks it again |
-| GlazeWM | `3.10.1` | `%USERPROFILE%\.glzr\glazewm\config.yaml` |
-| Flow Launcher | `2.1.2` | `%APPDATA%\FlowLauncher\Settings`, selected plugin settings, and Themes |
-| HideTaskbar | no executable/config found in accessible locations | not backed up |
-| Wallpaper Engine | installed under Steam | Workshop content intentionally excluded |
-| CAVA | `0.10.7` at `%LOCALAPPDATA%\cava\cava.exe` | no standalone config; YASB-generated runtime CAVA file excluded |
+| YASB | `yasb.exe` at `C:\Program Files\YASB\yasb.exe` | `%USERPROFILE%\.config\yasb` (`config.yaml`, `styles.css`) — *Base: [SleepyCatHey](https://github.com/SleepyCatHey/Yasb-GlazeWM-Config)* |
+| GlazeWM | `3.10.1` | `%USERPROFILE%\.glzr\glazewm\config.yaml` — *Base: [SleepyCatHey](https://github.com/SleepyCatHey/Yasb-GlazeWM-Config)* |
+| Flow Launcher | `2.1.2` | `%APPDATA%\FlowLauncher\Settings`, plugin settings, and Themes |
+| HideTaskbar | `HideTaskbar.exe` at `%USERPROFILE%\Downloads\HideTaskbar.exe` | `%USERPROFILE%\Downloads\HideTaskbar.exe` (portable binary backup) |
+| Wallpaper Engine | installed under Steam | `C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\config.json` |
+| CAVA | `0.10.7` at `%LOCALAPPDATA%\cava\cava.exe` | `%USERPROFILE%\.config\cava\config` & `%LOCALAPPDATA%\YASB\yasb_cava_config_1` |
 | Windows Terminal | Store package layout detected | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json` |
-| Oh My Posh | `oh-my-posh.exe` on PATH | no profile or custom theme found |
-| Fastfetch | `2.64.2` via Scoop shim | no config found in accessible locations |
-| GlazeTiler | `glazetiler.exe` at `%USERPROFILE%\.cargo\bin\glazetiler.exe` | only `%APPDATA%\GlazeTiler\glazetiler.log.*` was present; logs excluded |
-| PowerShell | PowerShell 7.6.2 (`pwsh.exe`) available | current-user profile file was not present |
+| Oh My Posh | `oh-my-posh.exe` on PATH | `%USERPROFILE%\.config\jandedobbeleer.omp.json` & `omp_cache.ps1` |
+| Fastfetch | `2.64.2` | `~/fastfetch/fastfetch.json`, `~/fastfetch/frieren.txt` & `~/.config/fastfetch` |
+| GlazeTiler | `glazetiler.exe` at `%USERPROFILE%\.cargo\bin\glazetiler.exe` | `%USERPROFILE%\.cargo\bin\glazetiler.exe` (binary backup & GlazeWM integration) |
+| PowerShell | PowerShell 7 (`pwsh.exe`) | `$PROFILE` (`Microsoft.PowerShell_profile.ps1`) |
 
 ## Features
 

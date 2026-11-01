@@ -1,0 +1,121 @@
+﻿{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "display": {
+    "key": {
+      "width": 12
+    },
+    "separator": " "
+  },
+  "logo": {
+    "type": "file",
+    "source": "C:/Users/suriy/fastfetch/frieren.txt",
+    "color": {
+      "1": "#ccccff",
+      "2": "#c6d2ff",
+      "3": "#c1d7ff",
+      "4": "#bedcff",
+      "5": "#bde0fe"
+    },
+    "padding": {
+      "top": 1,
+      "left": 1,
+      "right": 3
+    }
+  },
+  "modules": [
+    "break",
+    {
+      "type": "title",
+      "key": "ó°€‰ USER",
+      "keyColor": "#ccccff",
+      "format": "{user-name}@{host-name}"
+    },
+    {
+      "type": "separator",
+      "string": "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€",
+      "outputColor": "#89b4fa"
+    },
+    {
+      "type": "os",
+      "key": "ó°² OS",
+      "keyColor": "#c9cfff"
+    },
+    {
+      "type": "host",
+      "key": "ó°Œ¢ HOST",
+      "keyColor": "#c7d1ff"
+    },
+    {
+      "type": "kernel",
+      "key": "ó°Œ½ KER",
+      "keyColor": "#c4d4ff"
+    },
+    {
+      "type": "uptime",
+      "key": "ó°¥” UP",
+      "keyColor": "#c2d6ff"
+    },
+    {
+      "type": "packages",
+      "key": "ó°– PKG",
+      "keyColor": "#c1d7ff"
+    },
+    {
+      "type": "shell",
+      "key": "ó°ž· SH",
+      "keyColor": "#c0d9ff",
+      "format": "{pretty-name} {version}"
+    },
+    {
+      "type": "display",
+      "key": "ó°¹ DISP",
+      "keyColor": "#bedbff",
+      "format": "{width}x{height} @ {refresh-rate}Hz"
+    },
+    {
+      "type": "wm",
+      "key": "ó±‚¬ WM",
+      "keyColor": "#bddcff",
+      "format": "{plugin-name}"
+    },
+    {
+      "type": "terminal",
+      "key": "ó°† TERM",
+      "keyColor": "#bddeff",
+      "format": "{pretty-name} {version}"
+    },
+    {
+      "type": "cpu",
+      "key": "ó°»  CPU",
+      "keyColor": "#bde0fe"
+    },
+    {
+      "type": "gpu",
+      "key": "ó°¢® GPU",
+      "keyColor": "#bde0fe"
+    },
+    {
+      "type": "memory",
+      "key": "ó°› RAM",
+      "keyColor": "#bde0fe",
+      "format": "{used} / {total} ({percentage})"
+    },
+    {
+      "type": "disk",
+      "key": "ó°‹Š DISK",
+      "keyColor": "#bde0fe",
+      "folders": "C:\\",
+      "format": "{size-used} / {size-total} ({size-percentage})"
+    },
+    {
+      "type": "battery",
+      "key": "ó°¹ BAT",
+      "keyColor": "#bde0fe"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[90mï„‘ \u001b[91mï„‘ \u001b[92mï„‘ \u001b[93mï„‘ \u001b[94mï„‘ \u001b[95mï„‘ \u001b[96mï„‘ \u001b[97mï„‘"
+    },
+    "break"
+  ]
+}

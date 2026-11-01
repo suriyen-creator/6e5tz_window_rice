@@ -1,3 +1,4 @@
 # HideTaskbar
 
-No installed executable or shareable config was found in the accessible locations. The directory remains a safe placeholder.
+- **`HideTaskbar.exe`**: Lightweight utility to hide the standard Windows taskbar so YASB can operate as the primary top/bottom status bar without overlap.
+- Placed at `%USERPROFILE%\Downloads\HideTaskbar.exe`.

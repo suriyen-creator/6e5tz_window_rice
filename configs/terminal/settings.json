@@ -1,12 +1,12 @@
-{
+﻿{
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": [],
+    "compatibility.enableUnfocusedAcrylic": true,
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-    "keybindings":
-    [
+    "keybindings": [
         {
             "id": "Terminal.CopyToClipboard",
             "keys": "ctrl+c"
@@ -20,30 +20,31 @@
             "keys": "alt+shift+d"
         }
     ],
-    "newTabMenu":
-    [
+    "newTabMenu": [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles":
-    {
-        "defaults": {},
-        "list":
-        [
+    "profiles": {
+        "defaults": {
+            "opacity": 60,
+            "unfocusedAppearance": {
+                "opacity": 30,
+                "useAcrylic": false
+            },
+            "useAcrylic": false
+        },
+        "list": [
             {
                 "commandline": "pwsh.exe",
-                "font":
-                {
+                "font": {
                     "cellHeight": "1.1",
                     "cellWidth": "0.6",
                     "face": "MesloLGL Nerd Font"
                 },
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": false,
-                "name": "Windows PowerShell",
-                "opacity": 40,
-                "useAcrylic": true
+                "name": "Windows PowerShell"
             },
             {
                 "commandline": "%SystemRoot%\\System32\\cmd.exe",
@@ -58,15 +59,15 @@
                 "source": "Windows.Terminal.Azure"
             },
             {
-                "font":
-                {
+                "cursorShape": "vintage",
+                "font": {
                     "cellHeight": "1.1",
-                    "face": "MesloLGL Nerd Font"
+                    "face": "MesloLGL Nerd Font",
+                    "weight": "normal"
                 },
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
                 "name": "PowerShell",
-                "opacity": 59,
                 "source": "Windows.Terminal.PowershellCore"
             },
             {
@@ -96,5 +97,8 @@
         ]
     },
     "schemes": [],
-    "themes": []
+    "showTabsFullscreen": false,
+    "theme": "dark",
+    "themes": [],
+    "useAcrylicInTabRow": true
 }
