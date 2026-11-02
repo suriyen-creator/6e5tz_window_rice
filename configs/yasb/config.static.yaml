@@ -1,4 +1,4 @@
-# This is default and very simple configuration file for Yasb. 
+﻿# This is default and very simple configuration file for Yasb. 
 # For more information about configuration options, please visit the Wiki https://github.com/amnweb/yasb/wiki
 watch_stylesheet: true
 watch_config: true
@@ -387,26 +387,13 @@ widgets:
         on_right: "do_nothing"
         on_middle: "toggle_label"
   wallpapers:
-    type: "yasb.wallpapers.WallpapersWidget"
+    type: "yasb.custom.CustomWidget"
     options:
-      label: "<span>󰸉</span>"
-      image_path: "__USERPROFILE__/Pictures/Wallpapers"
-      change_automatically: false
-      update_interval: 300
-      gallery:
-        enabled: true
-        blur: true
-        image_width: 220
-        image_per_page: 8
-        show_buttons: true
-        orientation: "portrait"
-        image_spacing: 8
-        lazy_load: true
-        lazy_load_fadein: 400
-        image_corner_radius: 12
+      label: "<span></span>"
+      class_name: "wallpapers"
       callbacks:
-        on_left: "toggle_gallery"
-        on_right: "change_wallpaper"
+        on_left: "exec C:/Users/suriy/.config/yasb/scripts/next-wallpaper.exe"
+        on_right: "exec C:/Users/suriy/.config/yasb/scripts/pause-wallpaper.exe"
   cava:
     type: "yasb.cava.CavaWidget"
     options:

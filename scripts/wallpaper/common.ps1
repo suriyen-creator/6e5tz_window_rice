@@ -84,13 +84,25 @@ function Write-JsonFile {
         [Parameter(Mandatory = $true)][string]$Path,
         [Parameter(Mandatory = $true)][object]$Data
     )
+    $tempPath = "$Path.tmp.$([System.Guid]::NewGuid().ToString('N'))"
     try {
         $parent = Split-Path -Parent $Path
         Ensure-DirectoryExists -Path $parent
-        $tempPath = "$Path.tmp.$([System.Guid]::NewGuid().ToString('N'))"
         $json = $Data | ConvertTo-Json -Depth 20
         [System.IO.File]::WriteAllText($tempPath, $json, $script:Utf8NoBom)
-        Move-Item -LiteralPath $tempPath -Destination $Path -Force
+
+        # Robust atomic overwrite on Windows
+        try {
+            if ([System.Environment]::Version.Major -ge 5 -or ($PSVersionTable.ContainsKey('PSEdition') -and $PSVersionTable.PSEdition -eq 'Core')) {
+                [System.IO.File]::Move($tempPath, $Path, $true)
+            } else {
+                Copy-Item -LiteralPath $tempPath -Destination $Path -Force
+                Remove-Item -LiteralPath $tempPath -Force -ErrorAction SilentlyContinue
+            }
+        } catch {
+            Copy-Item -LiteralPath $tempPath -Destination $Path -Force
+            Remove-Item -LiteralPath $tempPath -Force -ErrorAction SilentlyContinue
+        }
         return $true
     } catch {
         Write-WpLog -Message "Failed to write JSON to ${Path}: $($_.Exception.Message)" -Level Error
@@ -107,7 +119,7 @@ function Write-JsonFile {
 function Invoke-WithWallpaperLock {
     param(
         [Parameter(Mandatory = $true)][scriptblock]$Script,
-        [int]$DebounceMs = 350,
+        [int]$DebounceMs = 500,
         [int]$TimeoutMs = 1500
     )
 

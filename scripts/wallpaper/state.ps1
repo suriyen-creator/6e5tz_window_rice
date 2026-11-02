@@ -25,6 +25,8 @@ function Get-WpState {
                 Lively = "Default"
             }
             currentWallpaper = ""
+            staticWallpaper = ""
+            wallpaperEngineWallpaper = ""
             activeWorkspace = "1"
             workspaceHistory = [PSCustomObject]@{}
             rotation = [PSCustomObject]@{
@@ -37,6 +39,28 @@ function Get-WpState {
     }
 
     # Ensure all required properties exist
+    if ($null -eq $state.PSObject.Properties['activeProvider']) {
+        $state | Add-Member -NotePropertyName 'activeProvider' -NotePropertyValue 'Static'
+    }
+    if ($null -eq $state.PSObject.Properties['currentWallpaper']) {
+        $state | Add-Member -NotePropertyName 'currentWallpaper' -NotePropertyValue ''
+    }
+    if ($null -eq $state.PSObject.Properties['staticWallpaper']) {
+        $initStatic = ''
+        if ($state.currentWallpaper -match '\.(jpg|jpeg|png|webp|bmp)$') {
+            $initStatic = [string]$state.currentWallpaper
+        }
+        $state | Add-Member -NotePropertyName 'staticWallpaper' -NotePropertyValue $initStatic
+    }
+    if ($null -eq $state.PSObject.Properties['wallpaperEngineWallpaper']) {
+        $state | Add-Member -NotePropertyName 'wallpaperEngineWallpaper' -NotePropertyValue ''
+    }
+    if ($null -eq $state.PSObject.Properties['activeWorkspace']) {
+        $state | Add-Member -NotePropertyName 'activeWorkspace' -NotePropertyValue '1'
+    }
+    if ($null -eq $state.PSObject.Properties['lastSwitched']) {
+        $state | Add-Member -NotePropertyName 'lastSwitched' -NotePropertyValue ((Get-Date).ToString('o'))
+    }
     if ($null -eq $state.PSObject.Properties['rotation']) {
         $state | Add-Member -NotePropertyName 'rotation' -NotePropertyValue ([PSCustomObject]@{
             lastRotated = (Get-Date).ToString('o')

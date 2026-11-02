@@ -86,6 +86,12 @@ function Get-WpConfig {
                     autoHideOnFocusLost = $true
                     closeOnOutsideClick = $true
                     animation = $true
+                    launchMode = "grid"
+                    coverFlow = [PSCustomObject]@{
+                        fullscreen = $true
+                        backgroundBlur = $true
+                        darkOverlayOpacity = 0.55
+                    }
                     viewMode = [PSCustomObject]@{
                         WallpaperEngine = "coverflow"
                         Static = "grid"
@@ -117,18 +123,40 @@ function Get-WpConfig {
             autoHideOnFocusLost = $true
             closeOnOutsideClick = $true
             animation = $true
+            launchMode = "grid"
+            coverFlow = [PSCustomObject]@{
+                fullscreen = $true
+                backgroundBlur = $true
+                darkOverlayOpacity = 0.55
+            }
             viewMode = [PSCustomObject]@{
                 WallpaperEngine = "coverflow"
                 Static = "grid"
                 Lively = "coverflow"
             }
         })
-    } elseif ($null -eq $config.ui.PSObject.Properties['viewMode']) {
-        $config.ui | Add-Member -MemberType NoteProperty -Name 'viewMode' -Value ([PSCustomObject]@{
-            WallpaperEngine = "coverflow"
-            Static = "grid"
-            Lively = "coverflow"
-        })
+    } else {
+        if ($null -eq $config.ui.PSObject.Properties['launchMode'] -or @('grid', 'coverFlow') -notcontains [string]$config.ui.launchMode) {
+            if ($null -eq $config.ui.PSObject.Properties['launchMode']) {
+                $config.ui | Add-Member -MemberType NoteProperty -Name 'launchMode' -Value 'grid'
+            } else {
+                $config.ui.launchMode = 'grid'
+            }
+        }
+        if ($null -eq $config.ui.PSObject.Properties['coverFlow']) {
+            $config.ui | Add-Member -MemberType NoteProperty -Name 'coverFlow' -Value ([PSCustomObject]@{
+                fullscreen = $true
+                backgroundBlur = $true
+                darkOverlayOpacity = 0.55
+            })
+        }
+        if ($null -eq $config.ui.PSObject.Properties['viewMode']) {
+            $config.ui | Add-Member -MemberType NoteProperty -Name 'viewMode' -Value ([PSCustomObject]@{
+                WallpaperEngine = "coverflow"
+                Static = "grid"
+                Lively = "coverflow"
+            })
+        }
     }
 
     if ($null -eq $config.PSObject.Properties['rotation']) {

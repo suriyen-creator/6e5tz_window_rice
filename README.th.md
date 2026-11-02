@@ -188,33 +188,38 @@ wp-mgr -Action cycle-provider
 - **ระบบ Debounce:** ป้องกันอาการจอกระพริบจากการกดสลับ Workspace ถี่ๆ
 - **ระบบ Daemon อัตโนมัติ:** GlazeWM จะสั่งรัน Watcher Daemon ตอนเปิดเครื่อง และปิดตัวลงให้อัตโนมัติเมื่อออกจาก GlazeWM
 
-### 5. ป้องกันการกดเบิ้ลของ Alt + W (Concurrency Mutex & Debounce)
-ปุ่มลัดเปลี่ยนวอลเปเปอร์ `Alt + W` ได้รับการป้องกันด้วย System Mutex (`Local\6e5tz_Wallpaper_Mutex`) ร่วมกับ Debouncing Timer ระดับ 350 มิลลิวินาที:
-- แก้ปัญหาการกดเบิ้ล หรือการสั่งสลับภาพพร้อมกันหลายคำสั่ง
+### 5. ตัวสั่งงานความเร็วสูงสำหรับ Alt + W และการป้องกันการกดเบิ้ล (Fast Launcher & Mutex)
+ปุ่มลัดเปลี่ยนวอลเปเปอร์ `Alt + W` ขับเคลื่อนด้วยโปรแกรม Native C# ความเร็วสูง (`next-wallpaper.exe`, เวลาทำงาน < 15ms) และได้รับการป้องกันด้วย System Mutex (`Local\6e5tz_Wallpaper_Mutex`) ร่วมกับ Debouncing Timer ระดับ 350 มิลลิวินาที:
+- ขจัดปัญหาความล่าช้าจากการโหลด PowerShell และอาการหน้าต่างกะพริบ
+- ป้องกันการกดเบิ้ล หรือการสั่งสลับภาพพร้อมกันหลายคำสั่ง 100%
 - รับประกันว่า **การกดปุ่ม Alt + W หนึ่งครั้ง จะทำให้ภาพเปลี่ยนเพียง 1 จังหวะเสมอ**
 - ส่งคำสั่ง CLI ที่ถูกต้องตรงตามแต่ละ Provider อย่างแม่นยำ
 
-### 6. หน้าต่าง Floating Acrylic Side Panel (`Alt + Shift + G`) & Standalone 3D Cover Flow
-กดปุ่ม **`Alt + Shift + G`** หรือคลิกไอคอนวอลเปเปอร์บนแถบ YASB เพื่อเปิด/ปิดแถบพาเนลลอยด้านข้างหน้าจอ:
-- **Zero-Console Native WinExe:** คอมไพล์เป็นแอป GUI วินโดวส์โดยตรง (`wallpaper-gallery.exe`) ไม่มีหน้าต่าง Terminal หรือ CMD กะพริบขึ้นมากวนใจ 100%
-- **Adaptive 2-Column Grid:** เลย์เอาต์ตาราง 2 คอลัมน์สมมาตรจัดเต็มพื้นที่ ไม่ห้อยแถวเดี่ยว ไร้ขอบว่างด้านขวา คำนวณความกว้างการ์ดแบบไดนามิกตามขนาดหน้าจอจริง
-- **หน้าต่างแยก Standalone Centered 3D Cover Flow:** กดปุ่ม "3D Cover Flow" จากในพาเนล หรือเรียก `wallpaper-gallery.exe -CoverFlow` เพื่อเปิดหน้าต่าง 3D คัฟเวอร์โฟลว์กึ่งกลางหน้าจอแบบไร้กรอบ (Frameless Acrylic) เลื่อนพรีวิวดูภาพได้ด้วยปุ่มลูกศร `Left`/`Right` โดยไม่เปลี่ยนเดสก์ท็อปจนกว่าจะกดปุ่ม `Enter` และกด `Escape` เพื่อปิด
-- **ฟอนต์และไอคอนมาตรฐาน 100% (Zero Broken Tofu):** ปลอดจากการใช้ Private-use Nerd Font ที่อาจเป็นกล่องสี่เหลี่ยมบนเครื่องที่ไม่ได้ลงฟอนต์ ใช้สัญลักษณ์เรขาคณิตสากล (`◀`, `▶`, `✓`, `★`) และ Typography ชัดเจน
+### 6. ระบบโหมดแสดงผล 2 รูปแบบ (Display Mode System) & Wallpaper Gallery (`Alt + Shift + G`)
+กดปุ่ม **`Alt + Shift + G`** หรือคลิกไอคอนวอลเปเปอร์บนแถบ YASB เพื่อเปิด/ปิดหน้าต่างวอลเปเปอร์ โดยระบบมาพร้อมกับ **โหมดแสดงผล 2 รูปแบบที่เลือกได้ตามต้องการ** พร้อมกลไกการกดปุ่มเพียงครั้งเดียวติดทันที:
+
+- **เลือกโหมดเปิดเริ่มต้นได้ (Configurable Opening Mode):** สามารถเลือกเปิดเป็น **Grid Mode** (ค่าเริ่มต้น) หรือ **Cover Flow Mode** ได้โดยตรงจากแถบ Settings บนหน้าต่าง UI โดยระบบจะบันทึกค่าเก็บไว้ถาวรใน `wallpaper-manager.json` (`ui.launchMode`) ข้ามการรีสตาร์ตเครื่อง:
+  - **Grid Mode (ค่าเริ่มต้น):** เปิดแถบ **Floating Acrylic Side Panel** ลอยแนบขอบจอ พร้อมตารางคลังภาพ 2 คอลัมน์ที่สมมาตรลงตัว, ปุ่มเลือก Provider, และการจัดการคอลเลกชัน หากใช้งาน Wallpaper Engine จะเปิดตรงเข้าหน้า Workshop Subscriptions ให้ทันที
+  - **Cover Flow Mode:** เปิดประสบการณ์ **Fullscreen 3D Cover Flow** เต็มจอของมอนิเตอร์ที่ใช้งานอยู่ พร้อมระบบเบลอเดสก์ท็อปจริงด้วย Windows DWM Acrylic Blur, แผ่นสกรีมสีเข้มโปร่งแสง (Dark Translucent Scrim Overlay), สเตจมุมมอง 3D ปรับขนาดตามหน้าจอพร้อมเงาสะท้อน, และการพรีวิวดูภาพโดยไม่กระทบภาพพื้นหลังจริงจนกว่าจะกด Enter
+- **กดครั้งเดียวติดอย่างแม่นยำ (Reliable Single-Press Execution):** ออกแบบสถาปัตยกรรมระดับกระบวนการใหม่ด้วย Win32 API (`FindWindow`, `IsWindowVisible`, และ `PostMessage(WM_CLOSE)`) การันตีว่าการกดปุ่ม `Alt + Shift + G` เพียง 1 ครั้งจะเปิดโหมดที่เลือกขึ้นมาทันทีเสมอ ไม่มีการทิ้งคำสั่งหรือต้องกดซ้ำเป็นครั้งที่สอง และหากเปิดอยู่แล้ว การกดซ้ำจะปิดหน้าต่างลงอย่างนุ่มนวล
+- **สลับโหมดได้ต่อเนื่องโดยหน้าต่างไม่ปิด (Seamless In-Place Mode Transition):** เมื่อคลิกปุ่มสลับระหว่าง Grid Mode และ Cover Flow Mode ระบบจะเปลี่ยนหน้าต่างให้อยู่บนหน้าจอต่อเนื่องทันที ไม่มีการปิดตัวเองหรือหลุดออกจากโปรแกรม
+- **ปรับสรีรศาสตร์ UI และระยะห่างตัวอักษร (Refined Ergonomics & Padding):** ปรับมุมโค้งมนขนาด 10px (`CornerRadius = 10`) พร้อมขยาย Padding แนวนอนเป็น 27px (`Padding = 27, 0, 27, 0`) ให้กับทุกปุ่มของ Provider และ Collection/Playlist ข้อความไม่เบียดชิดขอบกรอบอีกต่อไป
+- **เลื่อนดูรูปด้วยลูกกลิ้งเมาส์อย่างลื่นไหล (Smooth Mouse Wheel Scrolling):** รองรับการใช้ Scroll Wheel หมุนเลื่อนดูภาพอย่างสมบูรณ์แบบทั้งใน Grid Mode และ Cover Flow Mode
+- **เข้าถึงการตั้งค่าได้จากทั้ง 2 หน้าต่าง (2-Way Settings Accessibility):** ส่วนควบคุมโหมดแสดงผล (`[ Grid Mode ]` และ `[ Cover Flow ]`) ปรากฏให้เลือกใช้งานได้ทั้งใน Floating Side Panel และด้านบนของหน้า Fullscreen Cover Flow หากเปิดดู Cover Flow แบบเต็มจออยู่ สามารถเปลี่ยนค่าโหมดเปิดเริ่มต้นกลับเป็น Grid ได้ทันทีโดยไม่ต้องแก้ไขไฟล์ JSON ด้วยตนเอง
+- **Zero-Console Native WinExe:** คอมไพล์เป็นแอป GUI วินโดวส์โดยตรง (`wallpaper-gallery.exe`) ไร้หน้าต่าง Terminal หรือ CMD กะพริบขึ้นมากวนสายตา 100%
+- **Adaptive 2-Column Grid:** เลย์เอาต์ตาราง 2 คอลัมน์สมมาตรจัดเต็มพื้นที่ด้วย WPF `UniformGrid (Columns=2)` ไม่ห้อยแถวเดี่ยว ไร้ขอบว่างด้านขวาแม้จะมีแถบ Scrollbar แนวตั้ง
+- **ไอคอนเวกเตอร์คมชัดทุกความละเอียด (Resolution-Independent Vector Icons):** ปลอดจากการพึ่งพาฟอนต์ภายนอกหรือรหัส PUA ที่เสี่ยงต่อการแสดงผลเป็นกล่องสี่เหลี่ยม (tofu) 100% โดยใช้พาธเรขาคณิตเวกเตอร์แท้ของ WPF พร้อมฟอนต์ Segoe UI มาตรฐานของระบบ
 - **ความเร็วสูงระดับ In-Memory Fast-Path:** เรียก Win32 API โดยตรงและบันทึกสถานะแบบ Asynchronous ไม่มีการล็อก UI Thread สลับภาพได้เร็วใน 10ms เลื่อนดูรูปได้ลื่นไหล 60fps
 - **ระบบสำรวจคลัง Wallpaper Engine ครบวงจร:** สแกน Playlists, Default Projects ในตัวเครื่อง 19 รายการ และคลัง Steam Workshop ที่สมัครรับข้อมูลไว้ พร้อมดึงชื่อ ชนิด (`Scene`, `Video`, `Web`, `Application`) และรูปตัวอย่าง Preview มาแสดง
-- **ระบบ Auto Rotation หมุนเวียนภาพอัตโนมัติ:** ตั้งเวลาสลับภาพได้ (5m, 15m, 30m, 60m) มีตัวเลขนับถอยหลังสดแบบเรียลไทม์ (`00:00`) ปุ่ม Pause/Resume และหยุดนับเวลาชั่วคราวขณะเปิดดูพาเนล
-- **ดีไซน์ Windows Acrylic กระจกฝ้า:** ใช้ธีม Catppuccin Mocha สี Mantle แบบโปร่งแสง (`#181825`) มุมโค้งมน 16px และเงา Drop Shadow นุ่มนวล
-- **แอนิเมชันสไลด์เข้าจากขอบจอ:** เลื่อนเข้ามาจากขอบจออย่างสมูท (ตั้งค่าตำแหน่งขอบซ้ายหรือขวาได้ผ่าน `ui.position` ใน `wallpaper-manager.json`)
-- **ระบบ Auto-Hide & Toggle:** ปิดตัวเองอัตโนมัติเมื่อคลิกนอกหน้าต่างหรือเมื่อสลับโฟกัส (`autoHideOnFocusLost`), ปิดด้วยปุ่ม `Escape`, และกด `Alt + Shift + G` ซ้ำเพื่อเปิด/ปิดสลับกันได้ทันที
-- **ปุ่มเลือก Provider รูปแบบ Pill:** สลับระหว่าง Static, Wallpaper Engine และ Lively พร้อมไฟเรืองแสง Catppuccin Blue สำหรับ Engine ปัจจุบัน
-- **GlazeWM Window Rule:** กำหนดกฎ `commands: ['ignore']` ให้หน้าต่างลอยอยู่เหนือเดสก์ท็อปอย่างอิสระโดยไม่กระทบ Layout การจัดหน้าต่างของ GlazeWM ทั้ง Side Panel และ Cover Flow Window
+- **ดีไซน์ Windows Acrylic กระจกฝ้า:** ใช้ธีม Catppuccin Mocha สี Mantle แบบโปร่งแสง (`#181825`) มุมโค้งมน 10px และเงา Drop Shadow นุ่มนวล
+- **GlazeWM Window Rule:** กำหนดกฎ `commands: ['ignore']` ให้หน้าต่างลอยอยู่เหนือเดสก์ท็อปอย่างอิสระโดยไม่กระทบ Layout การจัดหน้าต่างของ GlazeWM ทั้ง Side Panel และ Fullscreen Cover Flow Window
 
 ### 7. คีย์ลัดและคำสั่งด่วนบน Terminal
 
 | คีย์ลัด | คำสั่ง / การทำงาน | รายละเอียด |
 | --- | --- | --- |
-| `Alt + W` | **สลับ Wallpaper ถัดไป** | ข้ามไปภาพถัดไปในคอลเลกชันปัจจุบัน (มีระบบ Mutex ล็อกไม่ให้ข้ามเบิ้ล) |
-| `Alt + Shift + G` | **เปิด/ปิด Floating Side Panel** | สลับเปิด/ปิดแถบพาเนลควบคุมวอลเปเปอร์สไตล์ Acrylic แก้วฝ้า ไร้หน้าต่าง Terminal |
+| `Alt + W` | **สลับ Wallpaper ถัดไป** | ข้ามไปภาพถัดไปทันทีผ่านตัวรัน Native C# (< 15ms มี Mutex ล็อกไม่ให้ข้ามเบิ้ล) |
+| `Alt + Shift + G` | **เปิด/ปิด Wallpaper Gallery** | สลับเปิด/ปิดโหมดแสดงผลที่เลือกไว้ (Grid Side Panel หรือ Fullscreen 3D Cover Flow) ติดทันทีในการกดครั้งเดียว |
 | `Alt + Ctrl + W` | **วนสลับ Engine Wallpaper** | สลับระหว่าง Static, Wallpaper Engine และ Lively พร้อมปลดฮุกและแสดง Toast บน Side Panel |
 
 คำสั่งลัดบน Windows Terminal (PowerShell 7):
@@ -389,7 +394,7 @@ wp-mgr -Action cycle-provider
 | **Workspaces (1-9)** | คลิกเพื่อสลับหน้าต่างไปยัง Workspace นั้น |
 | **Media Player** | คลิกซ้าย: เล่น/หยุดเพลง. คลิกที่ชื่อเพลงเพื่อเปิดโปรแกรมเล่นเพลง |
 | **นาฬิกา / วันที่** | คลิกซ้าย: เปิดแผงปฏิทินและเวลา |
-| **Wallpaper (`󰸉`)** | โหมด Wallpaper Engine: คลิกซ้ายเปลี่ยนภาพ, คลิกขวาหยุด/เล่นต่อ, คลิกกลางเปิด UI<br>โหมด Static: คลิกซ้ายเปิด Gallery Popup |
+| **Wallpaper (``)** | คลิกซ้าย: สลับไปภาพถัดไปทันที (เรียก `next-wallpaper.exe` ทำงานไวเหมือน `Alt + W` ใน < 15ms)<br>คลิกขวา: พักภาพ / เล่นต่อ (Pause/Resume) สำหรับ Wallpaper Engine (`pause-wallpaper.exe`) |
 | **Network / Wi-Fi** | คลิกซ้าย: เปิดเมนูดูรายละเอียดการเชื่อมต่อและ IP |
 | **Bluetooth** | คลิกซ้าย: เปิดเมนูจัดการอุปกรณ์ Bluetooth |
 | **ระดับเสียง** | เลื่อนลูกกลิ้งเมาส์เพื่อปรับเสียง, คลิกซ้ายเพื่อ Mute (ทำงานแทน ModernFlyouts โดยไม่แย่งคีย์ลัด) |

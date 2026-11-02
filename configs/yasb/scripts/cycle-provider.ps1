@@ -56,8 +56,12 @@ if ($managerScript) {
         }
         Log-CycleDiagnostic -Message "Current active provider before cycle: $curProv"
 
-        # Execute cycle-provider action via manager.ps1
-        $output = & $pwshExe -NoProfile -ExecutionPolicy Bypass -File "$managerScript" -Action cycle-provider 2>&1
+        # Execute cycle-provider action via manager.ps1 (in-process if pwsh 7+, else via pwshExe)
+        if ($PSVersionTable.PSVersion.Major -ge 7) {
+            $output = & $managerScript -Action cycle-provider 2>&1
+        } else {
+            $output = & $pwshExe -NoProfile -ExecutionPolicy Bypass -File "$managerScript" -Action cycle-provider 2>&1
+        }
         $outStr = ($output | Out-String).Trim()
         
         $newProv = $curProv

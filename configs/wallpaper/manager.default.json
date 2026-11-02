@@ -29,6 +29,12 @@
     "autoHideOnFocusLost": true,
     "closeOnOutsideClick": true,
     "animation": true,
+    "launchMode": "grid",
+    "coverFlow": {
+      "fullscreen": true,
+      "backgroundBlur": true,
+      "darkOverlayOpacity": 0.55
+    },
     "viewMode": {
       "WallpaperEngine": "coverflow",
       "Static": "grid",

@@ -188,33 +188,38 @@ Each GlazeWM workspace (1–9) can be mapped to its own wallpaper collection or 
 - **Transition Debounce:** Prevents rapid flickering or thrashing during rapid workspace switching.
 - **Auto-Lifecycle:** GlazeWM starts the watcher daemon automatically on launch and terminates it on exit.
 
-### 5. Alt + W Concurrency Protection & Debouncing
-The single-key wallpaper switch (`Alt + W`) is protected by a named system mutex (`Local\6e5tz_Wallpaper_Mutex`) and a 350ms high-resolution timer debounce:
-- Completely eliminates duplicate invocations and rapid double-switching.
+### 5. High-Speed Alt + W Launcher & Concurrency Protection
+The single-key wallpaper switch (`Alt + W`) is powered by an ultra-fast native C# executable (`next-wallpaper.exe`, < 15ms execution time) and protected by a named system mutex (`Local\6e5tz_Wallpaper_Mutex`) with a 350ms debouncer:
+- Eliminates PowerShell startup overhead, terminal flashing, and shell delays.
+- Completely prevents duplicate invocations and rapid double-switching.
 - Guarantees that **one keypress triggers exactly one wallpaper transition**.
 - Provider-specific commands are invoked accurately without redundant next commands.
 
-### 6. Floating Acrylic Side Panel UI (`Alt + Shift + G`) & Standalone 3D Cover Flow
-Press **`Alt + Shift + G`** or click the wallpaper icon in the YASB bar to toggle the sleek, floating side panel:
+### 6. Display Mode System & Wallpaper Gallery (`Alt + Shift + G`)
+Press **`Alt + Shift + G`** or click the wallpaper icon in the YASB bar to toggle the wallpaper experience. The application features **Two Distinct Display Modes** with seamless single-press shortcut execution:
+
+- **Configurable Opening Mode:** Choose between **Grid Mode** (Default) or **Cover Flow Mode** directly from the UI Settings. Your preference persists across restarts in `wallpaper-manager.json` (`ui.launchMode`).
+  - **Grid Mode (Default):** Opens the sleek **Floating Acrylic Side Panel** docking to your screen edge with an adaptive 2-column library grid, provider selector, and collection browsing. Automatically routes to Workshop Subscriptions when Wallpaper Engine is active.
+  - **Cover Flow Mode:** Opens a true **Fullscreen 3D Cover Flow Experience** filling the entire active monitor with live Windows DWM desktop acrylic blur, a dark translucent scrim overlay, responsive 3D perspective stage with reflections, and non-destructive preview navigation.
+- **Reliable Single-Press Execution:** Engineered at the architecture level using Win32 `FindWindow`, `IsWindowVisible`, and `PostMessage(WM_CLOSE)` to guarantee that one physical press of `Alt + Shift + G` always opens the active mode on the first attempt without dropped events or double-press delays. Pressing again toggles it closed cleanly.
+- **Seamless In-Place Mode Transition:** Switching between Grid Mode and Cover Flow Mode via the segmented buttons keeps the application open and transitions smoothly in-place without abruptly closing or terminating the window.
+- **Refined UI Ergonomics & Padding:** Modernized with 10px rounded pill corners (`CornerRadius = 10`) and 27px horizontal pill padding (`Padding = 27, 0, 27, 0`) across all Provider and Collection pills, ensuring text labels never touch borders.
+- **Smooth Mouse Wheel Scrolling:** Full mouse wheel scroll support across both Grid Mode and Cover Flow Mode for seamless library navigation.
+- **2-Way Settings Accessibility:** Display mode settings (`[ Grid Mode ]` and `[ Cover Flow ]`) are available in **BOTH** experiences. When browsing Cover Flow fullscreen, you can switch the default opening mode back or jump directly to the side panel without manual JSON editing.
 - **Zero-Console Native WinExe:** Compiled as a native Windows GUI executable (`wallpaper-gallery.exe`). Absolutely zero console windows, CMD prompts, or terminal flashing.
-- **Adaptive 2-Column Grid:** Balanced, edge-to-edge symmetric grid layout with dynamic thumbnail width calculation based on available panel width, eliminating single-column wrapping and empty right margins.
-- **Standalone Centered 3D Cover Flow Window:** Click the "3D Cover Flow" button in the side panel or run `wallpaper-gallery.exe -CoverFlow` to open an Apple Cover Flow-inspired standalone window centered on your screen. Left/Right arrow keys dynamically preview wallpapers in 3D perspective without modifying your desktop; press `Enter` to apply, and `Escape` to close.
-- **Pure Vector & Standard Unicode Typography:** Completely free of private-use font dependencies (no broken tofu boxes or missing glyphs). Uses crisp geometric accents (`◀`, `▶`, `✓`, `★`) and clean typography.
+- **Adaptive 2-Column Grid:** Balanced, edge-to-edge symmetric grid layout powered by WPF `UniformGrid (Columns=2)`, eliminating single-column wrapping and empty right margins even when vertical scrollbars appear.
+- **Resolution-Independent Vector Icons:** Completely free of private-use font dependencies (no broken tofu boxes or missing glyphs). Uses native vector geometry paths and crisp standard typography.
 - **Blazing Fast In-Memory Engine:** Direct native Win32 P/Invoke and asynchronous state persistence eliminate UI thread freezes, ensuring sub-10ms wallpaper activation and smooth 60fps scrolling.
 - **Wallpaper Engine Library Discovery:** Discovers user playlists, 19 built-in default projects, and all subscribed Steam Workshop items with titles, types (`Scene`, `Video`, `Web`, `Application`), and preview thumbnails.
-- **Auto Rotation Mode:** Built-in auto rotation engine with configurable intervals (5m, 15m, 30m, 60m), real-time countdown display (`00:00`), pause/resume toggle, and smart pause-while-browsing.
-- **Windows Acrylic Frosted Glass Aesthetic:** Catppuccin Mocha theme with translucent Mantle background (`#181825`), 16px rounded corners, and soft drop shadow.
-- **Smooth Edge Slide-in:** Glides smoothly from the screen edge upon trigger with customizable side docking (`position: "right" | "left"` in `wallpaper-manager.json`).
-- **Auto-Hide & Toggle Support:** Automatically closes on outside clicks or when focus is lost (`autoHideOnFocusLost`), closes on `Escape`, and toggles open/close on `Alt + Shift + G`.
-- **Interactive Provider Selector:** Seamless pills to switch between Static, Wallpaper Engine, and Lively with glowing Catppuccin Blue badge for the active provider.
+- **Windows Acrylic Frosted Glass Aesthetic:** Catppuccin Mocha theme with translucent Mantle background (`#181825`), 10px rounded corners, and soft drop shadow.
 - **GlazeWM Window Rule:** Fully registered with `commands: ['ignore']` so both Side Panel and Cover Flow windows float without affecting window tiling or gaps.
 
 ### 7. Wallpaper Shortcuts & Terminal Commands
 
 | Hotkey | Action | Description |
 | --- | --- | --- |
-| `Alt + W` | **Next Wallpaper** | Advances to next wallpaper in active collection (single switch guaranteed via concurrency lock) |
-| `Alt + Shift + G` | **Floating Side Panel** | Toggles the Catppuccin Mocha Acrylic side panel (zero terminal window) |
+| `Alt + W` | **Next Wallpaper** | Advances to next wallpaper instantly via native C# launcher (< 15ms, concurrency locked) |
+| `Alt + Shift + G` | **Toggle Wallpaper Gallery** | Opens your selected opening mode (Grid Side Panel or Fullscreen 3D Cover Flow) on the first press |
 | `Alt + Ctrl + W` | **Cycle Provider** | Safely transitions between Static, Wallpaper Engine, and Lively with Side Panel toast notice |
 
 Inside Windows Terminal (PowerShell 7), manage wallpapers directly with short aliases:
@@ -389,7 +394,7 @@ All window management shortcuts use `Alt` to prevent interference with Windows n
 | **Workspaces (1-9)** | Click to navigate directly to workspace |
 | **Media Player** | Left-click: Play/Pause. Click track name to focus media application |
 | **Clock / Date** | Left-click: Open calendar and time panel |
-| **Wallpaper (`󰸉`)** | Wallpaper Engine mode: Left-click next, Right-click pause, Middle-click open UI.<br>Static mode: Left-click opens gallery popup |
+| **Wallpaper (``)** | Left-click: Instantly cycles to next wallpaper (`next-wallpaper.exe`, same as `Alt + W` in < 15ms).<br>Right-click: Toggles pause / resume playback for Wallpaper Engine (`pause-wallpaper.exe`). |
 | **Network / Wi-Fi** | Left-click: Open connection details and IP menu |
 | **Bluetooth** | Left-click: Open Bluetooth devices menu |
 | **Volume** | Scroll wheel: Adjust volume. Left-click: Toggle mute (replaces ModernFlyouts with 0% hotkey conflict) |

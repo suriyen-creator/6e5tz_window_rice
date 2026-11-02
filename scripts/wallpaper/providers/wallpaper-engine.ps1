@@ -301,6 +301,7 @@ function Set-WallpaperEngineWallpaper {
         if ($success) {
             $state = Get-WpState
             $state.currentWallpaper = $PathOrPlaylist
+            $state.wallpaperEngineWallpaper = $PathOrPlaylist
             $state.activeProvider = 'WallpaperEngine'
             $null = Save-WpState -State $state
         }
@@ -317,6 +318,7 @@ function Set-WallpaperEngineWallpaper {
         if ($success) {
             $state = Get-WpState
             $state.currentWallpaper = $full
+            $state.wallpaperEngineWallpaper = $full
             $state.activeProvider = 'WallpaperEngine'
             $null = Save-WpState -State $state
         }
@@ -328,6 +330,7 @@ function Set-WallpaperEngineWallpaper {
     if ($success) {
         $state = Get-WpState
         $state.currentWallpaper = $PathOrPlaylist
+        $state.wallpaperEngineWallpaper = $PathOrPlaylist
         $state.activeProvider = 'WallpaperEngine'
         $null = Save-WpState -State $state
     }
@@ -337,20 +340,45 @@ function Set-WallpaperEngineWallpaper {
 function Next-WallpaperEngineWallpaper {
     param([string]$CollectionName = '')
     
-    # If a specific playlist was passed and differs from current, switch playlist
-    if (-not [string]::IsNullOrWhiteSpace($CollectionName) -and $CollectionName -ne 'Default') {
+    $targetCol = $CollectionName
+    if ([string]::IsNullOrWhiteSpace($targetCol) -or $targetCol -eq 'Default') {
+        $targetCol = 'Workshop Subscriptions'
+    }
+    
+    # Try finding wallpaper projects in the collection
+    $items = @(Get-WallpaperEngineWallpapers -CollectionName $targetCol)
+    if ($items.Count -eq 0 -and $targetCol -ne 'Default Projects') {
+        $items = @(Get-WallpaperEngineWallpapers -CollectionName 'Default Projects')
+    }
+    if ($items.Count -eq 0 -and $targetCol -ne 'Workshop Subscriptions') {
+        $items = @(Get-WallpaperEngineWallpapers -CollectionName 'Workshop Subscriptions')
+    }
+    
+    if ($items.Count -gt 0) {
         $state = Get-WpState
-        $currPl = if ($null -ne $state.activeCollection.PSObject.Properties['WallpaperEngine']) {
-            [string]$state.activeCollection.WallpaperEngine
-        } else { '' }
-
-        if ($currPl -ne $CollectionName) {
-            Set-WallpaperEngineWallpaper -PathOrPlaylist $CollectionName | Out-Null
-            return "Playlist:$CollectionName"
+        $current = if ($null -ne $state.PSObject.Properties['wallpaperEngineWallpaper'] -and -not [string]::IsNullOrWhiteSpace($state.wallpaperEngineWallpaper)) {
+            [string]$state.wallpaperEngineWallpaper
+        } else {
+            [string]$state.currentWallpaper
         }
+        
+        $currentIndex = -1
+        for ($i = 0; $i -lt $items.Count; $i++) {
+            $itemPath = [string]$items[$i].Path
+            $parentDir = if (-not [string]::IsNullOrWhiteSpace($itemPath)) { [System.IO.Path]::GetDirectoryName($itemPath) } else { "" }
+            if ($itemPath -ieq $current -or ($parentDir -and $parentDir -ieq $current)) {
+                $currentIndex = $i
+                break
+            }
+        }
+        
+        $nextIndex = ($currentIndex + 1) % $items.Count
+        $nextItem = $items[$nextIndex]
+        Write-WpLog -Message "Advancing Wallpaper Engine: $($nextItem.Title) ($($nextIndex + 1)/$($items.Count))" -Level Info
+        return (Set-WallpaperEngineWallpaper -PathOrPlaylist $nextItem.Path)
     }
 
-    Write-WpLog -Message "Advancing to next Wallpaper Engine wallpaper..." -Level Info
+    Write-WpLog -Message "Advancing to next Wallpaper Engine wallpaper via CLI..." -Level Info
     $success = Invoke-WallpaperEngineCli -Arguments @('-control', 'nextWallpaper')
     if ($success) { return 'next' }
     return $null

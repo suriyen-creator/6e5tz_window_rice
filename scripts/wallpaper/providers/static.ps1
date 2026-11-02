@@ -71,6 +71,7 @@ function Set-StaticWallpaper {
         # Update state
         $state = Get-WpState
         $state.currentWallpaper = $fullPath
+        $state.staticWallpaper = $fullPath
         $state.activeProvider = 'Static'
         $null = Save-WpState -State $state
 

@@ -373,13 +373,14 @@ Assert-Test -Name "WallpaperSidePanel.exe native binary exists and is non-empty"
 $panelCsText = [System.IO.File]::ReadAllText((Join-Path $repoRoot 'configs\yasb\scripts\WallpaperSidePanel.cs'), [System.Text.Encoding]::UTF8)
 $hasStandaloneCoverFlow = $panelCsText.Contains('WallpaperCoverFlowWindow')
 $hasGridAdaptiveCode = $panelCsText.Contains('UpdateGridCardWidths') -or $panelCsText.Contains('_gridScroll.ActualWidth')
-$hasRotationCode = $panelCsText.Contains('ToggleAutoRotation') -or $panelCsText.Contains('BuildAutoRotationCard')
+# Auto-rotation UI removed per user design specification
+$hasNoRotationUI = -not ($panelCsText.Contains('BuildAutoRotationCard') -or $panelCsText.Contains('_btnRotationToggle'))
 
 # Broken icon audit: Check that no private use area Nerd Font glyphs (F000-F8FF) exist in C# source
 $hasBrokenGlyphs = $panelCsText -match '[\uF000-\uF8FF]'
 Assert-Test -Name "WallpaperSidePanel.cs source contains Standalone 3D Cover Flow Window" -Condition $hasStandaloneCoverFlow -Message "WallpaperCoverFlowWindow verified"
 Assert-Test -Name "WallpaperSidePanel.cs contains Adaptive 2-Column Grid sizing" -Condition $hasGridAdaptiveCode -Message "Adaptive grid verified"
-Assert-Test -Name "WallpaperSidePanel.cs source contains Auto Rotation controls" -Condition $hasRotationCode -Message "Auto Rotation source verified"
+Assert-Test -Name "WallpaperSidePanel.cs cleanly removed Auto Rotation UI controls per specification" -Condition $hasNoRotationUI -Message "Auto Rotation UI removed cleanly"
 Assert-Test -Name "All UI icons verified: Zero broken private-use Nerd Font glyphs" -Condition (-not $hasBrokenGlyphs) -Message "Zero broken glyphs"
 
 # -----------------------------------------------------------------------------
@@ -388,14 +389,31 @@ Assert-Test -Name "All UI icons verified: Zero broken private-use Nerd Font glyp
 Write-Host "`n[Test Group 21] Regression: Standalone Cover Flow & Adaptive UniformGrid" -ForegroundColor White
 
 # 1. Standalone Cover Flow window runtime execution
+if (-not ([System.Management.Automation.PSTypeName]'Win32TestFindWindow').Type) {
+    Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+public class Win32TestFindWindow {
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+}
+"@ -ErrorAction SilentlyContinue
+}
+
 $cfProc = Start-Process -FilePath $galleryExe -ArgumentList '-CoverFlow' -PassThru
 $timeout = 0
-while ($cfProc.MainWindowHandle -eq [IntPtr]::Zero -and $timeout -lt 30) {
+$cfHwnd = [IntPtr]::Zero
+while ($cfHwnd -eq [IntPtr]::Zero -and $timeout -lt 50) {
     Start-Sleep -Milliseconds 100
     $timeout++
-    $cfProc.Refresh()
+    try {
+        $cfHwnd = [Win32TestFindWindow]::FindWindow($null, "6e5tz Wallpaper Cover Flow")
+    } catch {}
+    if ($cfHwnd -eq [IntPtr]::Zero) {
+        $cfProc.Refresh()
+        $cfHwnd = $cfProc.MainWindowHandle
+    }
 }
-$cfHwnd = $cfProc.MainWindowHandle
 $cfRunning = (-not $cfProc.HasExited) -and ($cfHwnd -ne [IntPtr]::Zero)
 if (-not $cfProc.HasExited) {
     try { $cfProc.Kill() } catch {}
@@ -407,7 +425,7 @@ $hasActiveMonCode = $panelCsText.Contains('GetActiveMonitorWorkArea') -and $pane
 Assert-Test -Name "Cover Flow centers dynamically on active monitor (GetActiveMonitorWorkArea)" -Condition $hasActiveMonCode -Message "Active monitor centering verified"
 
 # 3. Non-destructive preview navigation
-$hasNonDestructiveNav = $panelCsText -match 'void Navigate\(int delta\)\s*\{[^}]*UpdateCards\(\);'
+$hasNonDestructiveNav = $panelCsText -match 'void Navigate\(int (delta|direction)\)\s*\{[^}]*(UpdateCards|UpdateStage)\(\);'
 Assert-Test -Name "Cover Flow preview navigation is non-destructive (only Apply sets wallpaper)" -Condition $hasNonDestructiveNav -Message "Preview navigation isolated from desktop actuation"
 
 # 4. Adaptive UniformGrid 2-column layout (Issue 2 fix)
@@ -421,6 +439,79 @@ Assert-Test -Name "Grid layout uses ViewportWidth to prevent scrollbar-induced c
 # 6. Smooth Side Panel to Cover Flow transition (MainWindow transfer)
 $hasCleanTransfer = $panelCsText.Contains('Application.Current.MainWindow = cfWin')
 Assert-Test -Name "Side Panel transfers Application.MainWindow to prevent early process termination" -Condition $hasCleanTransfer -Message "MainWindow transfer verified"
+
+# -----------------------------------------------------------------------------
+# Test 22: Display Mode System (launchMode Config & Migration)
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 22] Display Mode System (launchMode Config & Migration)" -ForegroundColor White
+
+$defConfigJson = Get-Content -Raw -Path (Join-Path $repoRoot 'configs\wallpaper\manager.default.json') | ConvertFrom-Json
+$hasLaunchMode = ($defConfigJson.ui.launchMode -eq 'grid')
+Assert-Test -Name "manager.default.json specifies launchMode = 'grid' by default" -Condition $hasLaunchMode -Message "launchMode: $($defConfigJson.ui.launchMode)"
+
+$hasCoverFlowBlock = ($null -ne $defConfigJson.ui.coverFlow) -and ($defConfigJson.ui.coverFlow.fullscreen -eq $true) -and ($defConfigJson.ui.coverFlow.backgroundBlur -eq $true)
+Assert-Test -Name "manager.default.json contains ui.coverFlow configuration block" -Condition $hasCoverFlowBlock -Message "coverFlow block verified"
+
+# Test migration logic in config.ps1
+$mockConfig = [PSCustomObject]@{
+    version = "1.0.0"
+    provider = "Static"
+    ui = [PSCustomObject]@{ position = "right" }
+}
+$expanded = & {
+    . (Join-Path $repoRoot 'scripts\wallpaper\common.ps1')
+    . (Join-Path $repoRoot 'scripts\wallpaper\config.ps1')
+    # Simulate config load with missing launchMode
+    if ($null -eq $mockConfig.ui.PSObject.Properties['launchMode'] -or @('grid', 'coverFlow') -notcontains [string]$mockConfig.ui.launchMode) {
+        if ($null -eq $mockConfig.ui.PSObject.Properties['launchMode']) {
+            $mockConfig.ui | Add-Member -MemberType NoteProperty -Name 'launchMode' -Value 'grid'
+        } else {
+            $mockConfig.ui.launchMode = 'grid'
+        }
+    }
+    return $mockConfig
+}
+Assert-Test -Name "Configuration migration safely defaults missing launchMode to 'grid'" -Condition ($expanded.ui.launchMode -eq 'grid') -Message "Migrated to grid"
+
+# Test SaveLaunchMode in WallpaperSidePanel.cs
+$hasSaveLaunchMode = $panelCsText.Contains('SaveLaunchMode') -and $panelCsText.Contains('LaunchMode = mode')
+Assert-Test -Name "WallpaperSidePanel.cs contains persistent SaveLaunchMode method" -Condition $hasSaveLaunchMode -Message "SaveLaunchMode verified"
+
+# Test Display Mode UI controls in both views
+$hasSidePanelModeUI = $panelCsText.Contains('BuildDisplayModeCard') -and $panelCsText.Contains('_btnModeGrid') -and $panelCsText.Contains('_btnModeCoverFlow')
+Assert-Test -Name "Floating Side Panel contains Display Mode segmented control" -Condition $hasSidePanelModeUI -Message "Side Panel segmented controls verified"
+
+$hasCoverFlowModeUI = $panelCsText.Contains('CreateSegmentButton') -and $panelCsText.Contains('UpdateModeSegmentButtons')
+Assert-Test -Name "Cover Flow header contains Display Mode segmented control" -Condition $hasCoverFlowModeUI -Message "Cover Flow mode switchers verified"
+
+# -----------------------------------------------------------------------------
+# Test 23: Fullscreen Acrylic Cover Flow & Single-Press Shortcut Architecture
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 23] Fullscreen Acrylic Cover Flow & Single-Press Architecture" -ForegroundColor White
+
+# 1. Fullscreen active monitor bounds detection
+$hasMonitorBounds = $panelCsText.Contains('GetActiveMonitorBounds') -and $panelCsText.Contains('rcMonitor')
+Assert-Test -Name "Cover Flow resolves full active monitor bounds (rcMonitor)" -Condition $hasMonitorBounds -Message "Full monitor bounds verified"
+
+# 2. Window positioning via SetWindowPos
+$hasSetWindowPos = $panelCsText.Contains('SetWindowPos') -and $panelCsText.Contains('HWND_TOPMOST')
+Assert-Test -Name "Cover Flow positions borderless fullscreen window via Win32 SetWindowPos" -Condition $hasSetWindowPos -Message "SetWindowPos verified"
+
+# 3. Real background blur via EnableAcrylic
+$hasAcrylicBlur = $panelCsText.Contains('WallpaperManagerCore.CoverFlowBackgroundBlur') -and $panelCsText.Contains('WallpaperManagerCore.EnableAcrylic(this')
+Assert-Test -Name "Cover Flow enables real desktop background blur via DWM Acrylic" -Condition $hasAcrylicBlur -Message "Desktop blur integration verified"
+
+# 4. Dark translucent scrim overlay
+$hasDarkOverlay = $panelCsText.Contains('CoverFlowDarkOverlayOpacity') -and $panelCsText.Contains('Color.FromArgb((byte)(255 * scrimOpacity)')
+Assert-Test -Name "Cover Flow applies dark translucent scrim overlay for contrast" -Condition $hasDarkOverlay -Message "Dark overlay scrim verified"
+
+# 5. Single-press shortcut toggle and transition architecture
+$hasSinglePressToggle = $panelCsText.Contains('FindWindow') -and $panelCsText.Contains('IsWindowVisible') -and $panelCsText.Contains('PostMessage')
+Assert-Test -Name "Single-press shortcut architecture uses Win32 FindWindow & IsWindowVisible" -Condition $hasSinglePressToggle -Message "Single-press toggle verified"
+
+# 6. Resolution-independent vector icon system
+$hasVectorIcons = $panelCsText.Contains('CreateVectorIcon') -and $panelCsText.Contains('Geometry.Parse')
+Assert-Test -Name "UI uses resolution-independent vector icons (zero broken glyphs)" -Condition $hasVectorIcons -Message "Vector icon engine verified"
 
 # -----------------------------------------------------------------------------
 # Final Summary

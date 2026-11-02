@@ -112,6 +112,14 @@ function Resolve-TargetStaticWallpaper {
         return [string]$hist.wallpaper
     }
 
+    # Step 3.5: Check cached static wallpaper (never overwritten by Wallpaper Engine)
+    if ($null -ne $state.PSObject.Properties['staticWallpaper'] -and -not [string]::IsNullOrWhiteSpace($state.staticWallpaper) -and (Test-Path -LiteralPath $state.staticWallpaper)) {
+        $st = [string]$state.staticWallpaper
+        if ($st -match '\.(jpg|jpeg|png|webp|bmp)$') {
+            return $st
+        }
+    }
+
     # Step 4: Check if current wallpaper in state is valid and belongs to collection
     if ($null -ne $state.PSObject.Properties['currentWallpaper'] -and -not [string]::IsNullOrWhiteSpace($state.currentWallpaper) -and (Test-Path -LiteralPath $state.currentWallpaper)) {
         $curr = [string]$state.currentWallpaper
@@ -137,6 +145,12 @@ function Resolve-TargetStaticWallpaper {
             }
         }
     } catch {}
+
+    # Step 7: Fallback to repository wallpapers
+    $repoWp = Join-Path $PSScriptRoot '..\..\wallpapers\01.png'
+    if (Test-Path -LiteralPath $repoWp) {
+        return (Resolve-Path $repoWp).Path
+    }
 
     return $null
 }
@@ -273,9 +287,7 @@ function Cycle-NextProvider {
                 $switchResult = Switch-Provider -NewProvider $candidate
                 Write-WpDiagnosticLog -Category 'CYCLE_PROVIDER' -Message "Switching result: $switchResult | Active provider is now $candidate"
                 
-                # Open Floating Side Panel with visual feedback
-                Open-WallpaperSidePanel -Notice "Switched to $candidate Wallpaper" -Provider $candidate
-
+                Write-WpLog -Message "Switched provider to $candidate (Silent Cycle)" -Level Success
                 return $candidate
             } catch {
                 Write-WpDiagnosticLog -Category 'CYCLE_PROVIDER' -Message "Switching failed for $candidate" -ErrorDetails $_.Exception.Message

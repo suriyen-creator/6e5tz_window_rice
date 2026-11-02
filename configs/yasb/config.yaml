@@ -1,4 +1,4 @@
-# This is default and very simple configuration file for Yasb. 
+﻿# This is default and very simple configuration file for Yasb. 
 # For more information about configuration options, please visit the Wiki https://github.com/amnweb/yasb/wiki
 watch_stylesheet: true
 watch_config: true
@@ -389,15 +389,11 @@ widgets:
   wallpapers:
     type: "yasb.custom.CustomWidget"
     options:
-      class_name: "wallpapers-widget"
-      label: "<span>󰸉</span>"
-      label_alt: "<span>󰸉</span>"
-      tooltip: true
-      tooltip_label: "Wallpaper Engine\n• Left click: Next Wallpaper\n• Right click: Pause / Resume\n• Middle click: Open Wallpaper Engine"
+      label: "<span></span>"
+      class_name: "wallpapers"
       callbacks:
-        on_left: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__/.config/yasb/scripts/wallpaper_engine_control.ps1\" -Action next"
-        on_right: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__/.config/yasb/scripts/wallpaper_engine_control.ps1\" -Action toggle"
-        on_middle: "exec powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"__USERPROFILE__/.config/yasb/scripts/wallpaper_engine_control.ps1\" -Action open"
+        on_left: "exec C:/Users/suriy/.config/yasb/scripts/next-wallpaper.exe"
+        on_right: "exec C:/Users/suriy/.config/yasb/scripts/pause-wallpaper.exe"
   cava:
     type: "yasb.cava.CavaWidget"
     options:
