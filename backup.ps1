@@ -464,6 +464,11 @@ Copy-OptionalCandidates -Name 'Terminal Tools' -Sources @(
     (Join-Path $env:USERPROFILE '.config\tools')
 ) -Destination (Join-Path $ConfigsRoot 'tools') -AllowSensitiveExample
 
+# 18. Universal Wallpaper Manager
+Copy-OptionalCandidates -Name 'Universal Wallpaper Manager' -Sources @(
+    (Join-Path $env:USERPROFILE '.config\6e5tz\wallpaper-manager.json')
+) -Destination (Join-Path $ConfigsRoot 'wallpaper') -AllowSensitiveExample
+
 Write-Host ''
 Write-Host 'Backup summary' -ForegroundColor White
 $Results | Group-Object Status | Sort-Object Name | ForEach-Object {

@@ -147,32 +147,100 @@ pip install windows-curses
 
 ---
 
-## ระบบจัดการ Wallpaper (2 โหมด)
+## ระบบจัดการ Wallpaper สากล (Universal Wallpaper Manager)
 
-### 1. โหมด Wallpaper Engine
-เหมาะสำหรับเครื่องที่มี Wallpaper Engine บน Steam ตัววิดเจ็ตสื่อสารกับโปรเซสผ่าน CLI โดยตรง:
-- **คลิกซ้ายที่ `󰸉`:** สลับไปวอลเปเปอร์ถัดไปในเพลย์ลิสต์ (`nextWallpaper`)
-- **คลิกขวาที่ `󰸉`:** หยุดชั่วคราว / เล่นต่อ เพื่อประหยัดทรัพยากรการ์ดจอ
-- **คลิกกลางที่ `󰸉`:** เปิดหน้าต่างหลัก Wallpaper Engine
+6e5tz มาพร้อมกับระบบบริหารจัดการภาพพื้นหลังสไตล์ Linux สำหรับ Windows รองรับ Engine ทั้ง 3 รูปแบบอย่างอิสระ, จัดการภาพพื้นหลังแยกตามหมวดหมู่โฟลเดอร์ (Folder Collections), ซิงค์เปลี่ยนวอลเปเปอร์อัตโนมัติตาม GlazeWM Workspace ผ่าน IPC WebSocket, ระบบล็อกการกดปุ่มซ้ำ (Concurrency Mutex & Debounce) และ Wallpaper Gallery UI สไตล์ Catppuccin Mocha
 
-### 2. โหมด Static Wallpaper
-เหมาะสำหรับคนที่ใช้ภาพพื้นหลังปกติของ Windows โดยไม่ต้องรันโปรแกรมเสริม:
-- **คลิกซ้ายที่ `󰸉`:** เปิด Popup Gallery สวยงาม แสดงรูปตัวอย่างขนาดย่อ สามารถคลิกเลือกภาพเพื่อเปลี่ยนพื้นหลังหน้าจอได้ทันที
-- ดึงรูปภาพจากโฟลเดอร์ `%USERPROFILE%\Pictures\Wallpapers\`
-- มีภาพ Wallpaper ความละเอียดสูงแถมมาให้ 10 รูปในโฟลเดอร์ `wallpapers/`
+### 1. รองรับ 3 Wallpaper Provider อย่างอิสระ
+- **Wallpaper Engine:** สื่อสารกับ Wallpaper Engine บน Steam ผ่าน CLI ทางการ (`wallpaper64.exe -control nextWallpaper / openPlaylist / openWallpaper / pause / play / stop`) และอ่านรายชื่อ Playlists จาก `config.json` โดยตรง โดยไม่ต้องเสียเวลาสแกนไฟล์ Workshop ทั้งฮาร์ดดิสก์
+- **Lively Wallpaper:** เชื่อมต่อกับ Lively Wallpaper CLI (`livelycu setwp --file / app --play / closewp`) รองรับภาพเคลื่อนไหว วิดีโอ และ Local Library พร้อมระบบตรวจจับสถานะการติดตั้งอย่างปลอดภัย
+- **Static Wallpaper:** ทำงานผ่าน Windows Native Win32 API (`SystemParametersInfo(SPI_SETDESKWALLPAPER)`) รองรับไฟล์ภาพ JPG, PNG, WEBP, โหมดสุ่มภาพ (Shuffle) และระบบติดดาวภาพโปรด (Favorites) ใช้งานได้ทันทีโดยไม่ต้องลงโปรแกรมเสริมใดๆ
 
-### ปุ่มลัดสลับ Wallpaper สากล:
-- กด **`Alt + W`** ได้จากทุกหน้าจอเพื่อเปลี่ยนไปภาพถัดไปทันที ระบบจะตรวจจับโหมดอัตโนมัติ (หากเปิด Wallpaper Engine จะสั่งข้ามเพลง/ภาพในเพลย์ลิสต์ หากเป็น Static จะสลับรูปในโฟลเดอร์ให้ทันที)
+### 2. ระบบสลับ Engine (Engine Selector)
+สามารถสลับเปลี่ยน Engine ไปมาได้อย่างราบรื่นโดยไม่ต้องรีสตาร์ต Rice หรือปิดโปรแกรมใดๆ:
+- ตรวจจับ Engine ที่ติดตั้งในระบบโดยอัตโนมัติ (ตรวจจาก Registry, Steam Library, Process ที่กำลังรัน และโฟลเดอร์มาตรฐาน)
+- จดจำประวัติและสถานะภาพพื้นหลังล่าสุดของแต่ละ Provider แยกจากกัน
+- ป้องกันไม่ให้ Engine สองตัวทำงานทับซ้อนกัน (ปิดหรือหยุด Engine เดิมชั่วคราวเมื่อสลับไปใช้อีกตัว)
+- หากสั่งใช้งาน Engine ที่ไม่ได้ติดตั้ง จะแจ้งเตือนและ Fallback กลับมายัง Static Wallpaper ให้อัตโนมัติโดยไม่เกิด Crash
 
-### คำสั่งสลับโหมดได้ทุกเมื่อ:
 ```powershell
-# เปิดเมนู Interactive ให้เลือกโหมด
-.\scripts\switch-wallpaper-mode.ps1
+# สลับ Provider ผ่านคำสั่งหรือเมนู
+wp-provider WallpaperEngine
+wp-provider Lively
+wp-provider Static
 
-# หรือสั่งสลับตรงๆ
-.\scripts\switch-wallpaper-mode.ps1 -Mode Static
-.\scripts\switch-wallpaper-mode.ps1 -Mode WallpaperEngine
+# หรือวนรอบ Provider ถัดไปที่ติดตั้งอยู่ในเครื่อง
+wp-mgr -Action cycle-provider
 ```
+
+### 3. ระบบคอลเลกชันโฟลเดอร์ (Folder-Based Collections)
+คุณเป็นผู้ควบคุมโฟลเดอร์ภาพพื้นหลังด้วยตัวเอง—ระบบจะ**ไม่**สแกนและดึงภาพมั่วจากไดรฟ์ของคุณ:
+- จัดระเบียบภาพเป็นโฟลเดอร์ย่อยภายใต้ Root Directory (เช่น `Pictures/Wallpapers/Anime`, `Pictures/Wallpapers/Nature`, `Pictures/Wallpapers/Minimal`)
+- รองรับการเพิ่ม ลบ และเปลี่ยนชื่อโฟลเดอร์คอลเลกชัน
+- กรองเฉพาะไฟล์ภาพที่รองรับอย่างเข้มงวด (`.jpg`, `.jpeg`, `.png`, `.webp`, `.mp4`, `.webm`) และเพิกเฉยต่อไฟล์ขยะหรือไฟล์ระบบ (`desktop.ini`, `.txt`, `.log`, `.git`) โดยสิ้นเชิง
+- ปลอดภัยต่อโฟลเดอร์ว่าง หรือไฟล์ภาพที่ถูกลบ/ย้ายที่
+
+### 4. สลับ Wallpaper ตาม Workspace สไตล์ Linux (GlazeWM Workspace Wallpapers)
+กำหนดให้แต่ละ Workspace (1–9) ของ GlazeWM ใช้คอลเลกชันภาพพื้นหลังหรือ Engine แตกต่างกัน เมื่อสลับ Workspace วอลเปเปอร์จะเปลี่ยนตามให้ทันที:
+- **Event-Driven IPC:** เชื่อมต่อ GlazeWM ผ่าน WebSocket ที่ `ws://127.0.0.1:6123` และ Subscribe Event `workspace_activated` โดยตรง
+- **ไม่กินทรัพยากร CPU:** ไม่ใช้ลูป Polling ที่มีความถี่สูง ทำงานเฉพาะเมื่อมี Event การเปลี่ยน Workspace เกิดขึ้นจริงเท่านั้น
+- **จดจำภาพล่าสุด:** แต่ละ Workspace จะจำภาพล่าสุดที่เปิดไว้ ทำให้เมื่อสลับกลับมาจะเห็นภาพเดิมต่อเนื่อง
+- **ระบบ Debounce:** ป้องกันอาการจอกระพริบจากการกดสลับ Workspace ถี่ๆ
+- **ระบบ Daemon อัตโนมัติ:** GlazeWM จะสั่งรัน Watcher Daemon ตอนเปิดเครื่อง และปิดตัวลงให้อัตโนมัติเมื่อออกจาก GlazeWM
+
+### 5. ป้องกันการกดเบิ้ลของ Alt + W (Concurrency Mutex & Debounce)
+ปุ่มลัดเปลี่ยนวอลเปเปอร์ `Alt + W` ได้รับการป้องกันด้วย System Mutex (`Local\6e5tz_Wallpaper_Mutex`) ร่วมกับ Debouncing Timer ระดับ 350 มิลลิวินาที:
+- แก้ปัญหาการกดเบิ้ล หรือการสั่งสลับภาพพร้อมกันหลายคำสั่ง
+- รับประกันว่า **การกดปุ่ม Alt + W หนึ่งครั้ง จะทำให้ภาพเปลี่ยนเพียง 1 จังหวะเสมอ**
+- ส่งคำสั่ง CLI ที่ถูกต้องตรงตามแต่ละ Provider อย่างแม่นยำ
+
+### 6. หน้าต่าง Floating Acrylic Side Panel (`Alt + Shift + G`)
+กดปุ่ม **`Alt + Shift + G`** หรือคลิกไอคอนวอลเปเปอร์บนแถบ YASB เพื่อเปิด/ปิดแถบพาเนลลอยด้านข้างหน้าจอ:
+- **Zero-Console Native WinExe:** คอมไพล์เป็นแอป GUI วินโดวส์โดยตรง (`wallpaper-gallery.exe`) ไม่มีหน้าต่าง Terminal หรือ CMD กะพริบขึ้นมากวนใจ 100%
+- **ดีไซน์ Windows 11 Acrylic กระจกฝ้า:** ใช้ธีม Catppuccin Mocha สี Mantle แบบโปร่งแสง (`#181825`) มุมโค้งมน 16px และเงา Drop Shadow นุ่มนวล
+- **แอนิเมชันสไลด์เข้าจากขอบจอ:** เลื่อนเข้ามาจากขอบจออย่างสมูท (ตั้งค่าตำแหน่งขอบซ้ายหรือขวาได้ผ่าน `ui.position` ใน `wallpaper-manager.json`)
+- **ระบบ Auto-Hide & Toggle:** ปิดตัวเองอัตโนมัติเมื่อคลิกนอกหน้าต่างหรือเมื่อสลับโฟกัส (`autoHideOnFocusLost`), ปิดด้วยปุ่ม `Escape`, และกด `Alt + Shift + G` ซ้ำเพื่อเปิด/ปิดสลับกันได้ทันที
+- **ปุ่มเลือก Provider รูปแบบ Pill:** สลับระหว่าง Static, Wallpaper Engine และ Lively พร้อมไฟเรืองแสง Catppuccin Blue สำหรับ Engine ปัจจุบัน
+- **ตาราง Thumbnail 2 คอลัมน์:** โหลดแบบ Asynchronous ความเร็วสูง คลิกที่การ์ดเพื่อใช้วอลเปเปอร์ทันที พร้อมกรอบไฮไลต์และข้อความแจ้งเตือน (Toast Notice)
+- **GlazeWM Window Rule:** กำหนดกฎ `commands: ['ignore']` ให้หน้าต่างลอยอยู่เหนือเดสก์ท็อปอย่างอิสระโดยไม่กระทบ Layout การจัดหน้าต่างของ GlazeWM
+
+### 7. คีย์ลัดและคำสั่งด่วนบน Terminal
+
+| คีย์ลัด | คำสั่ง / การทำงาน | รายละเอียด |
+| --- | --- | --- |
+| `Alt + W` | **สลับ Wallpaper ถัดไป** | ข้ามไปภาพถัดไปในคอลเลกชันปัจจุบัน (มีระบบ Mutex ล็อกไม่ให้ข้ามเบิ้ล) |
+| `Alt + Shift + G` | **เปิด/ปิด Floating Side Panel** | สลับเปิด/ปิดแถบพาเนลควบคุมวอลเปเปอร์สไตล์ Acrylic แก้วฝ้า ไร้หน้าต่าง Terminal |
+| `Alt + Ctrl + W` | **วนสลับ Engine Wallpaper** | สลับระหว่าง Static, Wallpaper Engine และ Lively พร้อมปลดฮุกและแสดง Toast บน Side Panel |
+
+คำสั่งลัดบน Windows Terminal (PowerShell 7):
+- `wp-mgr [-Action next|prev|shuffle|status|gallery|workspace|cycle-provider]`
+- `wp-next`: สลับไปภาพถัดไป
+- `wp-prev`: ย้อนกลับไปภาพก่อนหน้า
+- `wp-shuffle`: สุ่มเปลี่ยนภาพในคอลเลกชันปัจจุบัน
+- `wp-gallery`: เปิดหน้าต่างแกลเลอรี WPF Gallery
+- `wp-provider [Static|WallpaperEngine|Lively]`: ตรวจสอบหรือสลับ Engine
+- `wp-collection [ชื่อคอลเลกชัน]`: ตรวจสอบหรือเลือกโฟลเดอร์คอลเลกชัน
+- `wp-status`: ดูสรุปสถานะ Engine, Workspace และ Collection ในปัจจุบัน
+- `wp-refresh`: สแกนรายการไฟล์ภาพใหม่หลังเพิ่มรูปเข้าโฟลเดอร์
+
+### 8. โครงสร้างไฟล์คอนฟิก (Configuration Architecture)
+ไฟล์คอนฟิกเป็นรูปแบบ JSON อ่านง่าย อยู่ที่โฟลเดอร์ `~/.config/6e5tz/`:
+- **`wallpaper-manager.json`**: สำหรับตั้งค่าหลัก, ตำแหน่งโฟลเดอร์ภาพ และการจับคู่ GlazeWM Workspace:
+  ```json
+  {
+    "provider": "Static",
+    "collectionRoot": "%USERPROFILE%\\Pictures\\Wallpapers",
+    "collections": {
+      "Static": ["Default", "Anime", "Nature", "Minimal", "Favorites"]
+    },
+    "workspaceMapping": {
+      "1": { "provider": "Static", "collection": "Default" },
+      "2": { "provider": "Static", "collection": "Anime" },
+      "3": { "provider": "Static", "collection": "Nature" }
+    }
+  }
+  ```
+- **`wallpaper-state.json`**: บันทึกสถานะการทำงานขณะนั้น (Engine ที่เปิดอยู่, คอลเลกชันที่เลือก และรูปภาพล่าสุดของแต่ละ Workspace) คืนค่าอัตโนมัติเมื่อเปิดเครื่องใหม่
 
 ---
 
@@ -246,7 +314,9 @@ pip install windows-curses
 | คีย์ลัด | คำสั่ง / การทำงาน |
 | --- | --- |
 | `Alt + Enter` | **เปิด Windows Terminal ทันที** |
-| `Alt + W` | **สลับ Wallpaper ถัดไป** (ทั้ง Wallpaper Engine และ Static Gallery) |
+| `Alt + W` | **สลับ Wallpaper ถัดไป** (ป้องกันคำสั่งซ้ำด้วยระบบล็อก Mutex) |
+| `Alt + Shift + G` | **เปิด Wallpaper Gallery UI** (หน้าต่างเลือกดูภาพสไตล์ Catppuccin Mocha) |
+| `Alt + Ctrl + W` | **วนสลับ Engine Wallpaper** (สลับระหว่าง Static, Wallpaper Engine, Lively) |
 | `Win + Space` | **สลับภาษาไทย-อังกฤษของ Windows** (ไม่มีโปรแกรมใดดักจับ ใช้งานได้ 100%) |
 | `Alt + Shift + R` | รีโหลดคอนฟิก GlazeWM โดยไม่ต้องรีสตาร์ต |
 | `Alt + Shift + W` | วาดหน้าต่างใหม่ทั้งหมด แก้บั๊กจอกระพริบหรือภาพค้าง |

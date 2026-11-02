@@ -116,9 +116,27 @@ function unimatrix {
 }
 Set-Alias -Name matrix -Value unimatrix
 
-# 9. Next Wallpaper Shortcut Function
+# 9. 6e5tz Universal Wallpaper Manager CLI
+function wp-mgr {
+    $mgr = "$HOME\.config\6e5tz\scripts\wallpaper\manager.ps1"
+    if (-not (Test-Path $mgr)) { $mgr = "$HOME\.config\yasb\scripts\next-wallpaper.ps1" }
+    & $mgr @args
+}
+function wp-status { wp-mgr -Action status }
+function wp-next { wp-mgr -Action next @args }
+function wp-prev { wp-mgr -Action prev @args }
+function wp-shuffle { wp-mgr -Action shuffle @args }
+function wp-gallery { wp-mgr -Action gallery }
+function wp-provider { param([string]$Name) if ($Name) { wp-mgr -Action provider -Provider $Name } else { wp-mgr -Action provider } }
+Set-Alias -Name wp-engine -Value wp-provider
+function wp-collection { param([string]$Name) if ($Name) { wp-mgr -Action collection -Collection $Name } else { wp-mgr -Action collection } }
+function wp-refresh {
+    $foldersScript = "$HOME\.config\6e5tz\scripts\wallpaper\collections\folders.ps1"
+    if (Test-Path $foldersScript) { . $foldersScript; Clear-CollectionCache; wp-status } else { wp-status }
+}
+
 function next-wallpaper {
-    & "$HOME\.config\yasb\scripts\next-wallpaper.ps1" @args
+    wp-next @args
 }
 
 # 10. สั่งให้รัน Fastfetch (น้องฟรีเรน) ขึ้นมาทันทีตอนเปิด Terminal

@@ -1,15 +1,36 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Auto', 'Static', 'WallpaperEngine')]
+    [ValidateSet('Auto', 'Static', 'WallpaperEngine', 'Lively', '')]
     [string]$Mode = 'Auto'
 )
 
 $ErrorActionPreference = 'SilentlyContinue'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$weControlScript = Join-Path $scriptDir "wallpaper_engine_control.ps1"
 
-# Determine target mode
+# 1. Resolve Universal Wallpaper Manager
+$mgrCandidates = @(
+    (Join-Path $env:USERPROFILE '.config\6e5tz\scripts\wallpaper\manager.ps1'),
+    (Join-Path $scriptDir '..\..\..\scripts\wallpaper\manager.ps1'),
+    (Join-Path $scriptDir '..\scripts\wallpaper\manager.ps1'),
+    (Join-Path $env:USERPROFILE '.dotfiles\window_rice\scripts\wallpaper\manager.ps1')
+)
+
+$managerScript = $mgrCandidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+
+if ($managerScript) {
+    if (-not [string]::IsNullOrWhiteSpace($Mode) -and $Mode -ne 'Auto') {
+        & $managerScript -Action next -Provider $Mode
+    } else {
+        & $managerScript -Action next
+    }
+    exit 0
+}
+
+# -------------------------------------------------------------
+# Fallback Legacy Logic (Ensures 100% Resilience)
+# -------------------------------------------------------------
+$weControlScript = Join-Path $scriptDir "wallpaper_engine_control.ps1"
 $target = $Mode
 if ($target -eq 'Auto') {
     $weProc = Get-Process -Name 'wallpaper64', 'wallpaper32' -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -17,9 +38,7 @@ if ($target -eq 'Auto') {
     $isWeInConfig = $false
     if (Test-Path $yasbConfig) {
         $content = Get-Content -Path $yasbConfig -Raw -ErrorAction SilentlyContinue
-        if ($content -match 'wallpaper_engine') {
-            $isWeInConfig = $true
-        }
+        if ($content -match 'wallpaper_engine') { $isWeInConfig = $true }
     }
     
     $weCandidates = @(
@@ -40,10 +59,7 @@ if ($target -eq 'WallpaperEngine' -and (Test-Path $weControlScript)) {
     exit 0
 }
 
-# -------------------------------------------------------------
-# Static Wallpaper Cycling (Windows Desktop)
-# Only cycles static desktop wallpapers when in Static mode
-# -------------------------------------------------------------
+# Static Wallpaper Cycling fallback
 $wallDir = Join-Path $env:USERPROFILE "Pictures\Wallpapers"
 if (-not (Test-Path $wallDir)) {
     $repoWall = Join-Path $scriptDir "..\..\..\wallpapers"
@@ -73,15 +89,15 @@ if ($wallpapers.Count -gt 0) {
     $code = @"
 using System;
 using System.Runtime.InteropServices;
-public class WinWallpaperSwitcher {
+public class WinWallpaperSwitcherLegacy {
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 }
 "@
-    if (-not ([System.Management.Automation.PSTypeName]'WinWallpaperSwitcher').Type) {
+    if (-not ([System.Management.Automation.PSTypeName]'WinWallpaperSwitcherLegacy').Type) {
         Add-Type -TypeDefinition $code -ErrorAction SilentlyContinue
     }
 
-    [WinWallpaperSwitcher]::SystemParametersInfo(0x0014, 0, $nextWallpaper, 0x01 -bor 0x02)
+    [WinWallpaperSwitcherLegacy]::SystemParametersInfo(0x0014, 0, $nextWallpaper, 0x01 -bor 0x02)
     Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name Wallpaper -Value $nextWallpaper -Force -ErrorAction SilentlyContinue
 }

@@ -6,7 +6,7 @@ param(
     [switch]$InstallFont,
     [switch]$UseLinks,
     [switch]$NonInteractive,
-    [ValidateSet('Auto', 'WallpaperEngine', 'Static')]
+    [ValidateSet('Auto', 'WallpaperEngine', 'Static', 'Lively')]
     [string]$WallpaperMode = 'Auto'
 )
 
@@ -368,6 +368,18 @@ function Deploy-AllConfigs {
     # 2. YASB
     Restore-Directory -Name 'YASB' -Source (Join-Path $ConfigRoot 'yasb') -Target (Join-Path $env:USERPROFILE '.config\yasb')
 
+    # 2.5 Deploy 6e5tz Universal Wallpaper Manager
+    $wpSource = Join-Path $RepoRoot 'scripts\wallpaper'
+    $wpTarget = Join-Path $env:USERPROFILE '.config\6e5tz\scripts\wallpaper'
+    if (Test-Path $wpSource) {
+        Restore-Directory -Name 'Universal Wallpaper Manager/scripts' -Source $wpSource -Target $wpTarget
+    }
+    $wpDefaultSource = Join-Path $ConfigRoot 'wallpaper\manager.default.json'
+    $wpUserConfig = Join-Path $env:USERPROFILE '.config\6e5tz\wallpaper-manager.json'
+    if ((Test-Path $wpDefaultSource) -and (-not (Test-Path $wpUserConfig))) {
+        Restore-File -Name 'Universal Wallpaper Manager/config' -Source $wpDefaultSource -Target $wpUserConfig
+    }
+
     # Detect & apply wallpaper configuration mode
     $wePaths = @(
         'C:\Program Files (x86)\Steam\steamapps\common\wallpaper_engine\wallpaper64.exe',
@@ -376,25 +388,40 @@ function Deploy-AllConfigs {
         'C:\Program Files\Steam\steamapps\common\wallpaper_engine\wallpaper32.exe'
     )
     $hasWE = [bool]($wePaths | Where-Object { Test-Path $_ } | Select-Object -First 1)
+    $hasLively = [bool]((Get-Command livelycu, Lively -ErrorAction SilentlyContinue) -or (Test-Path "$env:ProgramFiles\Lively Wallpaper\Lively.exe"))
 
     $targetMode = $WallpaperMode
     if ($targetMode -eq 'Auto') {
         if (-not $NonInteractive) {
             Write-Host "`nWallpaper Mode Configuration:" -ForegroundColor Yellow
+            Write-Host "  [1] Static Wallpaper Gallery (Pure Windows Desktop Wallpapers)" -ForegroundColor Green
             if ($hasWE) {
-                Write-Host "  [1] Wallpaper Engine (Detected on this system) [Default]" -ForegroundColor Green
-                Write-Host "  [2] Static Wallpaper Gallery (Windows Desktop Wallpapers)" -ForegroundColor Cyan
-                $choice = Read-Host "Select wallpaper mode (1/2) [Default: 1]"
-                $targetMode = if ($choice -eq '2') { 'Static' } else { 'WallpaperEngine' }
+                Write-Host "  [2] Wallpaper Engine (Detected on this system)" -ForegroundColor Cyan
             } else {
-                Write-Host "  [1] Static Wallpaper Gallery (Recommended - Built-in YASB Gallery) [Default]" -ForegroundColor Green
                 Write-Host "  [2] Wallpaper Engine (Requires Steam Wallpaper Engine)" -ForegroundColor DarkGray
-                $choice = Read-Host "Select wallpaper mode (1/2) [Default: 1]"
-                $targetMode = if ($choice -eq '2') { 'WallpaperEngine' } else { 'Static' }
+            }
+            if ($hasLively) {
+                Write-Host "  [3] Lively Wallpaper (Detected on this system)" -ForegroundColor Magenta
+            } else {
+                Write-Host "  [3] Lively Wallpaper (Requires Lively Wallpaper via GitHub/Store)" -ForegroundColor DarkGray
+            }
+            $defaultChoice = if ($hasWE) { '2' } else { '1' }
+            $choice = Read-Host "Select wallpaper mode (1/2/3) [Default: $defaultChoice]"
+            if ([string]::IsNullOrWhiteSpace($choice)) { $choice = $defaultChoice }
+            $targetMode = switch ($choice) {
+                '2' { 'WallpaperEngine' }
+                '3' { 'Lively' }
+                default { 'Static' }
             }
         } else {
             $targetMode = if ($hasWE) { 'WallpaperEngine' } else { 'Static' }
         }
+    }
+
+    # Sync provider choice with Universal Wallpaper Manager state
+    $mgrDeployed = Join-Path $env:USERPROFILE '.config\6e5tz\scripts\wallpaper\manager.ps1'
+    if (Test-Path $mgrDeployed) {
+        try { & $mgrDeployed -Action provider -Provider $targetMode | Out-Null } catch {}
     }
 
     if ($targetMode -eq 'Static') {
@@ -405,15 +432,20 @@ function Deploy-AllConfigs {
     } else {
         $weTmpl = Join-Path $ConfigRoot 'yasb\config.wallpaper-engine.yaml'
         if (Test-Path $weTmpl) {
-            Restore-File -Name 'YASB/config (Wallpaper Engine)' -Source $weTmpl -Target (Join-Path $env:USERPROFILE '.config\yasb\config.yaml')
+            Restore-File -Name "YASB/config ($targetMode)" -Source $weTmpl -Target (Join-Path $env:USERPROFILE '.config\yasb\config.yaml')
         }
     }
 
-    # Ensure silent next-wallpaper.exe launcher exists (GUI subsystem, zero console flash)
-    $targetExe = Join-Path $env:USERPROFILE '.config\yasb\scripts\next-wallpaper.exe'
-    if (-not (Test-Path $targetExe)) {
-        $csc = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe'
-        $srcCs = Join-Path $ConfigRoot 'yasb\scripts\NextWallpaperLauncher.cs'
+    # Ensure silent launcher executables exist (GUI subsystem, zero console flash)
+    $csc = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe'
+    $launchers = @(
+        @{ Exe = 'next-wallpaper.exe'; Cs = 'NextWallpaperLauncher.cs'; Name = 'Next Wallpaper' },
+        @{ Exe = 'wallpaper-gallery.exe'; Cs = 'WallpaperGalleryLauncher.cs'; Name = 'Wallpaper Gallery' },
+        @{ Exe = 'cycle-provider.exe'; Cs = 'CycleProviderLauncher.cs'; Name = 'Cycle Provider' }
+    )
+    foreach ($item in $launchers) {
+        $targetExe = Join-Path $env:USERPROFILE ".config\yasb\scripts\$($item.Exe)"
+        $srcCs = Join-Path $ConfigRoot "yasb\scripts\$($item.Cs)"
         if ((Test-Path $csc) -and (Test-Path $srcCs)) {
             & $csc /target:winexe /optimize /nologo /out:"$targetExe" "$srcCs" | Out-Null
         }
@@ -658,7 +690,10 @@ Write-Host "  - Alt + 1..9          : Switch GlazeWM workspaces"
 Write-Host "  - Alt + H / J / K / L : Move focus between windows (Vim keys)"
 Write-Host "  - Alt + Shift + Q     : Close focused window"
 Write-Host "  - Alt + Shift + Space : Toggle floating window"
-Write-Host "  - Alt + W             : Next Wallpaper (Wallpaper Engine or Static Gallery)"
+Write-Host "  - Alt + W             : Next Wallpaper (Universal Wallpaper Manager)
+  - Alt + Shift + G     : Open Wallpaper Gallery (Catppuccin Mocha UI)
+  - Alt + Ctrl + W      : Cycle Wallpaper Provider (Static -> Wallpaper Engine -> Lively)
+  - Wallpaper CLI       : 'wp-status', 'wp-next', 'wp-prev', 'wp-shuffle', 'wp-gallery', 'wp-provider', 'wp-collection'"
 Write-Host "  - Win + Space         : Native Windows language switch (100% free of conflicts)"
 Write-Host "  - Terminal Arsenal    : 'clock' (aesthetic clock), 'matrix' (rain screensaver), 'pipes', 'ff', 'btop', 'y' (Yazi), 'lg' (Lazygit), 'ls' (Eza), 'cat' (Bat), 'z' (Zoxide)"
 Write-Host "  - ExplorerBlurMica    : Press Ctrl + F1 in File Explorer to minimize Ribbon for full Acrylic Blur"

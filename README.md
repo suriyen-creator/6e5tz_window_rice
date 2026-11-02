@@ -147,34 +147,100 @@ Launch `glazewm.exe` and `yasb.exe` from the Start Menu. Press `Alt + Enter` to 
 
 ---
 
-## Wallpaper System
+## Universal Wallpaper Manager
 
-The setup provides two dedicated wallpaper operating modes:
+6e5tz features a comprehensive, Linux-like wallpaper management system designed natively for Windows, supporting three independent wallpaper engines, user-defined folder collections, event-driven GlazeWM workspace wallpaper synchronization, concurrency locks, and a Catppuccin Mocha WPF gallery.
 
-### 1. Wallpaper Engine Mode
-Designed for systems running Wallpaper Engine via Steam. The bar communicates directly with `wallpaper64.exe` via CLI:
-- **Left-Click on `󰸉`:** Advance to next wallpaper in playlist (`nextWallpaper`).
-- **Right-Click on `󰸉`:** Toggle pause / resume to free GPU resources.
-- **Middle-Click on `󰸉`:** Open Wallpaper Engine user interface.
+### 1. Three Independent Providers
+- **Wallpaper Engine:** Communicates directly with the official Steam Wallpaper Engine CLI (`wallpaper64.exe -control nextWallpaper / openPlaylist / openWallpaper / pause / play / stop`). Automatically reads your saved playlists from `config.json` without scanning your entire Steam library.
+- **Lively Wallpaper:** Integrates with rocksdanister's Lively Wallpaper CLI (`livelycu setwp --file / app --play / closewp`). Supports videos, animated GIFs, and local library items with graceful fallback if Lively is not installed.
+- **Static Wallpaper:** Fast native Windows wallpaper engine using Win32 `SystemParametersInfo(SPI_SETDESKWALLPAPER)`. Supports JPG, PNG, WEBP, shuffle mode, and instant desktop favorites bookmarking. Works with zero third-party dependencies.
 
-### 2. Static Wallpaper Mode
-Designed for standard Windows desktop wallpapers without third-party background engines:
-- **Left-Click on `󰸉`:** Opens an interactive popup gallery displaying thumbnails with pagination. Click any image to apply it as your desktop wallpaper immediately.
-- Loads images directly from `%USERPROFILE%\Pictures\Wallpapers\`.
-- 10 sample high-resolution wallpapers are included in `wallpapers/`.
+### 2. Engine Selector
+Switch between engines seamlessly on the fly without restarting your rice or terminal:
+- Detects installed engines automatically (registry, Steam `libraryfolders.vdf`, running processes, and CLI paths).
+- Remembers your active provider, collection, and wallpaper state across system reboots.
+- Prevents competing engines from running concurrently (pauses or stops the background engine when switching).
+- Safely falls back to Static wallpaper if an engine is unavailable or uninstalled.
 
-### Universal Wallpaper Hotkey:
-- Press **`Alt + W`** anywhere to switch to the next wallpaper. The script automatically determines whether Wallpaper Engine or the Static gallery is active and advances the wallpaper accordingly.
-
-### Switching Modes:
 ```powershell
-# Interactive selection menu
-.\scripts\switch-wallpaper-mode.ps1
+# Switch provider via CLI or interactive menu
+wp-provider WallpaperEngine
+wp-provider Lively
+wp-provider Static
 
-# Direct switch
-.\scripts\switch-wallpaper-mode.ps1 -Mode Static
-.\scripts\switch-wallpaper-mode.ps1 -Mode WallpaperEngine
+# Or cycle to the next installed provider
+wp-mgr -Action cycle-provider
 ```
+
+### 3. Folder-Based Collection System
+You stay in full control of your wallpaper library—the system **never** indexes your entire hard drive automatically:
+- Organize your wallpapers into folder collections under a user-defined root (e.g., `Pictures/Wallpapers/Anime`, `Pictures/Wallpapers/Nature`, `Pictures/Wallpapers/Minimal`).
+- Supports adding, removing, and renaming custom collections.
+- Strictly filters supported media files (`.jpg`, `.jpeg`, `.png`, `.webp`, `.mp4`, `.webm`) while completely ignoring metadata files (`desktop.ini`, `.txt`, `.log`, `.git`).
+- Gracefully handles empty folders and missing or deleted files without crashing.
+
+### 4. Linux-like GlazeWM Workspace Wallpapers
+Each GlazeWM workspace (1–9) can be mapped to its own wallpaper collection or provider, automatically transitioning your wallpaper when switching workspaces:
+- **Event-Driven IPC:** Subscribes to GlazeWM's native IPC WebSocket at `ws://127.0.0.1:6123` via `sub -e workspace_activated`.
+- **Zero Polling Overhead:** Runs as a lightweight event listener with zero high-frequency CPU polling.
+- **State Memory:** Remembers the last wallpaper applied to each workspace so you return to your exact wallpaper state.
+- **Transition Debounce:** Prevents rapid flickering or thrashing during rapid workspace switching.
+- **Auto-Lifecycle:** GlazeWM starts the watcher daemon automatically on launch and terminates it on exit.
+
+### 5. Alt + W Concurrency Protection & Debouncing
+The single-key wallpaper switch (`Alt + W`) is protected by a named system mutex (`Local\6e5tz_Wallpaper_Mutex`) and a 350ms high-resolution timer debounce:
+- Completely eliminates duplicate invocations and rapid double-switching.
+- Guarantees that **one keypress triggers exactly one wallpaper transition**.
+- Provider-specific commands are invoked accurately without redundant next commands.
+
+### 6. Floating Acrylic Side Panel UI (`Alt + Shift + G`)
+Press **`Alt + Shift + G`** or click the wallpaper icon in the YASB bar to toggle the sleek, floating side panel:
+- **Zero-Console Native WinExe:** Compiled as a native Windows GUI executable (`wallpaper-gallery.exe`). Absolutely zero console windows, CMD prompts, or terminal flashing.
+- **Windows 11 Acrylic Frosted Glass Aesthetic:** Catppuccin Mocha theme with translucent Mantle background (`#181825`), 16px rounded corners, and soft drop shadow.
+- **Smooth Edge Slide-in:** Glides smoothly from the screen edge upon trigger with customizable side docking (`position: "right" | "left"` in `wallpaper-manager.json`).
+- **Auto-Hide & Toggle Support:** Automatically closes on outside clicks or when focus is lost (`autoHideOnFocusLost`), closes on `Escape`, and toggles open/close on `Alt + Shift + G`.
+- **Interactive Provider Selector:** Seamless pills to switch between Static, Wallpaper Engine, and Lively with glowing Catppuccin Blue badge for the active provider.
+- **Asynchronous Wallpaper Grid:** 2-column thumbnail grid with instant click-to-apply, active wallpaper border badge, and toast confirmation.
+- **GlazeWM Window Rule:** Fully registered with `commands: ['ignore']` so it floats without affecting window tiling or gaps.
+
+### 7. Wallpaper Shortcuts & Terminal Commands
+
+| Hotkey | Action | Description |
+| --- | --- | --- |
+| `Alt + W` | **Next Wallpaper** | Advances to next wallpaper in active collection (single switch guaranteed via concurrency lock) |
+| `Alt + Shift + G` | **Floating Side Panel** | Toggles the Catppuccin Mocha Acrylic side panel (zero terminal window) |
+| `Alt + Ctrl + W` | **Cycle Provider** | Safely transitions between Static, Wallpaper Engine, and Lively with Side Panel toast notice |
+
+Inside Windows Terminal (PowerShell 7), manage wallpapers directly with short aliases:
+- `wp-mgr [-Action next|prev|shuffle|status|gallery|workspace|cycle-provider]`
+- `wp-next`: Advance to next wallpaper
+- `wp-prev`: Go back to previous wallpaper
+- `wp-shuffle`: Set a random wallpaper from active collection
+- `wp-gallery`: Open the WPF wallpaper gallery
+- `wp-provider [Static|WallpaperEngine|Lively]`: Query or switch active engine
+- `wp-collection [Name]`: Query or switch active collection
+- `wp-status`: Show complete engine, workspace, and collection status summary
+- `wp-refresh`: Refresh cached wallpaper metadata after adding new images
+
+### 8. Configuration Architecture
+Configurations are stored cleanly in plain JSON under `~/.config/6e5tz/`:
+- **`wallpaper-manager.json`**: User preferences, collection roots, and GlazeWM workspace mappings:
+  ```json
+  {
+    "provider": "Static",
+    "collectionRoot": "%USERPROFILE%\\Pictures\\Wallpapers",
+    "collections": {
+      "Static": ["Default", "Anime", "Nature", "Minimal", "Favorites"]
+    },
+    "workspaceMapping": {
+      "1": { "provider": "Static", "collection": "Default" },
+      "2": { "provider": "Static", "collection": "Anime" },
+      "3": { "provider": "Static", "collection": "Nature" }
+    }
+  }
+  ```
+- **`wallpaper-state.json`**: Current runtime state (active provider, active collection per engine, and last wallpaper per workspace). Automatically preserved and restored across Windows reboots.
 
 ---
 
@@ -248,7 +314,9 @@ All window management shortcuts use `Alt` to prevent interference with Windows n
 | Hotkey | Action |
 | --- | --- |
 | `Alt + Enter` | Open Windows Terminal |
-| `Alt + W` | **Next Wallpaper** (Wallpaper Engine or Static Gallery) |
+| `Alt + W` | **Next Wallpaper** (Single switch guaranteed via concurrency lock) |
+| `Alt + Shift + G` | **Wallpaper Gallery UI** (Open Catppuccin Mocha WPF wallpaper browser) |
+| `Alt + Ctrl + W` | **Cycle Wallpaper Provider** (Switch between Static, Wallpaper Engine, Lively) |
 | `Win + Space` | **Native Windows language switch** (100% conflict-free) |
 | `Alt + Shift + R` | Reload GlazeWM configuration |
 | `Alt + Shift + W` | Redraw all windows |
