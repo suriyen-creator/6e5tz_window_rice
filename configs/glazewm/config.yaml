@@ -139,10 +139,10 @@ workspaces:
 window_rules:
   - commands: ['ignore']
     match:
-      # Ignore 6e5tz Wallpaper Side Panel so it floats smoothly at screen edge
+      # Ignore 6e5tz Wallpaper Side Panel & Cover Flow so they float smoothly
       - window_process: { equals: 'wallpaper-gallery' }
       - window_process: { equals: 'WallpaperSidePanel' }
-      - window_title: { regex: '.*6e5tz Wallpaper Manager.*' }
+      - window_title: { regex: '.*6e5tz.*' }
       # Ignores any Zebar windows.
       - window_process: { equals: 'zebar' }
 

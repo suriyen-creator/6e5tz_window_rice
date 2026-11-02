@@ -27,12 +27,22 @@ function Get-WpState {
             currentWallpaper = ""
             activeWorkspace = "1"
             workspaceHistory = [PSCustomObject]@{}
+            rotation = [PSCustomObject]@{
+                lastRotated = (Get-Date).ToString('o')
+                isPaused = $false
+            }
             lastSwitched = (Get-Date).ToString('o')
         }
         $null = Save-WpState -State $state
     }
 
     # Ensure all required properties exist
+    if ($null -eq $state.PSObject.Properties['rotation']) {
+        $state | Add-Member -NotePropertyName 'rotation' -NotePropertyValue ([PSCustomObject]@{
+            lastRotated = (Get-Date).ToString('o')
+            isPaused = $false
+        })
+    }
     if ($null -eq $state.PSObject.Properties['activeCollection']) {
         $state | Add-Member -NotePropertyName 'activeCollection' -NotePropertyValue ([PSCustomObject]@{
             Static = "Default"
@@ -88,6 +98,19 @@ function Get-WpWorkspaceHistory {
         return $state.workspaceHistory.$WorkspaceId
     }
     return $null
+}
+
+function Reset-RotationTimer {
+    try {
+        $state = Get-WpState
+        if ($null -eq $state.PSObject.Properties['rotation']) {
+            $state | Add-Member -NotePropertyName 'rotation' -NotePropertyValue ([PSCustomObject]@{})
+        }
+        $state.rotation | Add-Member -NotePropertyName 'lastRotated' -NotePropertyValue ((Get-Date).ToUniversalTime().ToString('o')) -Force
+        return (Save-WpState -State $state)
+    } catch {
+        return $false
+    }
 }
 
 # End of state handler

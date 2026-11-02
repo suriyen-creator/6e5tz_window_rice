@@ -5,7 +5,7 @@
 
 [CmdletBinding()]
 param(
-    [ValidateSet('next', 'prev', 'shuffle', 'set', 'provider', 'collection', 'workspace', 'status', 'gallery', 'pause', 'resume', 'toggle-pause', 'open-ui', 'cycle-provider')]
+    [ValidateSet('next', 'prev', 'shuffle', 'set', 'provider', 'collection', 'workspace', 'status', 'gallery', 'pause', 'resume', 'toggle-pause', 'open-ui', 'cycle-provider', 'rotate')]
     [string]$Action = 'next',
 
     [ValidateSet('Static', 'WallpaperEngine', 'Lively', 'Auto', '')]
@@ -443,6 +443,7 @@ switch ($Action) {
                 default           { Next-StaticWallpaper -CollectionName $c }
             }
         }
+        Reset-RotationTimer
     }
     'prev' {
         Invoke-WithWallpaperLock -Script {
@@ -455,6 +456,7 @@ switch ($Action) {
                 default           { Previous-StaticWallpaper -CollectionName $c }
             }
         }
+        Reset-RotationTimer
     }
     'shuffle' {
         Invoke-WithWallpaperLock -Script {
@@ -467,6 +469,7 @@ switch ($Action) {
                 default           { Next-StaticWallpaper -CollectionName $c -Random }
             }
         }
+        Reset-RotationTimer
     }
     'set' {
         if ([string]::IsNullOrWhiteSpace($Path)) {
@@ -479,6 +482,7 @@ switch ($Action) {
             'Lively'          { Set-LivelyWallpaper -Path $Path }
             default           { Set-StaticWallpaper -Path $Path }
         }
+        Reset-RotationTimer
     }
     'pause' {
         $p = Get-ActiveProviderName
@@ -532,5 +536,47 @@ switch ($Action) {
             Write-WpDiagnosticLog -Category 'GALLERY' -Message "Gallery interface script not found at $galleryScript" -ErrorDetails "File not found"
             Write-WpLog -Message "Gallery interface script not found at $galleryScript" -Level Error
         }
+    }
+    'rotate' {
+        $config = Get-WpConfig
+        $rotConfig = if ($null -ne $config.PSObject.Properties['rotation']) { $config.rotation } else { $null }
+        $enabled = if ($rotConfig -and $null -ne $rotConfig.PSObject.Properties['enabled']) { [bool]$rotConfig.enabled } else { $false }
+        
+        if (-not $enabled) {
+            Write-WpLog -Message "Auto-rotation is disabled in configuration." -Level Debug
+            return
+        }
+
+        # Check pause while browsing
+        $pauseBrowsing = if ($rotConfig -and $null -ne $rotConfig.PSObject.Properties['pauseWhileBrowsing']) { [bool]$rotConfig.pauseWhileBrowsing } else { $true }
+        if ($pauseBrowsing) {
+            $galleryProc = Get-Process -Name 'wallpaper-gallery', 'WallpaperSidePanel' -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($galleryProc) {
+                Write-WpLog -Message "Auto-rotation paused because wallpaper gallery/panel is open." -Level Debug
+                return
+            }
+        }
+
+        # Check if paused in state
+        $state = Get-WpState
+        $rotState = if ($null -ne $state.PSObject.Properties['rotation']) { $state.rotation } else { $null }
+        if ($rotState -and $null -ne $rotState.PSObject.Properties['isPaused'] -and [bool]$rotState.isPaused) {
+            Write-WpLog -Message "Auto-rotation is currently paused in state." -Level Debug
+            return
+        }
+
+        Write-WpLog -Message "Auto-rotation triggering next wallpaper..." -Level Info
+        Invoke-WithWallpaperLock -Script {
+            $p = if (-not [string]::IsNullOrWhiteSpace($Provider)) { $Provider } else { Get-ActiveProviderName }
+            $c = if (-not [string]::IsNullOrWhiteSpace($Collection)) { $Collection } else { Get-ActiveCollectionName -ProviderName $p }
+
+            switch ($p) {
+                'WallpaperEngine' { Next-WallpaperEngineWallpaper -CollectionName $c }
+                'Lively'          { Next-LivelyWallpaper -CollectionName $c }
+                default           { Next-StaticWallpaper -CollectionName $c }
+            }
+        }
+
+        Reset-RotationTimer
     }
 }

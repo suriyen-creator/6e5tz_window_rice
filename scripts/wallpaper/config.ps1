@@ -86,6 +86,17 @@ function Get-WpConfig {
                     autoHideOnFocusLost = $true
                     closeOnOutsideClick = $true
                     animation = $true
+                    viewMode = [PSCustomObject]@{
+                        WallpaperEngine = "coverflow"
+                        Static = "grid"
+                        Lively = "coverflow"
+                    }
+                }
+                rotation = [PSCustomObject]@{
+                    enabled = $false
+                    intervalMinutes = 30
+                    pauseWhileBrowsing = $true
+                    resumeAfterSleep = $true
                 }
                 debounceMs = 350
                 historyLimit = 50
@@ -95,6 +106,38 @@ function Get-WpConfig {
 
         # Save freshly initialized config to user profile
         $null = Save-WpConfig -Config $config
+    }
+
+    # Ensure ui and rotation blocks exist on existing configurations
+    if ($null -eq $config.PSObject.Properties['ui']) {
+        $config | Add-Member -MemberType NoteProperty -Name 'ui' -Value ([PSCustomObject]@{
+            position = "right"
+            width = 420
+            acrylic = $true
+            autoHideOnFocusLost = $true
+            closeOnOutsideClick = $true
+            animation = $true
+            viewMode = [PSCustomObject]@{
+                WallpaperEngine = "coverflow"
+                Static = "grid"
+                Lively = "coverflow"
+            }
+        })
+    } elseif ($null -eq $config.ui.PSObject.Properties['viewMode']) {
+        $config.ui | Add-Member -MemberType NoteProperty -Name 'viewMode' -Value ([PSCustomObject]@{
+            WallpaperEngine = "coverflow"
+            Static = "grid"
+            Lively = "coverflow"
+        })
+    }
+
+    if ($null -eq $config.PSObject.Properties['rotation']) {
+        $config | Add-Member -MemberType NoteProperty -Name 'rotation' -Value ([PSCustomObject]@{
+            enabled = $false
+            intervalMinutes = 30
+            pauseWhileBrowsing = $true
+            resumeAfterSleep = $true
+        })
     }
 
     $config = Expand-ConfigPaths -Config $config

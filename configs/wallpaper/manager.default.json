@@ -28,7 +28,18 @@
     "acrylic": true,
     "autoHideOnFocusLost": true,
     "closeOnOutsideClick": true,
-    "animation": true
+    "animation": true,
+    "viewMode": {
+      "WallpaperEngine": "coverflow",
+      "Static": "grid",
+      "Lively": "coverflow"
+    }
+  },
+  "rotation": {
+    "enabled": false,
+    "intervalMinutes": 30,
+    "pauseWhileBrowsing": true,
+    "resumeAfterSleep": true
   },
   "debounceMs": 350,
   "historyLimit": 50,

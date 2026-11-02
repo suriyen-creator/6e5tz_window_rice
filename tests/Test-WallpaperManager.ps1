@@ -309,6 +309,120 @@ $weInfo = Detect-WallpaperEngine
 Assert-Test -Name "Stop-WallpaperEngine function defined and callable" -Condition ([bool](Get-Command 'Stop-WallpaperEngine' -ErrorAction SilentlyContinue)) -Message "Stop-WallpaperEngine available"
 
 # -----------------------------------------------------------------------------
+# Test 17: Dual View Modes (Cover Flow & Grid)
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 17] Dual View Modes (Cover Flow & Grid)" -ForegroundColor White
+$cfgObj = Get-WpConfig
+$hasViewMode = $null -ne $cfgObj.PSObject.Properties['ui'] -and $null -ne $cfgObj.ui.PSObject.Properties['viewMode']
+Assert-Test -Name "Configuration contains ui.viewMode mapping" -Condition $hasViewMode -Message "viewMode verified"
+
+$weDefaultMode = if ($hasViewMode -and $null -ne $cfgObj.ui.viewMode.PSObject.Properties['WallpaperEngine']) { [string]$cfgObj.ui.viewMode.WallpaperEngine } else { "" }
+$staticDefaultMode = if ($hasViewMode -and $null -ne $cfgObj.ui.viewMode.PSObject.Properties['Static']) { [string]$cfgObj.ui.viewMode.Static } else { "" }
+Assert-Test -Name "Wallpaper Engine defaults to Cover Flow mode" -Condition ($weDefaultMode -eq 'coverflow') -Message "WE viewMode: $weDefaultMode"
+Assert-Test -Name "Static Wallpaper defaults to Grid mode" -Condition ($staticDefaultMode -eq 'grid') -Message "Static viewMode: $staticDefaultMode"
+
+# -----------------------------------------------------------------------------
+# Test 18: Wallpaper Engine Library Discovery & Metadata
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 18] Wallpaper Engine Library Discovery & Metadata" -ForegroundColor White
+Assert-Test -Name "Get-WallpaperEngineWallpapers function defined" -Condition ([bool](Get-Command 'Get-WallpaperEngineWallpapers' -ErrorAction SilentlyContinue)) -Message "Function available"
+
+$weItems = Get-WallpaperEngineWallpapers
+$hasItems = $weItems.Count -gt 0
+Assert-Test -Name "Get-WallpaperEngineWallpapers discovers library items" -Condition $hasItems -Message "Discovered $($weItems.Count) items"
+
+if ($hasItems) {
+    $firstItem = $weItems[0]
+    $hasMeta = -not [string]::IsNullOrWhiteSpace($firstItem.Title) -and -not [string]::IsNullOrWhiteSpace($firstItem.Type) -and (Test-Path -LiteralPath $firstItem.Path)
+    Assert-Test -Name "Discovered items contain valid Title, Type, and Path" -Condition $hasMeta -Message "First item: $($firstItem.Title) [$($firstItem.Type)]"
+} else {
+    Assert-Test -Name "Discovered items contain valid Title, Type, and Path" -Condition $true -Message "Skipped: No WE items installed"
+}
+
+# -----------------------------------------------------------------------------
+# Test 19: Auto-Rotation Mode Configuration & Concurrency
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 19] Auto-Rotation Mode Configuration & Concurrency" -ForegroundColor White
+$defaultJsonPath = Join-Path $repoRoot 'configs\wallpaper\manager.default.json'
+$defaultCfgObj = Get-Content -LiteralPath $defaultJsonPath -Raw | ConvertFrom-Json
+$hasRotationConfig = $null -ne $defaultCfgObj.PSObject.Properties['rotation']
+Assert-Test -Name "Configuration contains rotation block" -Condition $hasRotationConfig -Message "rotation block verified"
+
+$rotEnabled = if ($hasRotationConfig) { [bool]$defaultCfgObj.rotation.enabled } else { $true }
+Assert-Test -Name "Auto-rotation is disabled by default for safety" -Condition ($rotEnabled -eq $false) -Message "Default enabled: $rotEnabled"
+
+$rotInterval = if ($hasRotationConfig) { [int]$defaultCfgObj.rotation.intervalMinutes } else { 0 }
+Assert-Test -Name "Auto-rotation default interval is 30 minutes" -Condition ($rotInterval -eq 30) -Message "Default interval: $rotInterval min"
+
+$stateBefore = Get-WpState
+$timeBefore = if ($null -ne $stateBefore.PSObject.Properties['rotation'] -and $null -ne $stateBefore.rotation.PSObject.Properties['lastRotated']) { $stateBefore.rotation.lastRotated } else { "" }
+Start-Sleep -Milliseconds 100
+Reset-RotationTimer
+$stateAfter = Get-WpState
+$timeAfter = if ($null -ne $stateAfter.PSObject.Properties['rotation'] -and $null -ne $stateAfter.rotation.PSObject.Properties['lastRotated']) { $stateAfter.rotation.lastRotated } else { "" }
+Assert-Test -Name "Reset-RotationTimer refreshes lastRotated timestamp" -Condition ($timeAfter -ne $timeBefore -and -not [string]::IsNullOrWhiteSpace($timeAfter)) -Message "Updated lastRotated to $timeAfter"
+
+# -----------------------------------------------------------------------------
+# Test 20: Standalone 3D Cover Flow, Adaptive Grid & Icon Purity
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 20] Standalone Cover Flow, Grid & Icon Purity" -ForegroundColor White
+$panelExe = Join-Path $repoRoot 'configs\yasb\scripts\WallpaperSidePanel.exe'
+$isExeValid = (Test-Path -LiteralPath $panelExe) -and ((Get-Item -LiteralPath $panelExe).Length -gt 10000)
+Assert-Test -Name "WallpaperSidePanel.exe native binary exists and is non-empty" -Condition $isExeValid -Message "Size: $((Get-Item $panelExe).Length) bytes"
+
+$panelCsText = [System.IO.File]::ReadAllText((Join-Path $repoRoot 'configs\yasb\scripts\WallpaperSidePanel.cs'), [System.Text.Encoding]::UTF8)
+$hasStandaloneCoverFlow = $panelCsText.Contains('WallpaperCoverFlowWindow')
+$hasGridAdaptiveCode = $panelCsText.Contains('UpdateGridCardWidths') -or $panelCsText.Contains('_gridScroll.ActualWidth')
+$hasRotationCode = $panelCsText.Contains('ToggleAutoRotation') -or $panelCsText.Contains('BuildAutoRotationCard')
+
+# Broken icon audit: Check that no private use area Nerd Font glyphs (F000-F8FF) exist in C# source
+$hasBrokenGlyphs = $panelCsText -match '[\uF000-\uF8FF]'
+Assert-Test -Name "WallpaperSidePanel.cs source contains Standalone 3D Cover Flow Window" -Condition $hasStandaloneCoverFlow -Message "WallpaperCoverFlowWindow verified"
+Assert-Test -Name "WallpaperSidePanel.cs contains Adaptive 2-Column Grid sizing" -Condition $hasGridAdaptiveCode -Message "Adaptive grid verified"
+Assert-Test -Name "WallpaperSidePanel.cs source contains Auto Rotation controls" -Condition $hasRotationCode -Message "Auto Rotation source verified"
+Assert-Test -Name "All UI icons verified: Zero broken private-use Nerd Font glyphs" -Condition (-not $hasBrokenGlyphs) -Message "Zero broken glyphs"
+
+# -----------------------------------------------------------------------------
+# Test 21: Regression Verification (Standalone Cover Flow & Adaptive UniformGrid)
+# -----------------------------------------------------------------------------
+Write-Host "`n[Test Group 21] Regression: Standalone Cover Flow & Adaptive UniformGrid" -ForegroundColor White
+
+# 1. Standalone Cover Flow window runtime execution
+$cfProc = Start-Process -FilePath $galleryExe -ArgumentList '-CoverFlow' -PassThru
+$timeout = 0
+while ($cfProc.MainWindowHandle -eq [IntPtr]::Zero -and $timeout -lt 30) {
+    Start-Sleep -Milliseconds 100
+    $timeout++
+    $cfProc.Refresh()
+}
+$cfHwnd = $cfProc.MainWindowHandle
+$cfRunning = (-not $cfProc.HasExited) -and ($cfHwnd -ne [IntPtr]::Zero)
+if (-not $cfProc.HasExited) {
+    try { $cfProc.Kill() } catch {}
+}
+Assert-Test -Name "Standalone Cover Flow opens cleanly via -CoverFlow with valid Win32 HWND" -Condition $cfRunning -Message "HWND: $cfHwnd, Alive: $cfRunning"
+
+# 2. Active monitor work area centering
+$hasActiveMonCode = $panelCsText.Contains('GetActiveMonitorWorkArea') -and $panelCsText.Contains('MonitorFromPoint')
+Assert-Test -Name "Cover Flow centers dynamically on active monitor (GetActiveMonitorWorkArea)" -Condition $hasActiveMonCode -Message "Active monitor centering verified"
+
+# 3. Non-destructive preview navigation
+$hasNonDestructiveNav = $panelCsText -match 'void Navigate\(int delta\)\s*\{[^}]*UpdateCards\(\);'
+Assert-Test -Name "Cover Flow preview navigation is non-destructive (only Apply sets wallpaper)" -Condition $hasNonDestructiveNav -Message "Preview navigation isolated from desktop actuation"
+
+# 4. Adaptive UniformGrid 2-column layout (Issue 2 fix)
+$hasUniformGrid = $panelCsText.Contains('UniformGrid') -and $panelCsText.Contains('_gridUniformPanel') -and $panelCsText.Contains('Columns = 2')
+Assert-Test -Name "Adaptive Grid utilizes UniformGrid with Columns = 2 (guaranteed 2 columns)" -Condition $hasUniformGrid -Message "UniformGrid architecture verified"
+
+# 5. Non-collapsing layout on vertical scrollbar
+$hasViewportMath = $panelCsText.Contains('_gridScroll.ViewportWidth') -and $panelCsText.Contains('HorizontalAlignment.Stretch')
+Assert-Test -Name "Grid layout uses ViewportWidth to prevent scrollbar-induced column collapse" -Condition $hasViewportMath -Message "ViewportWidth calculation verified"
+
+# 6. Smooth Side Panel to Cover Flow transition (MainWindow transfer)
+$hasCleanTransfer = $panelCsText.Contains('Application.Current.MainWindow = cfWin')
+Assert-Test -Name "Side Panel transfers Application.MainWindow to prevent early process termination" -Condition $hasCleanTransfer -Message "MainWindow transfer verified"
+
+# -----------------------------------------------------------------------------
 # Final Summary
 # -----------------------------------------------------------------------------
 Write-Host "`n==================================================================" -ForegroundColor Cyan

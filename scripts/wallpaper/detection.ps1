@@ -8,7 +8,13 @@ $ErrorActionPreference = 'Stop'
 
 . (Join-Path $PSScriptRoot 'common.ps1')
 
+$script:CachedSteamLibraries = $null
+
 function Get-SteamLibraryPaths {
+    if ($null -ne $script:CachedSteamLibraries -and $script:CachedSteamLibraries.Count -gt 0) {
+        return $script:CachedSteamLibraries
+    }
+
     $steamLibraries = [System.Collections.Generic.List[string]]::new()
     
     # 1. Main Steam installation from Registry
@@ -64,7 +70,8 @@ function Get-SteamLibraryPaths {
         }
     }
 
-    return @($steamLibraries | Select-Object -Unique)
+    $script:CachedSteamLibraries = @($steamLibraries | Select-Object -Unique)
+    return $script:CachedSteamLibraries
 }
 
 function Detect-WallpaperEngine {

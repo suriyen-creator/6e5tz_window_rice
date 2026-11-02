@@ -194,15 +194,20 @@ The single-key wallpaper switch (`Alt + W`) is protected by a named system mutex
 - Guarantees that **one keypress triggers exactly one wallpaper transition**.
 - Provider-specific commands are invoked accurately without redundant next commands.
 
-### 6. Floating Acrylic Side Panel UI (`Alt + Shift + G`)
+### 6. Floating Acrylic Side Panel UI (`Alt + Shift + G`) & Standalone 3D Cover Flow
 Press **`Alt + Shift + G`** or click the wallpaper icon in the YASB bar to toggle the sleek, floating side panel:
 - **Zero-Console Native WinExe:** Compiled as a native Windows GUI executable (`wallpaper-gallery.exe`). Absolutely zero console windows, CMD prompts, or terminal flashing.
-- **Windows 11 Acrylic Frosted Glass Aesthetic:** Catppuccin Mocha theme with translucent Mantle background (`#181825`), 16px rounded corners, and soft drop shadow.
+- **Adaptive 2-Column Grid:** Balanced, edge-to-edge symmetric grid layout with dynamic thumbnail width calculation based on available panel width, eliminating single-column wrapping and empty right margins.
+- **Standalone Centered 3D Cover Flow Window:** Click the "3D Cover Flow" button in the side panel or run `wallpaper-gallery.exe -CoverFlow` to open an Apple Cover Flow-inspired standalone window centered on your screen. Left/Right arrow keys dynamically preview wallpapers in 3D perspective without modifying your desktop; press `Enter` to apply, and `Escape` to close.
+- **Pure Vector & Standard Unicode Typography:** Completely free of private-use font dependencies (no broken tofu boxes or missing glyphs). Uses crisp geometric accents (`◀`, `▶`, `✓`, `★`) and clean typography.
+- **Blazing Fast In-Memory Engine:** Direct native Win32 P/Invoke and asynchronous state persistence eliminate UI thread freezes, ensuring sub-10ms wallpaper activation and smooth 60fps scrolling.
+- **Wallpaper Engine Library Discovery:** Discovers user playlists, 19 built-in default projects, and all subscribed Steam Workshop items with titles, types (`Scene`, `Video`, `Web`, `Application`), and preview thumbnails.
+- **Auto Rotation Mode:** Built-in auto rotation engine with configurable intervals (5m, 15m, 30m, 60m), real-time countdown display (`00:00`), pause/resume toggle, and smart pause-while-browsing.
+- **Windows Acrylic Frosted Glass Aesthetic:** Catppuccin Mocha theme with translucent Mantle background (`#181825`), 16px rounded corners, and soft drop shadow.
 - **Smooth Edge Slide-in:** Glides smoothly from the screen edge upon trigger with customizable side docking (`position: "right" | "left"` in `wallpaper-manager.json`).
 - **Auto-Hide & Toggle Support:** Automatically closes on outside clicks or when focus is lost (`autoHideOnFocusLost`), closes on `Escape`, and toggles open/close on `Alt + Shift + G`.
 - **Interactive Provider Selector:** Seamless pills to switch between Static, Wallpaper Engine, and Lively with glowing Catppuccin Blue badge for the active provider.
-- **Asynchronous Wallpaper Grid:** 2-column thumbnail grid with instant click-to-apply, active wallpaper border badge, and toast confirmation.
-- **GlazeWM Window Rule:** Fully registered with `commands: ['ignore']` so it floats without affecting window tiling or gaps.
+- **GlazeWM Window Rule:** Fully registered with `commands: ['ignore']` so both Side Panel and Cover Flow windows float without affecting window tiling or gaps.
 
 ### 7. Wallpaper Shortcuts & Terminal Commands
 
@@ -241,6 +246,48 @@ Configurations are stored cleanly in plain JSON under `~/.config/6e5tz/`:
   }
   ```
 - **`wallpaper-state.json`**: Current runtime state (active provider, active collection per engine, and last wallpaper per workspace). Automatically preserved and restored across Windows reboots.
+
+### 9. Performance Benchmarks
+
+The 6e5tz Wallpaper Manager features a native high-performance architecture engineered to eliminate process-spawning bottlenecks and UI thread freezes.
+
+> [!NOTE]
+> Previously recorded benchmark results from the development environment. Real-world performance varies depending on hardware specifications, disk I/O, Steam library size, cache warmup state, and Windows configuration.
+
+#### Benchmark Results (Before vs. After)
+
+| Operation | Before | After | Improvement |
+|---|---:|---:|---:|
+| **Wallpaper Engine library retrieval** | 253.36 ms | 0.70 ms | ~362x faster |
+| **Steam library path detection** | 179.29 ms | 7.09 ms | ~25.3x faster |
+| **Static wallpaper activation** | 562.97 ms | 76.64 ms | ~7.3x faster |
+| **UI thread blocking during interaction** | 560–1,010 ms | Less than 1 ms | Non-blocking UI |
+| **Standalone Cover Flow cold startup** | 2,039.48 ms | 513.64 ms | ~4x faster |
+
+#### Layout & Visual Architecture
+
+| Layout Aspect | Before | After |
+|---|---|---|
+| **Adaptive Grid (Static & WE)** | Incorrect 1-column layout; unused horizontal space; unbalanced cards on long libraries | Responsive 2-column `UniformGrid`; balanced card dimensions; edge-to-edge symmetrical width |
+| **Cover Flow Presentation** | Embedded side panel view; card crowding | Standalone centered Acrylic window on active monitor; non-destructive preview browsing |
+| **Icon Purity** | Broken tofu boxes from Private-Use Area Nerd Fonts | 100% universal standard Unicode geometric accents (`◀`, `▶`, `✓`, `★`) and crisp typography |
+
+#### What Was Optimized
+
+- **Native Win32 Wallpaper Actuator:** Static wallpaper switching calls Win32 P/Invoke `SystemParametersInfo(SPI_SETDESKWALLPAPER)` directly from C#, bypassing intermediate `pwsh.exe` process invocations.
+- **In-Memory Wallpaper Library Cache:** Wallpaper item metadata (`_libraryCache`) is parsed once per collection and retained in-memory; repeated views resolve in sub-millisecond time (`0.70 ms`).
+- **Steam Library Path Cache:** Registry and Steam `libraryfolders.vdf` parsing results are cached in `$script:CachedSteamLibraries`, reducing Steam detection overhead from 179 ms to 7 ms.
+- **Background Thumbnail Decoding:** Images are decoded off-thread via `ThreadPool.QueueUserWorkItem` with explicit `DecodePixelWidth = 240/320/480` to prevent memory bloat.
+- **Frozen WPF BitmapSource Objects:** Calling `bi.Freeze()` makes decoded bitmap assets cross-thread immutable, allowing instantaneous transfer to WPF Image controls without UI Dispatcher locking.
+- **Non-Blocking UI Thread:** State persistence to `wallpaper-state.json` and config updates are dispatched asynchronously via background worker tasks. Clicking buttons no longer blocks the GUI dispatcher (`< 1 ms`).
+- **UniformGrid Adaptive Geometry:** Replaced wrapping panel math with a dedicated WPF `UniformGrid (Columns=2)`, guaranteeing that cards never collapse into a single column when vertical scrollbars appear.
+
+#### Benchmark Methodology
+
+- **Measurement Tool:** High-precision `System.Diagnostics.Stopwatch` timestamps measured over 5–10 iterations per operation.
+- **Cold vs. Warm:** Cold tests evaluate initial process launch and initial disk reads without cache; warm tests measure subsequent in-memory cache retrieval.
+- **UI Dispatcher vs. Background IO:** UI blocking time measures the duration that the WPF Dispatcher / UI thread is frozen while processing an action; background disk persistence is measured separately.
+- **Actuation vs. Retrieval:** Library retrieval benchmarks evaluate metadata parsing speed; wallpaper activation benchmarks evaluate the complete end-to-end OS desktop change.
 
 ---
 

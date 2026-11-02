@@ -102,6 +102,34 @@ function Run-OnceWorkspaceSync {
     }
 }
 
+function Check-AutoRotationTrigger {
+    try {
+        $config = Get-WpConfig
+        if ($null -eq $config.PSObject.Properties['rotation']) { return }
+        $rotConfig = $config.rotation
+        if (-not $rotConfig.enabled) { return }
+
+        $intervalMin = if ($null -ne $rotConfig.intervalMinutes) { [int]$rotConfig.intervalMinutes } else { 30 }
+        if ($intervalMin -le 0) { $intervalMin = 30 }
+
+        $state = Get-WpState
+        $lastRotStr = if ($null -ne $state.PSObject.Properties['rotation'] -and $null -ne $state.rotation.PSObject.Properties['lastRotated']) {
+            [string]$state.rotation.lastRotated
+        } else { "" }
+
+        $lastRotTime = [DateTime]::MinValue
+        if (-not [string]::IsNullOrWhiteSpace($lastRotStr)) {
+            [DateTime]::TryParse($lastRotStr, [ref]$lastRotTime) | Out-Null
+        }
+
+        $elapsedMin = ([DateTime]::UtcNow - $lastRotTime.ToUniversalTime()).TotalMinutes
+        if ($elapsedMin -ge $intervalMin) {
+            Write-WpLog -Message "Auto-rotation timer triggered after $([Math]::Round($elapsedMin, 1))m (interval: ${intervalMin}m)." -Level Info
+            & $script:ManagerScript -Action rotate | Out-Null
+        }
+    } catch {}
+}
+
 function Run-WatcherDaemonLoop {
     [System.IO.File]::WriteAllText($script:PidFile, $PID.ToString(), $script:Utf8NoBom)
     Write-WpLog -Message "Starting Workspace Watcher event listener on $GlazeUri (PID $PID)..." -Level Info
@@ -129,8 +157,20 @@ function Run-WatcherDaemonLoop {
 
             while ($ws.State -eq [System.Net.WebSockets.WebSocketState]::Open) {
                 $segment = [ArraySegment[byte]]$buffer
-                $resultTask = $ws.ReceiveAsync($segment, [System.Threading.CancellationToken]::None)
-                $resultTask.Wait()
+                $timeoutCts = [System.Threading.CancellationTokenSource]::new([TimeSpan]::FromSeconds(5))
+                $resultTask = $ws.ReceiveAsync($segment, $timeoutCts.Token)
+                
+                try {
+                    $resultTask.Wait()
+                } catch [System.AggregateException] {
+                    if ($_.InnerException -is [System.OperationCanceledException] -or $_.InnerException -is [System.Threading.Tasks.TaskCanceledException]) {
+                        # Timeout interval: perform auto-rotation check
+                        Check-AutoRotationTrigger
+                        continue
+                    }
+                    throw
+                }
+
                 $result = $resultTask.Result
 
                 if ($result.MessageType -eq [System.Net.WebSockets.WebSocketMessageType]::Close) {
@@ -139,7 +179,10 @@ function Run-WatcherDaemonLoop {
                 }
 
                 $msgJson = [System.Text.Encoding]::UTF8.GetString($buffer, 0, $result.Count)
-                if ([string]::IsNullOrWhiteSpace($msgJson)) { continue }
+                if ([string]::IsNullOrWhiteSpace($msgJson)) {
+                    Check-AutoRotationTrigger
+                    continue
+                }
 
                 try {
                     $evt = $msgJson | ConvertFrom-Json
@@ -151,7 +194,6 @@ function Run-WatcherDaemonLoop {
                         if ($null -ne $data.PSObject.Properties['workspace'] -and $null -ne $data.workspace) {
                             $wsName = [string]$data.workspace.name
                         } elseif ($null -ne $data.PSObject.Properties['focusedContainer'] -and $null -ne $data.focusedContainer) {
-                            # Container focused; query workspace or check name
                             if ($data.focusedContainer.type -eq 'workspace') {
                                 $wsName = [string]$data.focusedContainer.name
                             }
@@ -168,19 +210,17 @@ function Run-WatcherDaemonLoop {
                         $pendingWs = $wsName
                         $lastEventTicks = $now
 
-                        # Debounce wait (e.g. 250ms) to ignore intermediate transitions
                         Start-Sleep -Milliseconds $DebounceMs
 
-                        # If no new event occurred during debounce, apply wallpaper
                         if ($pendingWs -eq $wsName) {
                             Write-WpLog -Message "Workspace activated: $wsName" -Level Info
                             & $script:ManagerScript -Action workspace -Workspace $wsName | Out-Null
                             $pendingWs = $null
                         }
                     }
-                } catch {
-                    # Ignore JSON parsing noise
-                }
+                } catch {}
+
+                Check-AutoRotationTrigger
             }
         } catch {
             Write-WpLog -Message "GlazeWM IPC connection error: $($_.Exception.Message). Reconnecting in 3 seconds..." -Level Debug
